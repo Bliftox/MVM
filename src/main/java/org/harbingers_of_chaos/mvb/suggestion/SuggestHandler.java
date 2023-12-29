@@ -2,6 +2,7 @@ package org.harbingers_of_chaos.mvb.suggestion;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -17,7 +18,7 @@ import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 
 public class SuggestHandler extends ListenerAdapter {
-    //vfdvvkmrifmvikrfmbk
+
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (event.getComponentId().equals("suggestButton")) {
@@ -60,6 +61,7 @@ public class SuggestHandler extends ListenerAdapter {
 
                     suggestChannel.sendMessage("<@&1190022838829199382> <@" + suggestAuthorId + ">").setEmbeds(suggestEmbed.build()).queue();
 
+                    suggestChannel.getHistory().getRetrievedHistory().get(0).addReaction(Emoji.fromUnicode("👍" + "👎"));
                 }
             }
         } catch (Exception e) {

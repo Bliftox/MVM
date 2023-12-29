@@ -17,7 +17,7 @@ import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 
 public class SuggestHandler extends ListenerAdapter {
-
+    //vfdvvkmrifmvikrfmbk
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (event.getComponentId().equals("suggestButton")) {

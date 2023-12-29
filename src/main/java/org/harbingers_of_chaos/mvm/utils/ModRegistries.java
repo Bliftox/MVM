@@ -8,7 +8,7 @@ import net.minecraft.command.argument.GameProfileArgumentType;
 import net.minecraft.command.argument.MessageArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import org.harbingers_of_chaos.mystiversemodserver.command.Start;
+import org.harbingers_of_chaos.mvm.command.Start;
 
 
 public class ModRegistries {

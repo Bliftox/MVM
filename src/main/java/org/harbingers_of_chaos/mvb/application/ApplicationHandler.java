@@ -132,20 +132,20 @@ public class ApplicationHandler extends ListenerAdapter {
         applicationsLogChat = jda.getTextChannelById("1189900614226944110");
 
         try {
-            String authorId1 = event.getButton().getId();
+            String authorId = event.getButton().getId();
             
             if (event.getComponent().getLabel().equals("⚠️ Отклонить с причиной")) {
                 log.info("Application №" + check + " rejected with reason");
-                if (authorId1 != null) {
+                if (authorId != null) {
                     try {
-                        guild.addRoleToMember(UserSnowflake.fromId(authorId1), rejectedRole).queue();
+                        guild.addRoleToMember(UserSnowflake.fromId(authorId), rejectedRole).queue();
 
                         EmbedBuilder applicationsLog = new EmbedBuilder();
-                        applicationsLog.setTitle("Заявка №" + check + " от Id:" + authorId1, null);
+                        applicationsLog.setTitle("Заявка №" + check + " от Id:" + authorId, null);
                         applicationsLog.setColor(new Color(0xFAD000));
                         applicationsLog.setDescription(
                                 "### ⚠️ Отклонено с причиной" + "\n Причина: " + reason);
-                        applicationsLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId1);
+                        applicationsLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
 
                         log.info(event.getMessage().getId());
 
@@ -164,7 +164,7 @@ public class ApplicationHandler extends ListenerAdapter {
                         if (reason != null) {
                             event.reply("Заявка №" + check + " успешно отправлена! 🎄").setEphemeral(true).queue();
                             log.info("deleete");
-                            applicationsLogChat.sendMessage("<@" + authorId1 + ">").setEmbeds(applicationsLog.build()).queue();
+                            applicationsLogChat.sendMessage("<@" + authorId + ">").setEmbeds(applicationsLog.build()).queue();
                         } else {
                             return;
                         }

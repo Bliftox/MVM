@@ -19,7 +19,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.world.dimension.DimensionType;
-import org.harbingers_of_chaos.mystiversemodserver.MystiVerseModServer;
+import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 
 public class Start {
     private static MinecraftServer minecraftServer = MystiVerseModServer.getMinecraftServer();

@@ -47,7 +47,7 @@ public class AcceptButton {
 
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
-                    log.info(event.getMessage().getId());
+                    log.info("Заявка №" + check + " от Id:" + authorId);
                 } catch (Exception e) {
                     log.warning("Access application error: " + e);
                 }

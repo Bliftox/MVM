@@ -24,7 +24,7 @@ public class Main {
             .addEventListeners(new CommandHandler())
             .addEventListeners(new ApplicationHandler())
             .addEventListeners(new SuggestHandler())
-            .addEventListeners(new NewsEmbedHandler())
+            //.addEventListeners(new NewsEmbedHandler())
             .build();
 
     private static final String CHECK_KEY = "check";
@@ -39,7 +39,7 @@ public class Main {
 
         prefs.putInt(CHECK_KEY, check);
 
-        DatabaseManager.connect();
+        //DatabaseManager.connect();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             // Закрытие подключения при выходе из программы

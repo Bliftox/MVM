@@ -16,6 +16,7 @@ import static org.harbingers_of_chaos.mvb.config.cfg.TOKEN;
 
 public class Main {
     public static final Logger log = Logger.getGlobal();
+    public static Guild guild;
     public static final JDA jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
             .setActivity(Activity.playing("Лучший в мире сервер MystiVerse"))
             .addEventListeners(new CommandHandler())
@@ -29,7 +30,7 @@ public class Main {
 
     public static void main(String[] args) {
         log.info("Bot started");
-        Guild guild = jda.getGuildById("1143266536958722240");
+        guild = jda.getGuildById("1143266536958722240");
 
         log.info("Количество отправленных заявок: " + check);
 

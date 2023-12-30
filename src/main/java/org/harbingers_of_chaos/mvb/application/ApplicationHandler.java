@@ -86,10 +86,6 @@ public class ApplicationHandler extends ListenerAdapter {
             AcceptButton.onButton(event, format, date);
         }
 
-        if (event.getComponent().getLabel().equals("⚠️ Отклонить с причиной")) {
-            RejectWithReasonButton.onButton(event, format, date);
-        }
-
         if (event.getComponent().getLabel().equals("🛑 Отклонить")) {
             RejectButton.onButton(event);
         }

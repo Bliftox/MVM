@@ -46,6 +46,10 @@ public class CommandHandler extends ListenerAdapter {
                             "```&stop``` - остановить бота." +
                             "\n```$buttons``` - кнопки взаимодействия.").queue();
                     log.info("Command help");
+
+                } else if (message.equalsIgnoreCase("$news")) {
+                    getClass().equals("NewsEmbedHandler");
+                    log.info("Command news");
                 }
 
             } else {

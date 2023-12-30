@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.harbingers_of_chaos.mvb.application.ApplicationHandler;
 import org.harbingers_of_chaos.mvb.commands.CommandHandler;
+import org.harbingers_of_chaos.mvb.commands.NewsEmbedHandler;
 import org.harbingers_of_chaos.mvb.suggestion.SuggestHandler;
 
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ public class Main {
             .addEventListeners(new CommandHandler())
             .addEventListeners(new ApplicationHandler())
             .addEventListeners(new SuggestHandler())
+            .addEventListeners(new NewsEmbedHandler())
             .build();
 
     private static final String CHECK_KEY = "check";

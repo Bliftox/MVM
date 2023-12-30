@@ -1,7 +1,10 @@
 package org.harbingers_of_chaos.mvb.application;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
@@ -19,6 +22,13 @@ import static org.harbingers_of_chaos.mvb.Main.log;
 public class RejectWithReasonButton {
     public static boolean onButton(ButtonInteractionEvent event, SimpleDateFormat format, Date date) {
         try {
+            Guild guild = event.getGuild();
+            assert guild != null;
+            TextChannel applicationsLogChat = jda.getTextChannelById("1189900614226944110");
+            Role accessRole = guild.getRoleById("1160295664668913816");
+            assert applicationsLogChat != null;
+            assert accessRole != null;
+
             long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()))-1;
             log.info("Application №" + check + " rejected with reason");
             if (authorId != 0) {
@@ -32,7 +42,7 @@ public class RejectWithReasonButton {
                             "### ⚠️ Отклонено с причиной" + "\n Причина: " );
                     applicationsLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
 
-                    log.info("Заявка №" + check + " от Id:" + authorId);
+                    log.info("Application №" + check + " rejected" +" от Id:" + authorId);
 
 
                     TextInput reason = TextInput.create("reason", "[🃏] Причина:", TextInputStyle.PARAGRAPH)

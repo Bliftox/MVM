@@ -33,19 +33,21 @@ public class Main {
             //.addEventListeners(new NewsEmbedHandler())
             .build();
 
-    private static final String CHECK_KEY = "check";
-    private static final Preferences prefs = Preferences.userRoot().node(Main.class.getName());
-    public static int check = prefs.getInt(CHECK_KEY, 0);
+    public static final Preferences prefs = Preferences.userRoot().node(Main.class.getName());
+
+    public static Integer appInt = prefs.getInt("appInt", 0);
 
     public static void main(String[] args) {
         log.info("Bot started");
 
+        // Получаем значение счетчика из настроек, если оно там сохранено
+
+
         applicationsLogChat = jda.getTextChannelById("1189900614226944110");
         applicationsChat = jda.getTextChannelById("1189996402164629575");
 
-        log.info("Number of applications sent: " + check);
+        log.info("Number of applications sent: " + appInt);
 
-        prefs.putInt(CHECK_KEY, check);
 
         //DatabaseManager.connect();
 

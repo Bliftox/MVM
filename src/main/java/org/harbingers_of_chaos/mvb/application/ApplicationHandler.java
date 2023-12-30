@@ -36,6 +36,7 @@ public class ApplicationHandler extends ListenerAdapter {
                 String sex = Objects.requireNonNull(event.getValue("sex")).getAsString();
                 String bio = Objects.requireNonNull(event.getValue("bio")).getAsString();
                 String whyWe = Objects.requireNonNull(event.getValue("whyWe")).getAsString();
+                appInt = prefs.getInt("appInt", 0);
 
                 String user = event.getUser().getName();
                 long userId = event.getUser().getIdLong();
@@ -45,7 +46,7 @@ public class ApplicationHandler extends ListenerAdapter {
                 if (applicationsChat != null) {
                     EmbedBuilder applicationEmbed = new EmbedBuilder();
                     applicationEmbed.setImage("https://cdn.discordapp.com/attachments/991951225962639524/1189687904415535195/-27-12-2023_8.png?ex=659f1233&is=658c9d33&hm=7b814ffffdfae944045e1df19636c44494fa4f380c9228cd1090a8dd9c0dc8b8&");
-                    applicationEmbed.setTitle("Заявка №" + check + " от " + user, null);
+                    applicationEmbed.setTitle("Заявка №" + appInt + " от " + user, null);
                     applicationEmbed.setColor(new Color(0xCB3966));
                     applicationEmbed.setDescription(
                             "### 🎀 Ник в игре: \n```" + nickname +
@@ -55,7 +56,7 @@ public class ApplicationHandler extends ListenerAdapter {
                                     "```\n### 💚 Почему именно наш сервер? \n```" + whyWe + "```");
                     applicationEmbed.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + userId);
 
-                    event.reply("Заявка №" + check + " успешно отправлена! 🎄").setEphemeral(true).queue();
+                    event.reply("Заявка №" + appInt + " успешно отправлена! 🎄").setEphemeral(true).queue();
 
                     applicationsChat.sendMessage("<@&1189667213318295606>" + " <@" + userId + ">").setEmbeds(applicationEmbed.build()).addActionRow(
                             Button.success(String.valueOf(userId), "✅ Принять"),
@@ -63,12 +64,11 @@ public class ApplicationHandler extends ListenerAdapter {
                             Button.danger(String.valueOf(userId + 2), "🛑 Отклонить")
                     ).queue();
 
-                    log.info("Application №" + check + " created access");
+                    log.info("Application №" + appInt + " created access");
                 } else {
                     log.warning("Failed to receive text channel");
                 }
-                check++;
-
+                prefs.putInt("appInt", appInt + 1);
             }
         } catch (Exception e) {
             log.warning("Error application: " + e);

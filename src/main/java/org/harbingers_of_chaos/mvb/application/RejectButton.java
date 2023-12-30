@@ -31,13 +31,13 @@ public class RejectButton {
             applicationsLogChat = jda.getTextChannelById("1189900614226944110");
 
             long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()))-2;
-            log.info("Application №" + check + " rejected" +" от Id:" + authorId);
+            log.info("Application rejected" +" от Id:" + authorId);
             if (authorId != 0) {
                 try {
                     guild.addRoleToMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190023047822974996"))).queue();
 
                     EmbedBuilder applicationsRejectLog = new EmbedBuilder();
-                    applicationsRejectLog.setTitle("Заявка №" + check + " от Id:" + authorId, null);
+                    applicationsRejectLog.setTitle("Заявка от Id:" + authorId, null);
                     applicationsRejectLog.setColor(new Color(0xDA0000));
                     applicationsRejectLog.setDescription("### 🛑 Отклонено");
                     applicationsRejectLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
@@ -47,7 +47,7 @@ public class RejectButton {
 
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
-                    log.info("Заявка №" + check + " от Id:" + authorId);
+                    log.info("Заявка от Id:" + authorId);
                 } catch (Exception e) {
                     log.warning("Rejected application error: " + e);
                 }

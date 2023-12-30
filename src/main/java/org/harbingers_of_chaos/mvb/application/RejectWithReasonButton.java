@@ -39,7 +39,7 @@ public class RejectWithReasonButton extends ListenerAdapter {
                 applicationsLogChat = jda.getTextChannelById("1189900614226944110");
 
                 authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId())) - 1;
-                log.info("Application №" + check + " rejected with reason");
+                log.info("Application №" + appInt + " rejected with reason");
                 if (authorId != 0) {
                     try {
 
@@ -73,18 +73,18 @@ public class RejectWithReasonButton extends ListenerAdapter {
                 String reasonText = event.getValue("reason").getAsString();
 
                 EmbedBuilder applicationsRejectWithReasonLog = new EmbedBuilder();
-                applicationsRejectWithReasonLog.setTitle("Заявка №" + check + " от Id:" + authorId, null);
+                applicationsRejectWithReasonLog.setTitle("Заявка от Id:" + authorId, null);
                 applicationsRejectWithReasonLog.setColor(new Color(0xFAD000));
                 applicationsRejectWithReasonLog.setDescription(
                         "### ⚠️ Отклонено с причиной" + "\n Причина: ```" + reasonText + "```");
                 applicationsRejectWithReasonLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
 
-                event.reply("Заявка №" + check + " успешно отклонена! 🎄").setEphemeral(true).queue();
+                event.reply("Заявка успешно отклонена! 🎄").setEphemeral(true).queue();
                 event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
                 applicationsLogChat.sendMessage("<@" + authorId + ">").setEmbeds(applicationsRejectWithReasonLog.build()).queue();
 
-                log.info("Application №" + check + " rejected" + " от Id:" + authorId);
+                log.info("Application rejected, Id:" + authorId);
             }
         } catch (Exception e) {
         log.warning("Error reject with reason application: " + e);

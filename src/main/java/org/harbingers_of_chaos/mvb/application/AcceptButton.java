@@ -30,14 +30,14 @@ public class AcceptButton {
 
             //получает айди кнопки которую нажали
             long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()));
-            log.info("Application №" + check + " access");
+            log.info("Application access");
 
             if (authorId != 0) {
                 try {
                     guild.addRoleToMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1160295664668913816"))).queue();
 
                     EmbedBuilder applicationsAcceptLog = new EmbedBuilder();
-                    applicationsAcceptLog.setTitle("Заявка №" + check + " от Id:" + authorId, null);
+                    applicationsAcceptLog.setTitle("Заявка от Id:" + authorId, null);
                     applicationsAcceptLog.setColor(new Color(0x0bda51));
                     applicationsAcceptLog.setDescription("### ✅ Одобрено");
                     applicationsAcceptLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
@@ -47,7 +47,7 @@ public class AcceptButton {
 
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
-                    log.info("Заявка №" + check + " от Id:" + authorId);
+                    log.info("Заявка от Id:" + authorId);
                 } catch (Exception e) {
                     log.warning("Access application error: " + e);
                 }

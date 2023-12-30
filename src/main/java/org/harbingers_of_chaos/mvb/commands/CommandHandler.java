@@ -33,7 +33,7 @@ public class CommandHandler extends ListenerAdapter {
             if (messageAuthor != null && messageAuthor.getJDA().getRoles().stream().anyMatch(role -> role.getId().equals("1185653602056933436"))) {
                 if (message.equalsIgnoreCase("&stop")) {
                     event.getJDA().shutdown();
-                    event.getMessage().reply("Успешная остановка! 🎄").queue();
+                    event.getMessage().reply("Успешная остановка! 🎀").queue();
                     log.info("Command stop");
 
                 } else if (message.equalsIgnoreCase("$buttons")) {
@@ -44,12 +44,14 @@ public class CommandHandler extends ListenerAdapter {
                 } else if (message.equalsIgnoreCase("$help")) {
                     event.getMessage().reply("```$help``` - помощь по командам." +
                             "```&stop``` - остановить бота." +
-                            "\n```$buttons``` - кнопки взаимодействия.").queue();
+                            "\n```$buttons``` - кнопки взаимодействия." +
+                            "\n```$appintreset``` - сбросить счетчки заявок.").queue();
                     log.info("Command help");
 
-                } else if (message.equalsIgnoreCase("$news")) {
-                    getClass().equals("NewsEmbedHandler");
-                    log.info("Command news");
+                } else if (message.equalsIgnoreCase("$appintreset")) {
+                    prefs.putInt("appInt", appInt - appInt + 1);
+                    event.getMessage().reply("Счетчик сброшен успешно! ☃️").queue();
+                    log.info("Command appintreset");
                 }
 
             } else {

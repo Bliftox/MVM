@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.modals.Modal;
 
 public class HelloButton {
     public static boolean onButton(ButtonInteractionEvent event) {
+
         TextInput nickname = TextInput.create("nickname", "[🎀] Ник в игре:", TextInputStyle.SHORT)
                 .setPlaceholder("Введите ваш ник в игре")
                 .setMinLength(3)

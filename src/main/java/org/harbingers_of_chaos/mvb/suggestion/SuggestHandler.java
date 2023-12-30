@@ -2,11 +2,14 @@ package org.harbingers_of_chaos.mvb.suggestion;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.sticker.StickerSnowflake;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
@@ -55,6 +58,7 @@ public class SuggestHandler extends ListenerAdapter {
         }
     }
 
+    private static TextChannel suggestChannel;
     @Override
     public void onModalInteraction(ModalInteractionEvent event) {
         try {
@@ -69,7 +73,7 @@ public class SuggestHandler extends ListenerAdapter {
                 String suggestTitle = event.getValue("suggestTitle").getAsString();
 
                 // Получение текстового канала для отправки предложения
-                TextChannel suggestChannel = jda.getTextChannelById("1190289941817733140");
+                suggestChannel = jda.getTextChannelById("1190289941817733140");
 
                 if (suggestChannel != null) {
                     // Вывод в лог информации о добавлении предложения

@@ -64,7 +64,6 @@ public class ApplicationHandler extends ListenerAdapter {
                             Button.danger(userId + 2, "🛑 Отклонить")
                     ).queue();
 
-
                     log.info("Application №" + check + " created access");
                 } else {
                     log.warning("Не удалось получить текстовый канал.");

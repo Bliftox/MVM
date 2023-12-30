@@ -12,6 +12,7 @@ import org.harbingers_of_chaos.mvb.suggestion.SuggestHandler;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
+
 import static org.harbingers_of_chaos.mvb.config.cfg.TOKEN;
 
 public class Main {
@@ -35,5 +36,12 @@ public class Main {
         log.info("Количество отправленных заявок: " + check);
 
         prefs.putInt(CHECK_KEY, check);
+
+        DatabaseManager.connect();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // Закрытие подключения при выходе из программы
+            DatabaseManager.disconnect();
+        }));
     }
 }

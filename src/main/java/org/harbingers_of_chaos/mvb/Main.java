@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.harbingers_of_chaos.mvb.application.ApplicationHandler;
+import org.harbingers_of_chaos.mvb.application.RejectWithReasonButton;
 import org.harbingers_of_chaos.mvb.commands.CommandHandler;
 import org.harbingers_of_chaos.mvb.commands.NewsEmbedHandler;
 import org.harbingers_of_chaos.mvb.suggestion.SuggestHandler;
@@ -23,6 +24,7 @@ public class Main {
             .setActivity(Activity.playing("Лучший в мире сервер MystiVerse"))
             .addEventListeners(new CommandHandler())
             .addEventListeners(new ApplicationHandler())
+            .addEventListeners(new RejectWithReasonButton())
             .addEventListeners(new SuggestHandler())
             //.addEventListeners(new NewsEmbedHandler())
             .build();

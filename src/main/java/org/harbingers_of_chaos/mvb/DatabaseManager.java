@@ -8,11 +8,11 @@ import static org.harbingers_of_chaos.mvb.Main.*;
 import static org.harbingers_of_chaos.mvb.config.cfg.*;
 
 public class DatabaseManager {
-    private static Connection connection;
+    public static Connection connection;
 
     public static void connect() {
         try {
-            Class.forName("db1.apexnodes.xyz:3306");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, user, password);
             log.info("Connected to the database");
         } catch (ClassNotFoundException | SQLException e) {

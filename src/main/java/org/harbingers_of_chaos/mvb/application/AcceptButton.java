@@ -28,6 +28,8 @@ public class AcceptButton {
             assert accessRole != null;
             applicationsLogChat = jda.getTextChannelById("1189900614226944110");
 
+
+
             //получает айди кнопки которую нажали
             long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()));
             log.info("Application access");
@@ -35,11 +37,12 @@ public class AcceptButton {
             if (authorId != 0) {
                 try {
                     guild.addRoleToMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1160295664668913816"))).queue();
+                    guild.removeRoleFromMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190724252966596701"))).queue();
 
                     EmbedBuilder applicationsAcceptLog = new EmbedBuilder();
                     applicationsAcceptLog.setTitle("Заявка от Id:" + authorId, null);
                     applicationsAcceptLog.setColor(new Color(0x0bda51));
-                    applicationsAcceptLog.setDescription("### ✅ Одобрено");
+                    applicationsAcceptLog.setDescription("### ✅ Одобрено - <@" + event.getUser().getId() + ">");
                     applicationsAcceptLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
 
                     assert applicationsLogChat != null;

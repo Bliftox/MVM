@@ -70,13 +70,15 @@ public class RejectWithReasonButton extends ListenerAdapter {
         try {
             if (event.getModalId().equals("reasonModal")) {
                 guild.addRoleToMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190023047822974996"))).queue();
+                guild.removeRoleFromMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190724252966596701"))).queue();
+
                 String reasonText = event.getValue("reason").getAsString();
 
                 EmbedBuilder applicationsRejectWithReasonLog = new EmbedBuilder();
                 applicationsRejectWithReasonLog.setTitle("Заявка от Id:" + authorId, null);
                 applicationsRejectWithReasonLog.setColor(new Color(0xFAD000));
                 applicationsRejectWithReasonLog.setDescription(
-                        "### ⚠️ Отклонено с причиной" + "\n Причина: ```" + reasonText + "```");
+                        "### ⚠️ Отклонено с причиной - <@" + event.getUser().getId() + ">" + "\n Причина: ```" + reasonText + "```");
                 applicationsRejectWithReasonLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
 
                 event.reply("Заявка успешно отклонена! 🎄").setEphemeral(true).queue();

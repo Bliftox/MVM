@@ -35,11 +35,12 @@ public class RejectButton {
             if (authorId != 0) {
                 try {
                     guild.addRoleToMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190023047822974996"))).queue();
+                    guild.removeRoleFromMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190724252966596701"))).queue();
 
                     EmbedBuilder applicationsRejectLog = new EmbedBuilder();
                     applicationsRejectLog.setTitle("Заявка от Id:" + authorId, null);
                     applicationsRejectLog.setColor(new Color(0xDA0000));
-                    applicationsRejectLog.setDescription("### 🛑 Отклонено");
+                    applicationsRejectLog.setDescription("### 🛑 Отклонено - <@" + event.getUser().getId() + ">");
                     applicationsRejectLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
 
                     assert applicationsLogChat != null;

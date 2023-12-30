@@ -13,35 +13,33 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import static org.harbingers_of_chaos.mvb.Main.*;
 
 public class ApplicationHandler extends ListenerAdapter {
-    private static String userId;
-    private static String user;
     private static String reason;
-    private static TextChannel applicationsChat;
-    private static TextChannel applicationsLogChat;
     public static SimpleDateFormat format = new SimpleDateFormat(" HH:mm  dd/MM/yyyy");
     public static Date date = new Date();
 
     @Override
-    public void onModalInteraction(ModalInteractionEvent event) {
+    public void onModalInteraction(@NotNull ModalInteractionEvent event) {
         try {
             if (event.getModalId().equals("application")) {
-                String nickname = event.getValue("nickname").getAsString();
-                String years = event.getValue("years").getAsString();
-                String sex = event.getValue("sex").getAsString();
-                String bio = event.getValue("bio").getAsString();
-                String whyWe = event.getValue("whyWe").getAsString();
-                applicationsChat = jda.getTextChannelById("1189996402164629575");
+                String nickname = Objects.requireNonNull(event.getValue("nickname")).getAsString();
+                String years = Objects.requireNonNull(event.getValue("years")).getAsString();
+                String sex = Objects.requireNonNull(event.getValue("sex")).getAsString();
+                String bio = Objects.requireNonNull(event.getValue("bio")).getAsString();
+                String whyWe = Objects.requireNonNull(event.getValue("whyWe")).getAsString();
+                TextChannel applicationsChat = jda.getTextChannelById("1189996402164629575");
 
-                user = event.getUser().getName();
-                userId = String.valueOf(event.getUser().getIdLong());
+                String user = event.getUser().getName();
+                long userId = event.getUser().getIdLong();
 
                 if (applicationsChat != null) {
                     EmbedBuilder applicationEmbed = new EmbedBuilder();
@@ -59,9 +57,9 @@ public class ApplicationHandler extends ListenerAdapter {
                     event.reply("Заявка №" + check + " успешно отправлена! 🎄").setEphemeral(true).queue();
 
                     applicationsChat.sendMessage("<@&1189667213318295606>" + " <@" + userId + ">").setEmbeds(applicationEmbed.build()).addActionRow(
-                            Button.success(userId, "✅ Принять"),
-                            Button.secondary(userId + 1, "⚠️ Отклонить с причиной"),
-                            Button.danger(userId + 2, "🛑 Отклонить")
+                            Button.success(String.valueOf(userId), "✅ Принять"),
+                            Button.secondary(String.valueOf(userId + 1), "⚠️ Отклонить с причиной"),
+                            Button.danger(String.valueOf(userId + 2), "🛑 Отклонить")
                     ).queue();
 
                     log.info("Application №" + check + " created access");
@@ -79,142 +77,21 @@ public class ApplicationHandler extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
+
         /*                       Модальное окно                           */
         if (event.getComponentId().equals("Hello")) {
-
-            TextInput nickname = TextInput.create("nickname", "[🎀] Ник в игре:", TextInputStyle.SHORT)
-                    .setPlaceholder("Введите ваш ник в игре")
-                    .setMinLength(3)
-                    .setMaxLength(15)
-                    .build();
-
-            TextInput years = TextInput.create("years", "[🧭] Сколько вам лет?", TextInputStyle.SHORT)
-                    .setPlaceholder("Введите свой настоящий возраст")
-                    .setMinLength(1)
-                    .setMaxLength(2)
-                    .setRequired(true)
-                    .build();
-
-            TextInput sex = TextInput.create("sex", "[🎨] Ваш пол:", TextInputStyle.SHORT)
-                    .setPlaceholder("Введите ваш пол")
-                    .setMinLength(1)
-                    .setMaxLength(10)
-                    .setRequired(true)
-                    .build();
-
-            TextInput bio = TextInput.create("bio", "[📕] Роскажите о себе:", TextInputStyle.PARAGRAPH)
-                    .setPlaceholder("Поделитесь немного о себе: чем занимаетесь, какие у вас увлечения и интересы?")
-                    .setMinLength(1)
-                    .setMaxLength(200)
-                    .setRequired(true)
-                    .build();
-
-            TextInput whyWe = TextInput.create("whyWe", "[💚] Почему именно наш сервер?", TextInputStyle.SHORT)
-                    .setPlaceholder("Чем вам приглянулся наш сервер?")
-                    .setMinLength(1)
-                    .setMaxLength(100)
-                    .setRequired(true)
-                    .build();
-
-            Modal modal = Modal.create("application", "Заявка на сервер MystiVerse")
-                    .addComponents(ActionRow.of(nickname), ActionRow.of(years), ActionRow.of(sex), ActionRow.of(bio), ActionRow.of(whyWe))
-                    .build();
-
-            event.replyModal(modal).queue();
-
+            HelloButton.onButton(event);
         }
-        Guild guild = event.getGuild();
-
-        Role accessRole = guild.getRoleById("1160295664668913816");
-        Role rejectedRole = guild.getRoleById("1190023047822974996");
-
-        applicationsLogChat = jda.getTextChannelById("1189900614226944110");
-
-        try {
-            String authorId = event.getButton().getId();
-            
-            if (event.getComponent().getLabel().equals("⚠️ Отклонить с причиной")) {
-                log.info("Application №" + check + " rejected with reason");
-                if (authorId != null) {
-                    try {
-                        guild.addRoleToMember(UserSnowflake.fromId(authorId), rejectedRole).queue();
-
-                        EmbedBuilder applicationsLog = new EmbedBuilder();
-                        applicationsLog.setTitle("Заявка №" + check + " от Id:" + authorId, null);
-                        applicationsLog.setColor(new Color(0xFAD000));
-                        applicationsLog.setDescription(
-                                "### ⚠️ Отклонено с причиной" + "\n Причина: " + reason);
-                        applicationsLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
-
-                        log.info(event.getMessage().getId());
-
-
-                        TextInput reason = TextInput.create("reason", "[🃏] Причина:", TextInputStyle.PARAGRAPH)
-                                .setPlaceholder("Введите причину отклонения анкеты")
-                                .setMinLength(1)
-                                .setMaxLength(250)
-                                .setRequired(true)
-                                .build();
-                        Modal reasonModal = Modal.create("reasonModal", "Причина отклонения анкеты")
-                                .addComponents(ActionRow.of(reason))
-                                .build();
-                        event.replyModal(reasonModal).queue();
-
-                        if (reason != null) {
-                            event.reply("Заявка №" + check + " успешно отправлена! 🎄").setEphemeral(true).queue();
-                            log.info("deleete");
-                            applicationsLogChat.sendMessage("<@" + authorId + ">").setEmbeds(applicationsLog.build()).queue();
-                        } else {
-                            return;
-                        }
-
-                    } catch (Exception e) {
-                        log.warning("Rejected with reason application error: " + e);
-                    }
-                } else {
-                    log.warning("id null");
-                    return;
-                }
-            }
-        } catch (Exception e) {
-        log.warning("tyt "+ e);
+        if (event.getComponent().getLabel().equals("✅ Принять")) {
+            AcceptButton.onButton(event, format, date);
         }
 
+        if (event.getComponent().getLabel().equals("⚠️ Отклонить с причиной")) {
+            RejectWithReasonButton.onButton(event, format, date);
+        }
 
-        try {
-            //получает айди кнопки которую нажали
-
-            
-            if (event.getComponent().getLabel().equals("✅ Принять")) {
-                Long authorId = Long.valueOf(event.getButton().getId());
-                log.info("Application №" + check + " access");
-                if (authorId != null) {
-                    try {
-                        guild.addRoleToMember(UserSnowflake.fromId(authorId), accessRole).queue();
-
-                        EmbedBuilder applicationsLog = new EmbedBuilder();
-                        applicationsLog.setTitle("Заявка №" + check + " от Id:" + authorId, null);
-                        applicationsLog.setColor(new Color(0x0bda51));
-                        applicationsLog.setDescription(
-                                "### ✅ Одобрено");
-                        applicationsLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
-
-                        applicationsLogChat.sendMessage("<@" + authorId + ">").setEmbeds(applicationsLog.build()).queue();
-
-                        event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
-
-                        log.info(event.getMessage().getId());
-                    } catch (Exception e) {
-                        log.warning("Access application error: " + e);
-                    }
-                } else {
-                    log.warning("id null");
-                    return;
-                }
-            }
-        } catch (Exception e) {
-            log.warning("Application warning: " + e);
-            return;
+        if (event.getComponent().getLabel().equals("🛑 Отклонить")) {
+            RejectButton.onButton(event);
         }
     }
 }

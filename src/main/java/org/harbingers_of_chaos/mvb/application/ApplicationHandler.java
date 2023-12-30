@@ -36,10 +36,11 @@ public class ApplicationHandler extends ListenerAdapter {
                 String sex = Objects.requireNonNull(event.getValue("sex")).getAsString();
                 String bio = Objects.requireNonNull(event.getValue("bio")).getAsString();
                 String whyWe = Objects.requireNonNull(event.getValue("whyWe")).getAsString();
-                TextChannel applicationsChat = jda.getTextChannelById("1189996402164629575");
 
                 String user = event.getUser().getName();
                 long userId = event.getUser().getIdLong();
+
+                applicationsChat = jda.getTextChannelById("1189996402164629575");
 
                 if (applicationsChat != null) {
                     EmbedBuilder applicationEmbed = new EmbedBuilder();
@@ -64,7 +65,7 @@ public class ApplicationHandler extends ListenerAdapter {
 
                     log.info("Application №" + check + " created access");
                 } else {
-                    log.warning("Не удалось получить текстовый канал.");
+                    log.warning("Failed to receive text channel");
                 }
                 check++;
 

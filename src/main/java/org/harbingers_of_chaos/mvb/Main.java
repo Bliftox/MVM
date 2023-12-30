@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.harbingers_of_chaos.mvb.application.ApplicationHandler;
 import org.harbingers_of_chaos.mvb.application.RejectWithReasonButton;
@@ -20,6 +21,9 @@ import static org.harbingers_of_chaos.mvb.config.cfg.TOKEN;
 public class Main {
     public static final Logger log = Logger.getGlobal();
     public static Guild guild;
+    public static TextChannel applicationsLogChat;
+    public static TextChannel applicationsChat;
+
     public static final JDA jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
             .setActivity(Activity.playing("Лучший в мире сервер MystiVerse"))
             .addEventListeners(new CommandHandler())
@@ -35,9 +39,11 @@ public class Main {
 
     public static void main(String[] args) {
         log.info("Bot started");
-        guild = jda.getGuildById("1143266536958722240");
 
-        log.info("Количество отправленных заявок: " + check);
+        applicationsLogChat = jda.getTextChannelById("1189900614226944110");
+        applicationsChat = jda.getTextChannelById("1189996402164629575");
+
+        log.info("Number of applications sent: " + check);
 
         prefs.putInt(CHECK_KEY, check);
 

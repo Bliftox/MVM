@@ -25,32 +25,23 @@ import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 
 public class RejectWithReasonButton extends ListenerAdapter {
+    private static Long authorId;
+
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (event.getComponent().getLabel().equals("⚠️ Отклонить с причиной")) {
             try {
-                Guild guild = event.getGuild();
+                guild = event.getGuild();
                 assert guild != null;
-                TextChannel applicationsLogChat = jda.getTextChannelById("1189900614226944110");
                 Role accessRole = guild.getRoleById("1160295664668913816");
                 assert applicationsLogChat != null;
                 assert accessRole != null;
+                applicationsLogChat = jda.getTextChannelById("1189900614226944110");
 
-                long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId())) - 1;
+                authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId())) - 1;
                 log.info("Application №" + check + " rejected with reason");
                 if (authorId != 0) {
                     try {
-                        guild.addRoleToMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190023047822974996"))).queue();
-
-                        EmbedBuilder applicationsLog = new EmbedBuilder();
-                        applicationsLog.setTitle("Заявка №" + check + " от Id:" + authorId, null);
-                        applicationsLog.setColor(new Color(0xFAD000));
-                        applicationsLog.setDescription(
-                                "### ⚠️ Отклонено с причиной" + "\n Причина: ");
-                        applicationsLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
-
-                        log.info("Application №" + check + " rejected" + " от Id:" + authorId);
-
 
                         TextInput reason = TextInput.create("reason", "[🃏] Причина:", TextInputStyle.PARAGRAPH)
                                 .setPlaceholder("Введите причину отклонения анкеты")
@@ -77,10 +68,27 @@ public class RejectWithReasonButton extends ListenerAdapter {
     @Override
     public void onModalInteraction(@NotNull ModalInteractionEvent event) {
         try {
-            // тут код
+            if (event.getModalId().equals("reasonModal")) {
+                guild.addRoleToMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190023047822974996"))).queue();
+                String reasonText = event.getValue("reason").getAsString();
+
+                EmbedBuilder applicationsRejectWithReasonLog = new EmbedBuilder();
+                applicationsRejectWithReasonLog.setTitle("Заявка №" + check + " от Id:" + authorId, null);
+                applicationsRejectWithReasonLog.setColor(new Color(0xFAD000));
+                applicationsRejectWithReasonLog.setDescription(
+                        "### ⚠️ Отклонено с причиной" + "\n Причина: ```" + reasonText + "```");
+                applicationsRejectWithReasonLog.setFooter("Заявка была создана в " + format.format(date) + "  \nAppID: " + authorId);
+
+                event.reply("Заявка №" + check + " успешно отклонена! 🎄").setEphemeral(true).queue();
+                event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
+
+                applicationsLogChat.sendMessage("<@" + authorId + ">").setEmbeds(applicationsRejectWithReasonLog.build()).queue();
+
+                log.info("Application №" + check + " rejected" + " от Id:" + authorId);
+            }
         } catch (Exception e) {
-        log.warning("Error application: " + e);
+        log.warning("Error reject with reason application: " + e);
         event.reply("Произошла ошибка! ⛔").setEphemeral(true).queue();
-    }
+        }
     }
 }

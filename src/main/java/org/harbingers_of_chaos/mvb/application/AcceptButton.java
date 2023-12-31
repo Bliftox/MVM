@@ -1,9 +1,7 @@
 package org.harbingers_of_chaos.mvb.application;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -17,6 +15,8 @@ import java.util.Date;
 import java.util.Objects;
 
 import static org.harbingers_of_chaos.mvb.Main.*;
+import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
+import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.userId;
 
 public class AcceptButton {
     public static boolean onButton(ButtonInteractionEvent event, SimpleDateFormat format, Date date) {
@@ -49,6 +49,10 @@ public class AcceptButton {
                     applicationsLogChat.sendMessage("<@" + authorId + ">").setEmbeds(applicationsAcceptLog.build()).queue();
 
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
+
+                    Member member = guild.getMemberById(userId);
+                    member.modifyNickname(nickname).queue();
+
 
                     log.info("Заявка от Id:" + authorId);
                 } catch (Exception e) {

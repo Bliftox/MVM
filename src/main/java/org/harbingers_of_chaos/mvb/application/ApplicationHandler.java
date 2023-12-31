@@ -31,7 +31,7 @@ import static org.harbingers_of_chaos.mvb.Main.*;
 public class ApplicationHandler extends ListenerAdapter {
     private static String reason;
     private static String userName;
-    private static long userId;
+    public static long userId;
     public static SimpleDateFormat format = new SimpleDateFormat(" HH:mm  dd/MM/yyyy");
     public static Date date = new Date();
 
@@ -94,11 +94,11 @@ public class ApplicationHandler extends ListenerAdapter {
 
         try {
             // Вставка нового пользователя в таблицу users
-            String insertQuery = "INSERT INTO applications (application_Int, username, user_id, years, sex, bio, why_we) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO Application (appInt, userName, userId, years, sex, bio, whyWe) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
                 preparedStatement.setInt(1, appInt);
                 preparedStatement.setString(2, userName);
-                preparedStatement.setLong(3, userId);
+                preparedStatement.setString(3, String.valueOf(userId));
                 preparedStatement.setString(4, years);
                 preparedStatement.setString(5, sex);
                 preparedStatement.setString(6, bio);

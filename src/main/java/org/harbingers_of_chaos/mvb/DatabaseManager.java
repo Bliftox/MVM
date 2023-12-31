@@ -12,7 +12,7 @@ public class DatabaseManager {
 
     public static void connect() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver"); // Загрузка JDBC драйвера для MySQL
             connection = DriverManager.getConnection(url, user, password);
             log.info("Connected to the database");
         } catch (ClassNotFoundException | SQLException e) {

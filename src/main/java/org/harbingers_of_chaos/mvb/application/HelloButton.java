@@ -23,9 +23,9 @@ public class HelloButton {
                 .build();
 
         TextInput sex = TextInput.create("sex", "[🎨] Ваш пол:", TextInputStyle.SHORT)
-                .setPlaceholder("Введите ваш пол")
+                .setPlaceholder("Введите ваш пол М/Ж")
                 .setMinLength(1)
-                .setMaxLength(10)
+                .setMaxLength(2)
                 .setRequired(true)
                 .build();
 

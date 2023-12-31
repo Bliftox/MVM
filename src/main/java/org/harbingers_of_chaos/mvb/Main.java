@@ -18,8 +18,6 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-
-import static org.harbingers_of_chaos.mvb.DatabaseManager.connection;
 import static org.harbingers_of_chaos.mvb.config.cfg.TOKEN;
 
 public class Main {
@@ -52,14 +50,6 @@ public class Main {
 
         log.info("Number of applications sent: " + appInt);
 
-        try {
-            DatabaseManager.connect();
-        } catch (Exception e) {log.warning("Db error: " + e);}
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            // Закрытие подключения при выходе из программы
-            DatabaseManager.disconnect();
-        }));
 
     }
 }

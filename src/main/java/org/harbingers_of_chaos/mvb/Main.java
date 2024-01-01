@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.harbingers_of_chaos.mvb.CityHandler.cityHandler;
+import org.harbingers_of_chaos.mvb.CityHandler.cityModalHandler;
 import org.harbingers_of_chaos.mvb.application.ApplicationHandler;
 import org.harbingers_of_chaos.mvb.application.RejectWithReasonButton;
 import org.harbingers_of_chaos.mvb.commands.CommandHandler;
@@ -32,6 +34,8 @@ public class Main {
             .addEventListeners(new ApplicationHandler())
             .addEventListeners(new RejectWithReasonButton())
             .addEventListeners(new SuggestHandler())
+            .addEventListeners(new cityHandler())
+            .addEventListeners(new cityModalHandler())
             //.addEventListeners(new NewsEmbedHandler())
             .build();
 
@@ -41,6 +45,8 @@ public class Main {
 
     public static void main(String[] args) {
         log.info("Bot started");
+
+
 
         // Получаем значение счетчика из настроек, если оно там сохранено
 

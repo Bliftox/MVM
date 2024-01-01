@@ -91,29 +91,6 @@ public class ApplicationHandler extends ListenerAdapter {
             log.warning("Error application: " + e);
             event.reply("Произошла ошибка! ⛔").setEphemeral(true).queue();
         }
-
-        try {
-            // Вставка нового пользователя в таблицу users
-            String insertQuery = "INSERT INTO Application (appInt, userName, userId, years, sex, bio, whyWe) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-                preparedStatement.setInt(1, appInt);
-                preparedStatement.setString(2, userName);
-                preparedStatement.setString(3, String.valueOf(userId));
-                preparedStatement.setString(4, years);
-                preparedStatement.setString(5, sex);
-                preparedStatement.setString(6, bio);
-                preparedStatement.setString(7, whyWe);
-
-                int rowsInserted = preparedStatement.executeUpdate();
-                if (rowsInserted > 0) {
-                    System.out.println("User inserted successfully!");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (Exception e) {
-            log.warning("Db input error: " + e);
-        }
     }
 
     private static boolean hasRole(Member member, String roleName) {

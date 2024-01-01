@@ -39,6 +39,7 @@ public class CommandHandler extends ListenerAdapter {
                 } else if (message.equalsIgnoreCase("$buttons")) {
                     event.getMessage().reply("jepa").addActionRow(Button.primary("Hello", "Jepa")).queue();
                     event.getMessage().reply("jepa1").addActionRow(Button.primary("suggestButton", "suggestion")).queue();
+                    event.getMessage().reply("cityJepa").addActionRow(Button.primary("cityButton", "City")).queue();
                     log.info("Command buttons");
 
                 } else if (message.equalsIgnoreCase("$help")) {

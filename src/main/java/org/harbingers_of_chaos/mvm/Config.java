@@ -11,7 +11,7 @@ public class Config {
     public static Config INSTANCE;
 
     public static void load() throws Exception {
-        var configPath = FabricLoader.getInstance().getConfigDir().resolve("teabridge.json");
+        var configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
 
         if (Files.exists(configPath)) {
             INSTANCE = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
@@ -28,7 +28,9 @@ public class Config {
 
     public static class Discord {
         @Expose public String webhook = "";
-        @Expose public String channel = "";
+        @Expose public String channel = "1189900614226944110";
+        @Expose public String LogChat = "1189900614226944110";
+        @Expose public String Chat = "1189996402164629575";
         @Expose public String token = "";
     }
     public static class SQLite{

@@ -15,12 +15,13 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
+import org.harbingers_of_chaos.mvb.Discord;
 
 import java.awt.*;
 import java.util.Collection;
 import java.util.TreeSet;
 
-import static org.harbingers_of_chaos.mvb.Main.*;
+import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
@@ -74,7 +75,7 @@ public class SuggestHandler extends ListenerAdapter {
                 String suggestTitle = event.getValue("suggestTitle").getAsString();
 
                 // Получение текстового канала для отправки предложения
-                suggestChannel = jda.getTextChannelById("1190289941817733140");
+                suggestChannel = Discord.getJda().getTextChannelById("1190289941817733140");
 
                 if (suggestChannel != null) {
                     // Вывод в лог информации о добавлении предложения

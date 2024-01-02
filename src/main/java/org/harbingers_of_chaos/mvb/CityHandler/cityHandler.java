@@ -1,5 +1,6 @@
 package org.harbingers_of_chaos.mvb.CityHandler;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.UserSnowflake;
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.awt.*;
 import java.util.Objects;
 
-import static org.harbingers_of_chaos.mvb.Main.*;
+import static org.harbingers_of_chaos.mvb.Discord.*;
 
 public class cityHandler extends ListenerAdapter {
     public static String cityName;
@@ -18,6 +19,7 @@ public class cityHandler extends ListenerAdapter {
     public static String cityDescription;
     public static String cityFormОfGovernment;
     public static String cityCoordinates;
+    private Guild guild;
     @Override
     public void onModalInteraction(ModalInteractionEvent event) {
         guild = event.getGuild();

@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.harbingers_of_chaos.mvb.Main.*;
+import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvb.commands.CommandHandler.*;
 public class NewsEmbedHandler extends ListenerAdapter {
 

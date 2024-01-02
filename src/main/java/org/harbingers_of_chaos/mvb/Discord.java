@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,7 +27,9 @@ public class Discord {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().create();
 
     private static JDA jda;
+    public static final Preferences prefs = Preferences.userRoot().node(Discord.class.getName());
 
+    public static Integer appInt = prefs.getInt("appInt", 0);
     public static void start() {
         if (Config.INSTANCE.discord.token.isEmpty()) {
             MystiVerseModServer.LOGGER.fatal("Unable to load, no Discord token is specified!");
@@ -38,10 +41,10 @@ public class Discord {
             return;
         }
 
-        if (Config.INSTANCE.discord.webhook.isEmpty()) {
-            MystiVerseModServer.LOGGER.fatal("Unable to load, no Discord webhook is specified!");
-            return;
-        }
+//        if (Config.INSTANCE.discord.webhook.isEmpty()) {
+//            MystiVerseModServer.LOGGER.fatal("Unable to load, no Discord webhook is specified!");
+//            return;
+//        }
 
         try {
             jda = JDABuilder.createDefault(Config.INSTANCE.discord.token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
@@ -57,6 +60,8 @@ public class Discord {
         } catch (Exception e) {
             MystiVerseModServer.LOGGER.fatal("Exception initializing JDA", e);
         }
+        MystiVerseModServer.LOGGER.info("Bot started");
+        MystiVerseModServer.LOGGER.info("Number of applications sent: " + appInt);
     }
     public static void send(String message) {
         if (jda != null) {
@@ -75,4 +80,6 @@ public class Discord {
 
         }
     }
+
+    public static JDA getJda() {return jda;}
 }

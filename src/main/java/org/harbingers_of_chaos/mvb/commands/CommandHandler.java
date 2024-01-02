@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.entities.Role;
 
-import static org.harbingers_of_chaos.mvb.Main.*;
+import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class CommandHandler extends ListenerAdapter {

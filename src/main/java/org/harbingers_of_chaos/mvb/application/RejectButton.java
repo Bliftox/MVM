@@ -11,24 +11,29 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
+import org.harbingers_of_chaos.mvb.Discord;
 
 import java.awt.*;
 import java.util.Objects;
 
-import static org.harbingers_of_chaos.mvb.Main.*;
+
+import org.harbingers_of_chaos.mvm.Config;
+import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class RejectButton {
+    private static TextChannel applicationsLogChat;
+    private static Guild guild;
     public static boolean onButton(ButtonInteractionEvent event) {
         try {
             guild = event.getGuild();
             assert guild != null;
             Role accessRole = guild.getRoleById("1160295664668913816");
+            applicationsLogChat = Discord.getJda().getTextChannelById(Config.INSTANCE.discord.LogChat);
             assert applicationsLogChat != null;
             assert accessRole != null;
-            applicationsLogChat = jda.getTextChannelById("1189900614226944110");
 
             long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()))-2;
             LOGGER.info("Application rejected" +" от Id:" + authorId);

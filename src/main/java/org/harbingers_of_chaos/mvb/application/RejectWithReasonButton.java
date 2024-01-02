@@ -12,21 +12,25 @@ import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
+import org.harbingers_of_chaos.mvb.Discord;
 import org.jetbrains.annotations.NotNull;
+import org.harbingers_of_chaos.mvm.Config;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-import static org.harbingers_of_chaos.mvb.Main.*;
+import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class RejectWithReasonButton extends ListenerAdapter {
     private static Long authorId;
+    private static Guild guild;
 
+    private TextChannel applicationsLogChat;
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
         if (event.getComponent().getLabel().equals("⚠️ Отклонить с причиной")) {
@@ -36,7 +40,7 @@ public class RejectWithReasonButton extends ListenerAdapter {
                 Role accessRole = guild.getRoleById("1160295664668913816");
                 assert applicationsLogChat != null;
                 assert accessRole != null;
-                applicationsLogChat = jda.getTextChannelById("1189900614226944110");
+                applicationsLogChat = Discord.getJda().getTextChannelById(Config.INSTANCE.discord.LogChat);
 
                 authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId())) - 1;
                 LOGGER.info("Application №" + appInt + " rejected with reason");

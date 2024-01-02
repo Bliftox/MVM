@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 import net.dv8tion.jda.api.requests.Route;
-import org.harbingers_of_chaos.mvb.DatabaseManager;
+import org.harbingers_of_chaos.mvb.Discord;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -25,8 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-import static org.harbingers_of_chaos.mvb.DatabaseManager.connection;
-import static org.harbingers_of_chaos.mvb.Main.*;
+
+import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class ApplicationHandler extends ListenerAdapter {
@@ -35,12 +35,13 @@ public class ApplicationHandler extends ListenerAdapter {
     public static long userId;
     public static SimpleDateFormat format = new SimpleDateFormat(" HH:mm  dd/MM/yyyy");
     public static Date date = new Date();
-
+    private TextChannel applicationsChat;
     public static String nickname;
     public static String years;
     public static String sex;
     public static String bio;
     public static String whyWe;
+    private static Guild guild;
 
     @Override
     public void onModalInteraction(@NotNull ModalInteractionEvent event) {
@@ -57,7 +58,7 @@ public class ApplicationHandler extends ListenerAdapter {
                 userName = event.getUser().getName();
                 userId = event.getUser().getIdLong();
 
-                applicationsChat = jda.getTextChannelById("1189996402164629575");
+                applicationsChat = Discord.getJda().getTextChannelById("1189996402164629575");
 
                 if (applicationsChat != null) {
                     guild.addRoleToMember(UserSnowflake.fromId(userId), Objects.requireNonNull(guild.getRoleById("1190724252966596701"))).queue();

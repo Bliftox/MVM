@@ -22,6 +22,7 @@ public class Config {
     }
 
     @Expose public Discord discord = new Discord();
+    @Expose public SQLite sqLite = new SQLite();
     @Expose public Game game = new Game();
     @Expose public Crashes crashes = new Crashes();
 
@@ -29,6 +30,12 @@ public class Config {
         @Expose public String webhook = "";
         @Expose public String channel = "";
         @Expose public String token = "";
+    }
+    public static class SQLite{
+        @Expose public String password = "";
+        @Expose public String url = "";
+        @Expose public String user = "";
+
     }
 
     public static class Game {

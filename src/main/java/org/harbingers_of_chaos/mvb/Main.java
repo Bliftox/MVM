@@ -20,24 +20,11 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
-import static org.harbingers_of_chaos.mvb.config.cfg.TOKEN;
-
 public class Main {
     public static final Logger log = Logger.getGlobal();
     public static Guild guild;
     public static TextChannel applicationsLogChat;
     public static TextChannel applicationsChat;
-
-    public static final JDA jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
-            .setActivity(Activity.playing("Лучший в мире сервер MystiVerse"))
-            .addEventListeners(new CommandHandler())
-            .addEventListeners(new ApplicationHandler())
-            .addEventListeners(new RejectWithReasonButton())
-            .addEventListeners(new SuggestHandler())
-            .addEventListeners(new cityHandler())
-            .addEventListeners(new cityModalHandler())
-            //.addEventListeners(new NewsEmbedHandler())
-            .build();
 
     public static final Preferences prefs = Preferences.userRoot().node(Main.class.getName());
 
@@ -51,8 +38,8 @@ public class Main {
         // Получаем значение счетчика из настроек, если оно там сохранено
 
 
-        applicationsLogChat = jda.getTextChannelById("1189900614226944110");
-        applicationsChat = jda.getTextChannelById("1189996402164629575");
+//        applicationsLogChat = jda.getTextChannelById("1189900614226944110");
+//        applicationsChat = jda.getTextChannelById("1189996402164629575");
 
         log.info("Number of applications sent: " + appInt);
 

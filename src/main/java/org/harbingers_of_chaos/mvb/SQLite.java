@@ -1,6 +1,5 @@
 package org.harbingers_of_chaos.mvb;
 
-import org.harbingers_of_chaos.mvb.config.cfg;
 import org.harbingers_of_chaos.mvm.Config;
 
 import java.sql.*;

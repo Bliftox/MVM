@@ -18,8 +18,12 @@ import net.minecraft.util.Util;
 import net.minecraft.util.WorldSavePath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.harbingers_of_chaos.mvb.Discord;
 import org.harbingers_of_chaos.mvm.command.Start;
 import org.harbingers_of_chaos.mvm.utils.ModRegistries;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 
@@ -27,15 +31,29 @@ public class MystiVerseModServer implements ModInitializer {
     public static final String MOD_ID = "mws";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().setLenient().create();
+
     private static MinecraftServer minecraftServer;
-    public static boolean isTrinkets = false;
     public static boolean isLuckPerms = false;
-    public static boolean isOrigins = false;
     @Override
     public void onInitialize() {
-        isTrinkets = FabricLoader.getInstance().isModLoaded("trinkets");
         isLuckPerms = FabricLoader.getInstance().isModLoaded("luckperms");
-        isOrigins = FabricLoader.getInstance().isModLoaded("origins");
+
+        try {
+            Config.load();
+        } catch (Exception e) {
+            LOGGER.warn("Failed to load config using defaults : ", e);
+        }
+
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+            Discord.start();
+        });
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> Discord.send(Config.INSTANCE.game.serverStartMessage));
+
+        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
+            Discord.stop();
+            Discord.send(Config.INSTANCE.game.serverStopMessage);
+        });
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 
@@ -79,7 +97,6 @@ public class MystiVerseModServer implements ModInitializer {
             startNode.addChild(sendNode);
 
         });
-
         ServerLifecycleEvents.SERVER_STARTING.register(this::onLogicalServerStarting);
     }
 

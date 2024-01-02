@@ -27,6 +27,7 @@ import java.util.Objects;
 
 import static org.harbingers_of_chaos.mvb.DatabaseManager.connection;
 import static org.harbingers_of_chaos.mvb.Main.*;
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class ApplicationHandler extends ListenerAdapter {
     private static String reason;
@@ -81,14 +82,14 @@ public class ApplicationHandler extends ListenerAdapter {
                             Button.danger(String.valueOf(userId + 2), "🛑 Отклонить")
                     ).queue();
 
-                    log.info("Application №" + appInt + " created access");
+                    LOGGER.info("Application №" + appInt + " created access");
                 } else {
-                    log.warning("Failed to receive text channel");
+                    LOGGER.warn("Failed to receive text channel");
                 }
                 prefs.putInt("appInt", appInt + 1);
             }
         } catch (Exception e) {
-            log.warning("Error application: " + e);
+            LOGGER.warn("Error application: " + e);
             event.reply("Произошла ошибка! ⛔").setEphemeral(true).queue();
         }
     }
@@ -101,7 +102,7 @@ public class ApplicationHandler extends ListenerAdapter {
                 }
             }
             return false; // Роль не найдена
-        } catch (Exception e) {log.warning("Role error: " + e);}
+        } catch (Exception e) {LOGGER.warn("Role error: " + e);}
         return false;
     }
 
@@ -119,7 +120,7 @@ public class ApplicationHandler extends ListenerAdapter {
             if (event.getComponent().getLabel().equals("🛑 Отклонить")) {
                 RejectButton.onButton(event);
             }
-        } catch (Exception e) {log.warning("Modal error: " + e);}
+        } catch (Exception e) {LOGGER.warn("Modal error: " + e);}
     }
 }
 

@@ -17,6 +17,7 @@ import java.util.Objects;
 import static org.harbingers_of_chaos.mvb.Main.*;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.userId;
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class AcceptButton {
     public static boolean onButton(ButtonInteractionEvent event, SimpleDateFormat format, Date date) {
@@ -32,7 +33,7 @@ public class AcceptButton {
 
             //получает айди кнопки которую нажали
             long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()));
-            log.info("Application access");
+            LOGGER.info("Application access");
 
             if (authorId != 0) {
                 try {
@@ -54,16 +55,16 @@ public class AcceptButton {
                     member.modifyNickname(nickname).queue();
 
 
-                    log.info("Заявка от Id:" + authorId);
+                    LOGGER.info("Заявка от Id:" + authorId);
                 } catch (Exception e) {
-                    log.warning("Access application error: " + e);
+                    LOGGER.warn("Access application error: " + e);
                 }
             } else {
-                log.warning("id null");
+                LOGGER.warn("id null");
                 return false;
             }
         } catch (Exception e) {
-            log.warning("Application warning: " + e);
+            LOGGER.warn("Application warning: " + e);
             return false;
         }
         return true;

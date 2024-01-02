@@ -23,6 +23,7 @@ import java.util.TreeSet;
 import static org.harbingers_of_chaos.mvb.Main.*;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class SuggestHandler extends ListenerAdapter {
 
@@ -54,7 +55,7 @@ public class SuggestHandler extends ListenerAdapter {
             event.replyModal(suggestModal).queue();
 
             // Вывод информации в лог о начале процесса предложения
-            log.info("Suggest");
+            LOGGER.info("Suggest");
         }
     }
 
@@ -77,7 +78,7 @@ public class SuggestHandler extends ListenerAdapter {
 
                 if (suggestChannel != null) {
                     // Вывод в лог информации о добавлении предложения
-                    log.info("Suggest added " + suggestAuthorId);
+                    LOGGER.info("Suggest added " + suggestAuthorId);
 
                     // Создание встроенного сообщения с предложением
                     EmbedBuilder suggestEmbed = new EmbedBuilder();
@@ -102,7 +103,7 @@ public class SuggestHandler extends ListenerAdapter {
                                     throwable.printStackTrace();
                                 });
                     } catch (Exception e) {
-                        log.warning("Send suggest error" + e);
+                        LOGGER.warn("Send suggest error" + e);
                     }
                 } else {
                     // В случае ошибки отправки сообщения
@@ -111,7 +112,7 @@ public class SuggestHandler extends ListenerAdapter {
             }
         } catch (Exception e) {
             // Обработка и вывод в лог исключений
-            log.warning("Suggest exception " + e);
+            LOGGER.warn("Suggest exception " + e);
         }
     }
 }

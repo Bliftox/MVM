@@ -153,11 +153,6 @@ public class Start {
 
         return 1;
     }
-
-
-
-
-
     private static ServerPlayerEntity getRequestedPlayer(CommandContext<ServerCommandSource> context, String number)
             throws CommandSyntaxException {
         GameProfile requestedProfile = GameProfileArgumentType.getProfileArgument(context, "target" + number).iterator().next();

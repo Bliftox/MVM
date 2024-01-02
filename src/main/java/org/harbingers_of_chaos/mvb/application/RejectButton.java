@@ -16,9 +16,9 @@ import java.awt.*;
 import java.util.Objects;
 
 import static org.harbingers_of_chaos.mvb.Main.*;
-import static org.harbingers_of_chaos.mvb.Main.log;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class RejectButton {
     public static boolean onButton(ButtonInteractionEvent event) {
@@ -31,7 +31,7 @@ public class RejectButton {
             applicationsLogChat = jda.getTextChannelById("1189900614226944110");
 
             long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()))-2;
-            log.info("Application rejected" +" от Id:" + authorId);
+            LOGGER.info("Application rejected" +" от Id:" + authorId);
             if (authorId != 0) {
                 try {
                     guild.addRoleToMember(UserSnowflake.fromId(authorId), Objects.requireNonNull(guild.getRoleById("1190023047822974996"))).queue();
@@ -48,17 +48,17 @@ public class RejectButton {
 
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
-                    log.info("Заявка от Id:" + authorId);
+                    LOGGER.info("Заявка от Id:" + authorId);
                 } catch (Exception e) {
-                    log.warning("Rejected application error: " + e);
+                    LOGGER.warn("Rejected application error: " + e);
                 }
             } else {
-                log.warning("id null");
+                LOGGER.warn("id null");
                 return false;
             }
 
         } catch (Exception e) {
-            log.warning("Application warning: " + e);
+            LOGGER.warn("Application warning: " + e);
             return false;
         }
         return true;

@@ -5,6 +5,7 @@ public class cfg {
     public static String password = "iUpyXD5+cl7+IfGia8eoILz5";
     public static String url = "jdbc:mysql://u44248_pUYk55cLWH:iUpyXD5%2Bcl7%2BIfGia8eoILz5@db1.apexnodes.xyz:3306/s44248_Application";
     public static String user = "u44248_pUYk55cLWH";
+    public static String channel = "1190289941817733140";
     public static Character prefix = '!';
 
 

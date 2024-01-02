@@ -20,9 +20,9 @@ import java.util.Date;
 import java.util.Objects;
 
 import static org.harbingers_of_chaos.mvb.Main.*;
-import static org.harbingers_of_chaos.mvb.Main.log;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class RejectWithReasonButton extends ListenerAdapter {
     private static Long authorId;
@@ -39,7 +39,7 @@ public class RejectWithReasonButton extends ListenerAdapter {
                 applicationsLogChat = jda.getTextChannelById("1189900614226944110");
 
                 authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId())) - 1;
-                log.info("Application №" + appInt + " rejected with reason");
+                LOGGER.info("Application №" + appInt + " rejected with reason");
                 if (authorId != 0) {
                     try {
 
@@ -54,14 +54,14 @@ public class RejectWithReasonButton extends ListenerAdapter {
                                 .build();
                         event.replyModal(reasonModal).queue();
                     } catch (Exception e) {
-                        log.warning("Rejected with reason application error: " + e);
+                        LOGGER.warn("Rejected with reason application error: " + e);
                     }
                 } else {
-                    log.warning("id null");
+                    LOGGER.warn("id null");
                     return;
                 }
             } catch (Exception e) {
-                log.warning("tyt " + e);
+                LOGGER.warn("tyt " + e);
             }
         }
     }
@@ -86,10 +86,10 @@ public class RejectWithReasonButton extends ListenerAdapter {
 
                 applicationsLogChat.sendMessage("<@" + authorId + ">").setEmbeds(applicationsRejectWithReasonLog.build()).queue();
 
-                log.info("Application rejected, Id:" + authorId);
+                LOGGER.info("Application rejected, Id:" + authorId);
             }
         } catch (Exception e) {
-        log.warning("Error reject with reason application: " + e);
+        LOGGER.warn("Error reject with reason application: " + e);
         event.reply("Произошла ошибка! ⛔").setEphemeral(true).queue();
         }
     }

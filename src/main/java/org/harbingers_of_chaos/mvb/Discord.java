@@ -41,14 +41,30 @@ public class Discord {
             return;
         }
 
+        if (Config.INSTANCE.sqLite.url.isEmpty()) {
+            MystiVerseModServer.LOGGER.fatal("Unable to load, no SQLite url is specified!");
+            return;
+        }
+
+        if (Config.INSTANCE.sqLite.password.isEmpty()) {
+            MystiVerseModServer.LOGGER.fatal("Unable to load, no SQLite password is specified!");
+            return;
+        }
+
+        if (Config.INSTANCE.sqLite.user.isEmpty()) {
+            MystiVerseModServer.LOGGER.fatal("Unable to load, no SQLite user is specified!");
+            return;
+        }
+
 //        if (Config.INSTANCE.discord.webhook.isEmpty()) {
 //            MystiVerseModServer.LOGGER.fatal("Unable to load, no Discord webhook is specified!");
 //            return;
 //        }
 
+
         try {
             jda = JDABuilder.createDefault(Config.INSTANCE.discord.token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
-                    .setActivity(Activity.playing("Лучший в мире сервер MystiVerse"))
+                    //.setActivity(Activity.playing("Лучший в мире сервер MystiVerse"))
                     .addEventListeners(new CommandHandler())
                     .addEventListeners(new ApplicationHandler())
                     .addEventListeners(new RejectWithReasonButton())

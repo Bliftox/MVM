@@ -3,6 +3,7 @@ package org.harbingers_of_chaos.mvb;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -56,11 +57,12 @@ public class Discord {
             return;
         }
 
-//        if (Config.INSTANCE.discord.webhook.isEmpty()) {
-//            MystiVerseModServer.LOGGER.fatal("Unable to load, no Discord webhook is specified!");
-//            return;
-//        }
-
+        try {
+            SQLite.getConnection();
+            SQLite.createDB();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         try {
             jda = JDABuilder.createDefault(Config.INSTANCE.discord.token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)

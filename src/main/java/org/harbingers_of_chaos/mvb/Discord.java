@@ -22,7 +22,6 @@ import org.harbingers_of_chaos.mvb.commands.CommandHandler;
 import org.harbingers_of_chaos.mvb.suggestion.SuggestHandler;
 import org.harbingers_of_chaos.mvm.Config;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
-
 public class Discord {
     // We can't use the Gson instance from the MystiVerseModServer class since it has html escaping disabled, which we want enabled for obvious reasons
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().create();
@@ -58,10 +57,11 @@ public class Discord {
         }
 
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             SQLite.getConnection();
             SQLite.createDB();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | ClassNotFoundException e) {
+            MystiVerseModServer.LOGGER.fatal("Exception initializing SQLite", e);
         }
 
         try {
@@ -95,7 +95,11 @@ public class Discord {
         if (jda != null) {
             jda.shutdown();
             jda = null;
-
+            try {
+                SQLite.closeConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

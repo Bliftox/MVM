@@ -51,6 +51,8 @@ dependencies {
 
     modImplementation(include("eu.pb4:placeholder-api:2.0.0-pre.1+1.19.2"))
 
+
+
     include(implementation("net.dv8tion:JDA:5.0.0-beta.18"){
         exclude module: "opus-java"
     })
@@ -62,6 +64,7 @@ dependencies {
     include("com.squareup.okhttp3:okhttp:4.9.3")
     include("com.squareup.okio:okio-jvm:3.2.0")
     include("com.neovisionaries:nv-websocket-client:2.14")
+    include("mysql:mysql-connector-java:8.0.30")
 
     modImplementation "me.lucko:fabric-permissions-api:0.2-SNAPSHOT"
     include "me.lucko:fabric-permissions-api:0.2-SNAPSHOT"

@@ -27,9 +27,7 @@ public class Discord {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().create();
 
     private static JDA jda;
-    public static final Preferences prefs = Preferences.userRoot().node(Discord.class.getName());
 
-    public static Integer appInt = prefs.getInt("appInt", 0);
     public static void start() {
         if (Config.INSTANCE.discord.token.isEmpty()) {
             MystiVerseModServer.LOGGER.fatal("Unable to load, no Discord token is specified!");
@@ -60,9 +58,11 @@ public class Discord {
             Class.forName("com.mysql.cj.jdbc.Driver");
             SQLite.getConnection();
             SQLite.createDB();
+            MystiVerseModServer.LOGGER.info("MVM:SQLite start");
         } catch (SQLException | ClassNotFoundException e) {
             MystiVerseModServer.LOGGER.fatal("Exception initializing SQLite", e);
         }
+
 
         try {
             jda = JDABuilder.createDefault(Config.INSTANCE.discord.token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
@@ -79,7 +79,7 @@ public class Discord {
             MystiVerseModServer.LOGGER.fatal("Exception initializing JDA", e);
         }
         MystiVerseModServer.LOGGER.info("Bot started");
-        MystiVerseModServer.LOGGER.info("Number of applications sent: " + appInt);
+        MystiVerseModServer.LOGGER.info("Number of applications sent: " + Config.INSTANCE.discord.appInt);
     }
     public static void send(String message) {
         if (jda != null) {

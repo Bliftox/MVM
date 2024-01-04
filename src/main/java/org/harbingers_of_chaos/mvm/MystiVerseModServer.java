@@ -51,8 +51,13 @@ public class MystiVerseModServer implements ModInitializer {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> Discord.send(Config.INSTANCE.game.serverStartMessage));
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            Discord.stop();
             Discord.send(Config.INSTANCE.game.serverStopMessage);
+            Discord.stop();
+            try {
+                Config.save();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {

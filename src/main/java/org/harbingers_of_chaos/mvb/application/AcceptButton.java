@@ -15,10 +15,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
+import org.harbingers_of_chaos.mvb.SQLite;
 import org.harbingers_of_chaos.mvm.Config;
-import static org.harbingers_of_chaos.mvb.Discord.*;
-import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
-import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.userId;
+
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class AcceptButton {
@@ -36,8 +35,11 @@ public class AcceptButton {
 
 
             //получает айди кнопки которую нажали
-            long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()));
+            int appInt = Integer.parseInt(Objects.requireNonNull(event.getButton().getId()));
+            long authorId = SQLite.getApplicationUser_id(appInt);
+            String nickname = SQLite.getApplicationNickname(appInt);
             LOGGER.info("Application access");
+            LOGGER.info(authorId);
 
             if (authorId != 0) {
                 try {
@@ -55,8 +57,9 @@ public class AcceptButton {
 
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
-                    Member member = guild.getMemberById(userId);
-                    member.modifyNickname(nickname).queue();
+//                    Member member = guild.getMember(UserSnowflake.fromId(authorId));
+//                    guild.modifyNickname(guild.getMember(UserSnowflake.fromId(authorId)),nickname).queue();
+
 
 
                     LOGGER.info("Заявка от Id:" + authorId);

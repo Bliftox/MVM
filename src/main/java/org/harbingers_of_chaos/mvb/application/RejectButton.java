@@ -6,19 +6,14 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.text.TextInput;
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
-import net.dv8tion.jda.api.interactions.modals.Modal;
 import org.harbingers_of_chaos.mvb.Discord;
 
 import java.awt.*;
 import java.util.Objects;
 
 
+import org.harbingers_of_chaos.mvb.SQLite;
 import org.harbingers_of_chaos.mvm.Config;
-import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
@@ -35,7 +30,8 @@ public class RejectButton {
             assert applicationsLogChat != null;
             assert accessRole != null;
 
-            long authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId()))-2;
+            int appInt = Integer.parseInt(Objects.requireNonNull(event.getButton().getId()))-1;
+            long authorId = SQLite.getApplicationUser_id(appInt);
             LOGGER.info("Application rejected" +" от Id:" + authorId);
             if (authorId != 0) {
                 try {

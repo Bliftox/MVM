@@ -16,6 +16,8 @@ import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 import net.dv8tion.jda.api.requests.Route;
 import org.harbingers_of_chaos.mvb.Discord;
+import org.harbingers_of_chaos.mvb.SQLite;
+import org.harbingers_of_chaos.mvm.Config;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -32,16 +34,18 @@ import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 public class ApplicationHandler extends ListenerAdapter {
     private static String reason;
     private static String userName;
-    public static long userId;
+    public static String userId;
     public static SimpleDateFormat format = new SimpleDateFormat(" HH:mm  dd/MM/yyyy");
     public static Date date = new Date();
     private TextChannel applicationsChat;
     public static String nickname;
-    public static String years;
-    public static String sex;
-    public static String bio;
-    public static String whyWe;
+    private static int years;
+    private static String sex;
+    private static String bio;
+    private static String whyWe;
     private static Guild guild;
+    private static int appInt;
+
 
     @Override
     public void onModalInteraction(@NotNull ModalInteractionEvent event) {
@@ -49,14 +53,14 @@ public class ApplicationHandler extends ListenerAdapter {
             if (event.getModalId().equals("application")) {
                 guild = event.getGuild();
                 nickname = Objects.requireNonNull(event.getValue("nickname")).getAsString();
-                years = Objects.requireNonNull(event.getValue("years")).getAsString();
+                years = Integer.parseInt(Objects.requireNonNull(event.getValue("years")).getAsString());
                 sex = Objects.requireNonNull(event.getValue("sex")).getAsString();
                 bio = Objects.requireNonNull(event.getValue("bio")).getAsString();
                 whyWe = Objects.requireNonNull(event.getValue("whyWe")).getAsString();
-                appInt = prefs.getInt("appInt", 0);
+                appInt = Config.INSTANCE.discord.appInt;
 
                 userName = event.getUser().getName();
-                userId = event.getUser().getIdLong();
+                userId = event.getUser().getId();
 
                 applicationsChat = Discord.getJda().getTextChannelById("1189996402164629575");
 
@@ -78,16 +82,16 @@ public class ApplicationHandler extends ListenerAdapter {
                     event.reply("Заявка №" + appInt + " успешно отправлена! 🎄").setEphemeral(true).queue();
 
                     applicationsChat.sendMessage("<@&1189667213318295606>" + " <@" + userId + ">").setEmbeds(applicationEmbed.build()).addActionRow(
-                            Button.success(String.valueOf(userId), "✅ Принять"),
-                            Button.secondary(String.valueOf(userId + 1), "⚠️ Отклонить с причиной"),
-                            Button.danger(String.valueOf(userId + 2), "🛑 Отклонить")
+                            Button.success(String.valueOf(appInt), "✅ Принять"),
+                            Button.secondary(String.valueOf(appInt+1), "⚠️ Отклонить с причиной"),
+                            Button.danger(String.valueOf(appInt+2), "🛑 Отклонить")
                     ).queue();
-
+                    SQLite.addApplication(appInt,userName, userId,nickname,years,sex,bio,whyWe);
                     LOGGER.info("Application №" + appInt + " created access");
                 } else {
                     LOGGER.warn("Failed to receive text channel");
                 }
-                prefs.putInt("appInt", appInt + 1);
+                Config.INSTANCE.discord.appInt++;
             }
         } catch (Exception e) {
             LOGGER.warn("Error application: " + e);

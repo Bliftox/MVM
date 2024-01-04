@@ -20,6 +20,15 @@ public class Config {
             Files.writeString(configPath, MystiVerseModServer.GSON.toJson(INSTANCE), StandardCharsets.UTF_8);
         }
     }
+    public static void save() throws Exception {
+        var configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
+
+        if (Files.exists(configPath)) {
+            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(INSTANCE), StandardCharsets.UTF_8);
+        } else {
+            MystiVerseModServer.LOGGER.error("MVM:No config");
+        }
+    }
 
     @Expose public Discord discord = new Discord();
     @Expose public SQLite sqLite = new SQLite();
@@ -32,6 +41,7 @@ public class Config {
         @Expose public String LogChat = "1189900614226944110";
         @Expose public String Chat = "1189996402164629575";
         @Expose public String token = "";
+        @Expose public int appInt = 1;
     }
     public static class SQLite{
         @Expose public String password = "";

@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.entities.Role;
+import org.harbingers_of_chaos.mvm.Config;
 
 import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
@@ -51,7 +52,7 @@ public class CommandHandler extends ListenerAdapter {
                     LOGGER.info("Command help");
 
                 } else if (message.equalsIgnoreCase("$appintreset")) {
-                    prefs.putInt("appInt", appInt - appInt + 1);
+                    Config.INSTANCE.discord.appInt = 1;
                     event.getMessage().reply("Счетчик сброшен успешно! ☃️").queue();
                     LOGGER.info("Command appintreset");
                 }

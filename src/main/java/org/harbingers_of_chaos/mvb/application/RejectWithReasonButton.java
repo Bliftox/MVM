@@ -13,15 +13,13 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 import org.harbingers_of_chaos.mvb.Discord;
+import org.harbingers_of_chaos.mvb.SQLite;
 import org.jetbrains.annotations.NotNull;
 import org.harbingers_of_chaos.mvm.Config;
 
 import java.awt.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
 
-import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
@@ -42,8 +40,9 @@ public class RejectWithReasonButton extends ListenerAdapter {
                 assert accessRole != null;
                 applicationsLogChat = Discord.getJda().getTextChannelById(Config.INSTANCE.discord.LogChat);
 
-                authorId = Long.parseLong(Objects.requireNonNull(event.getButton().getId())) - 1;
-                LOGGER.info("Application №" + appInt + " rejected with reason");
+                int appInt = Integer.parseInt(Objects.requireNonNull(event.getButton().getId()))-1;
+                long authorId = SQLite.getApplicationUser_id(appInt);
+                LOGGER.info("Application №" + Config.INSTANCE.discord.appInt + " rejected with reason");
                 if (authorId != 0) {
                     try {
 

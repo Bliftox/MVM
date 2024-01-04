@@ -29,7 +29,8 @@ public class SQLite {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
 
-        statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (application_Int INTEGER , username TEXT, user_id BIGINT, nickname TEXT, years INTEGER, sex TEXT, bio TEXT, why_we TEXT)");
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (application_Int INTEGER PRIMARY KEY, username TEXT, user_id BIGINT, nickname TEXT, years INTEGER, sex TEXT, bio TEXT, why_we TEXT)");
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (Id INTEGER PRIMARY KEY, application_Int INTEGER, nickname TEXT)");
     }
 
     public static void addApplication(int application_Int,String username,String user_id,String nickname,int years,String sex,String bio,String why_we) throws SQLException {
@@ -57,11 +58,11 @@ public class SQLite {
         return data;
     }
 
-    public static void addPlayer(String name) throws SQLException {
+    public static void addPlayer(int id,int application_Int,String nickname) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
 
-        statement.executeUpdate(String.format("INSERT INTO players VALUES('%s', 0)", name));
+        statement.executeUpdate(String.format("INSERT INTO player VALUES('%d','%d','%s')", id,application_Int,nickname));
     }
 
     public static void updatePlayerData(String name, long unix) throws SQLException {

@@ -57,6 +57,8 @@ public class AcceptButton {
 
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
+                    Config.INSTANCE.game.players++;
+                    SQLite.addPlayer(Config.INSTANCE.game.players,appInt,nickname);
 //                    Member member = guild.getMember(UserSnowflake.fromId(authorId));
 //                    guild.modifyNickname(guild.getMember(UserSnowflake.fromId(authorId)),nickname).queue();
 

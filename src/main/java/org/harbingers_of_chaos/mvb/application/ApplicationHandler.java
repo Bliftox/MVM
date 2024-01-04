@@ -64,6 +64,8 @@ public class ApplicationHandler extends ListenerAdapter {
 
                 applicationsChat = Discord.getJda().getTextChannelById("1189996402164629575");
 
+                Config.INSTANCE.discord.appInt++;
+
                 if (applicationsChat != null) {
                     guild.addRoleToMember(UserSnowflake.fromId(userId), Objects.requireNonNull(guild.getRoleById("1190724252966596701"))).queue();
 
@@ -91,7 +93,6 @@ public class ApplicationHandler extends ListenerAdapter {
                 } else {
                     LOGGER.warn("Failed to receive text channel");
                 }
-                Config.INSTANCE.discord.appInt++;
             }
         } catch (Exception e) {
             LOGGER.warn("Error application: " + e);

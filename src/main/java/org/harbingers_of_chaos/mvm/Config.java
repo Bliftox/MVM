@@ -41,7 +41,7 @@ public class Config {
         @Expose public String LogChat = "1189900614226944110";
         @Expose public String Chat = "1189996402164629575";
         @Expose public String token = "";
-        @Expose public int appInt = 1;
+        @Expose public int appInt = 0;
     }
     public static class SQLite{
         @Expose public String password = "";
@@ -54,6 +54,7 @@ public class Config {
         @Expose public String serverStartMessage = "Server has started!";
         @Expose public String serverStopMessage = "Server has stopped!";
         @Expose public String serverCrashMessage = "Server has crashed!";
+        @Expose public int players = 0;
         @Expose public boolean mirrorDeath = true;
         @Expose public boolean mirrorAdvancements = true;
     }

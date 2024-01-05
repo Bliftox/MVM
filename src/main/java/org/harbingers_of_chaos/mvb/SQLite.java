@@ -18,7 +18,7 @@ public class SQLite {
     static Connection dbConnection;
 
     public static void getConnection() throws SQLException {
-        dbConnection = DriverManager.getConnection(Config.INSTANCE.sqLite.url, Config.INSTANCE.sqLite.user,Config.INSTANCE.sqLite.password);
+        dbConnection = DriverManager.getConnection(Config.INSTANCE.sqLite.url, Config.INSTANCE.sqLite.user, Config.INSTANCE.sqLite.password);
     }
 
     public static void closeConnection() throws SQLException {
@@ -33,12 +33,13 @@ public class SQLite {
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (Id INTEGER PRIMARY KEY, application_Int INTEGER, nickname TEXT)");
     }
 
-    public static void addApplication(int application_Int,String username,String user_id,String nickname,int years,String sex,String bio,String why_we) throws SQLException {
+    public static void addApplication(int application_Int, String username, String user_id, String nickname, int years, String sex, String bio, String why_we) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
 
-        statement.executeUpdate(String.format("INSERT INTO application VALUES('%d','%s','%s','%s','%d','%s','%s','%s')", application_Int,username,user_id,nickname,years,sex,bio,why_we));
+        statement.executeUpdate(String.format("INSERT INTO application VALUES('%d','%s','%s','%s','%d','%s','%s','%s')", application_Int, username, user_id, nickname, years, sex, bio, why_we));
     }
+
     public static long getApplicationUser_id(int appInt) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
@@ -48,52 +49,41 @@ public class SQLite {
             data = rs.getLong("user_id");
         return data;
     }
+
     public static String getApplicationNickname(int appInt) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM application WHERE application_Int = '%d'", appInt));
         String data = "";
         while (rs.next())
-            data = rs.getString("user_id");
+            data = rs.getString("nickname");
         return data;
     }
 
-    public static void addPlayer(int id,int application_Int,String nickname) throws SQLException {
+    public static void addPlayer(int id, int application_Int, String nickname) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
 
-        statement.executeUpdate(String.format("INSERT INTO player VALUES('%d','%d','%s')", id,application_Int,nickname));
+        statement.executeUpdate(String.format("INSERT INTO player VALUES('%d','%d','%s')", id, application_Int, nickname));
     }
 
-    public static void updatePlayerData(String name, long unix) throws SQLException {
+    public static String getPlayerNickname(int id) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
-        statement.executeUpdate(String.format("UPDATE players SET unix = %d WHERE name = '%s'", unix, name));
-    }
-
-    public static long getPlayerUnix(String name) throws SQLException {
-        Statement statement = dbConnection.createStatement();
-        statement.setQueryTimeout(30);
-        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM players WHERE name = '%s'", name));
-        long data = 0;
-        while (rs.next())
-            data = rs.getLong("unix");
-        return data;
-    }
-
-    public static int getPlayerIsRegistered(String name) throws SQLException {
-        Statement statement = dbConnection.createStatement();
-        statement.setQueryTimeout(30);
-        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM players WHERE name = '%s'", name));
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE Id = '%d'", id));
         String data = "";
         while (rs.next())
-            data = rs.getString("name");
+            data = rs.getString("nickname");
+        return data;
+    }
 
-        if (data == null) {
-            return 0;
-        } else if (!data.equals(name)) {
-            return 0;
-        }
-        return 1;
+    public static int getPlayerApp(int id) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        statement.setQueryTimeout(30);
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE Id = '%d'", id));
+        int data = 0;
+        while (rs.next())
+            data = rs.getInt("nickname");
+        return data;
     }
 }

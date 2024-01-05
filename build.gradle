@@ -64,7 +64,7 @@ dependencies {
     include("com.squareup.okhttp3:okhttp:4.9.3")
     include("com.squareup.okio:okio-jvm:3.2.0")
     include("com.neovisionaries:nv-websocket-client:2.14")
-    include("mysql:mysql-connector-java:8.0.30")
+    include(implementation("mysql:mysql-connector-java:8.0.30"))
 
     modImplementation "me.lucko:fabric-permissions-api:0.2-SNAPSHOT"
     include "me.lucko:fabric-permissions-api:0.2-SNAPSHOT"

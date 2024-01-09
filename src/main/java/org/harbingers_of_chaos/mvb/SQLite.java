@@ -83,7 +83,16 @@ public class SQLite {
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE Id = '%d'", id));
         int data = 0;
         while (rs.next())
-            data = rs.getInt("nickname");
+            data = rs.getInt("application_Int");
+        return data;
+    }
+    public static int getPlayerID(String nickname) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        statement.setQueryTimeout(30);
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE Id = '%s'", nickname));
+        int data = 0;
+        while (rs.next())
+            data = rs.getInt("Id");
         return data;
     }
 }

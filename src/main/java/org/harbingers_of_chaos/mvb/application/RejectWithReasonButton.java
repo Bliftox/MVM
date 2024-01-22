@@ -13,9 +13,9 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 import org.harbingers_of_chaos.mvb.Discord;
-import org.harbingers_of_chaos.mvb.SQLite;
+import org.harbingers_of_chaos.mvlib.mySQL;
 import org.jetbrains.annotations.NotNull;
-import org.harbingers_of_chaos.mvm.Config;
+import org.harbingers_of_chaos.mvlib.Config;
 
 import java.awt.*;
 import java.util.Objects;
@@ -41,7 +41,7 @@ public class RejectWithReasonButton extends ListenerAdapter {
                 applicationsLogChat = Discord.getJda().getTextChannelById(Config.INSTANCE.discord.LogChat);
 
                 int appInt = Integer.parseInt(Objects.requireNonNull(event.getButton().getId()))-1;
-                long authorId = SQLite.getApplicationUser_id(appInt);
+                long authorId = mySQL.getApplicationUser_id(appInt);
                 LOGGER.info("Application №" + Config.INSTANCE.discord.appInt + " rejected with reason");
                 if (authorId != 0) {
                     try {

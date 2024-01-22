@@ -9,26 +9,18 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.interactions.components.text.TextInput;
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
-import net.dv8tion.jda.api.interactions.modals.Modal;
-import net.dv8tion.jda.api.requests.Route;
 import org.harbingers_of_chaos.mvb.Discord;
-import org.harbingers_of_chaos.mvb.SQLite;
-import org.harbingers_of_chaos.mvm.Config;
+import org.harbingers_of_chaos.mvlib.mySQL;
+import org.harbingers_of_chaos.mvlib.Config;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
 
-import static org.harbingers_of_chaos.mvb.Discord.*;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class ApplicationHandler extends ListenerAdapter {
@@ -88,7 +80,7 @@ public class ApplicationHandler extends ListenerAdapter {
                             Button.secondary(String.valueOf(appInt+1), "⚠️ Отклонить с причиной"),
                             Button.danger(String.valueOf(appInt+2), "🛑 Отклонить")
                     ).queue();
-                    SQLite.addApplication(appInt,userName, userId,nickname,years,sex,bio,whyWe);
+                    mySQL.addApplication(appInt,userName, userId,nickname,years,sex,bio,whyWe);
                     LOGGER.info("Application №" + appInt + " created access");
                 } else {
                     LOGGER.warn("Failed to receive text channel");

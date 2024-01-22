@@ -1,30 +1,21 @@
 package org.harbingers_of_chaos.mvb.application;
 
-import com.google.gson.JsonObject;
-import com.mojang.authlib.GameProfile;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.text.TextInput;
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
-import net.dv8tion.jda.api.interactions.modals.Modal;
 import net.minecraft.server.Whitelist;
 import net.minecraft.server.WhitelistEntry;
 import org.harbingers_of_chaos.mvb.Discord;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-import org.harbingers_of_chaos.mvb.SQLite;
+import org.harbingers_of_chaos.mvlib.mySQL;
 import org.harbingers_of_chaos.mvb.profiles.profiles;
-import org.harbingers_of_chaos.mvm.Config;
+import org.harbingers_of_chaos.mvlib.Config;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
@@ -45,8 +36,8 @@ public class AcceptButton {
 
             //получает айди кнопки которую нажали
             int appInt = Integer.parseInt(Objects.requireNonNull(event.getButton().getId()));
-            long authorId = SQLite.getApplicationUser_id(appInt);
-            String nickname = SQLite.getApplicationNickname(appInt);
+            long authorId = mySQL.getApplicationUser_id(appInt);
+            String nickname = mySQL.getApplicationNickname(appInt);
             LOGGER.info("Application access");
             LOGGER.info(authorId);
 
@@ -67,19 +58,19 @@ public class AcceptButton {
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
                     Config.INSTANCE.game.players++;
-                    SQLite.addPlayer(Config.INSTANCE.game.players,appInt,nickname);
+                    mySQL.addPlayer(Config.INSTANCE.game.players,appInt,nickname);
 //                    Member member = guild.getMember(UserSnowflake.fromId(authorId));
 //                    guild.modifyNickname(guild.getMember(UserSnowflake.fromId(authorId)),nickname).queue();
 
-//                    try {
-//                        Whitelist whitelist = MystiVerseModServer.getMinecraftServer().getPlayerManager().getWhitelist();
-//                        WhitelistEntry whitelistEntry = new WhitelistEntry(profiles.JsonUrl(nickname));
-////                        LOGGER.info("nickname:" + authorId);
-//                        LOGGER.info("uuid:" + profiles.JsonUrl(nickname).toString());
-//                        whitelist.add(whitelistEntry);
-//                    } catch (Exception e) {
-//                        LOGGER.warn("Access application error: " + e);
-//                    }
+                    try {
+                        Whitelist whitelist = MystiVerseModServer.getMinecraftServer().getPlayerManager().getWhitelist();
+                        WhitelistEntry whitelistEntry = new WhitelistEntry(profiles.JsonUrl(nickname));
+//                        LOGGER.info("nickname:" + authorId);
+                        LOGGER.info("uuid:" + profiles.JsonUrl(nickname).toString());
+                        whitelist.add(whitelistEntry);
+                    } catch (Exception e) {
+                        LOGGER.warn("Access application error: " + e);
+                    }
                     LOGGER.info("Заявка от Id:" + authorId);
                 } catch (Exception e) {
                     LOGGER.warn("Access application error: " + e);

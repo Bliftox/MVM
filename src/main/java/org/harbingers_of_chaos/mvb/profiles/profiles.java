@@ -37,8 +37,11 @@ public class profiles {
             URL url = new URL("https://api.mojang.com/users/profiles/minecraft/"+urlString);
             URLConnection request = url.openConnection();
             request.setRequestProperty("Content-Type", "application/json; utf-8");
+            JsonObject jsonObject = new JsonParser().parse(new InputStreamReader((InputStream) request.getContent())).getAsJsonObject();
 
-            return new JsonParser().parse(new InputStreamReader((InputStream) request.getContent())).getAsJsonObject();
+            jsonObject.addProperty("uuid",jsonObject.get("uuid").getAsString().replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
+
+            return jsonObject;
         } finally {
             if (reader != null)
                 reader.close();

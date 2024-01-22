@@ -12,8 +12,8 @@ import java.awt.*;
 import java.util.Objects;
 
 
-import org.harbingers_of_chaos.mvb.SQLite;
-import org.harbingers_of_chaos.mvm.Config;
+import org.harbingers_of_chaos.mvlib.mySQL;
+import org.harbingers_of_chaos.mvlib.Config;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.date;
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.format;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
@@ -31,7 +31,7 @@ public class RejectButton {
             assert accessRole != null;
 
             int appInt = Integer.parseInt(Objects.requireNonNull(event.getButton().getId()))-1;
-            long authorId = SQLite.getApplicationUser_id(appInt);
+            long authorId = mySQL.getApplicationUser_id(appInt);
             LOGGER.info("Application rejected" +" от Id:" + authorId);
             if (authorId != 0) {
                 try {

@@ -1,31 +1,35 @@
 package org.harbingers_of_chaos.mvb;
 
-import java.net.URI;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.prefs.Preferences;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.harbingers_of_chaos.mvb.CityHandler.cityHandler;
 import org.harbingers_of_chaos.mvb.CityHandler.cityModalHandler;
 import org.harbingers_of_chaos.mvb.application.ApplicationHandler;
 import org.harbingers_of_chaos.mvb.application.RejectWithReasonButton;
+import org.harbingers_of_chaos.mvb.code.DiscordMessageListener;
 import org.harbingers_of_chaos.mvb.commands.CommandHandler;
 import org.harbingers_of_chaos.mvb.suggestion.SuggestHandler;
-import org.harbingers_of_chaos.mvm.Config;
+import org.harbingers_of_chaos.mvlib.AccountLinking;
+import org.harbingers_of_chaos.mvlib.Config;
+import org.harbingers_of_chaos.mvlib.mySQL;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
+import org.harbingers_of_chaos.mvm.listeners.MinecraftEventListeners;
 public class Discord {
     // We can't use the Gson instance from the MystiVerseModServer class since it has html escaping disabled, which we want enabled for obvious reasons
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().create();
-
+    public static AccountLinking ACCOUNT_LINKING;
     private static JDA jda;
 
     public static void start() {
@@ -56,8 +60,8 @@ public class Discord {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            SQLite.getConnection();
-            SQLite.createDB();
+            mySQL.getConnection();
+            mySQL.createDB();
             MystiVerseModServer.LOGGER.info("MVM:SQLite start");
         } catch (SQLException | ClassNotFoundException e) {
             MystiVerseModServer.LOGGER.fatal("Exception initializing SQLite", e);
@@ -73,13 +77,31 @@ public class Discord {
                     .addEventListeners(new SuggestHandler())
                     .addEventListeners(new cityHandler())
                     .addEventListeners(new cityModalHandler())
-                    //.addEventListeners(new NewsEmbedHandler())
+                    .addEventListeners(new DiscordMessageListener())
+                    .disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS)
+            //.addEventListeners(new NewsEmbedHandler())
                     .build();
         } catch (Exception e) {
             MystiVerseModServer.LOGGER.fatal("Exception initializing JDA", e);
         }
+        MinecraftEventListeners.init(ACCOUNT_LINKING);
+        DiscordMessageListener.init(ACCOUNT_LINKING);
         MystiVerseModServer.LOGGER.info("Bot started");
         MystiVerseModServer.LOGGER.info("Number of applications sent: " + Config.INSTANCE.discord.appInt);
+    }
+    public static void kickForUnlinkedAccount(ServerPlayerEntity player){
+        String ip = player.getIp();
+        ACCOUNT_LINKING.tryQueueForLinking(ip);
+        String code = ACCOUNT_LINKING.getCode(ip);
+
+        MutableText reason = Text.empty()
+                .append(Text.literal("This server requires a linked Discord account!\n"))
+                .append(Text.literal("Your linking code is "))
+                .append(Text.literal(code)
+                        .formatted(Formatting.BLUE, Formatting.UNDERLINE))
+                .append(Text.literal("\nPlease DM the bot this linking code to link your account"));
+
+        player.networkHandler.disconnect(reason);
     }
     public static void send(String message) {
         if (jda != null) {
@@ -96,7 +118,7 @@ public class Discord {
             jda.shutdown();
             jda = null;
             try {
-                SQLite.closeConnection();
+                mySQL.closeConnection();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

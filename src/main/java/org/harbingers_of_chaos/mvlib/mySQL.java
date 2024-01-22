@@ -1,8 +1,8 @@
-package org.harbingers_of_chaos.mvb;
-
-import org.harbingers_of_chaos.mvm.Config;
+package org.harbingers_of_chaos.mvlib;
 
 import java.sql.*;
+
+import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
 
 
 
@@ -14,7 +14,7 @@ import java.sql.*;
  *
  */
 
-public class SQLite {
+public class mySQL {
     static Connection dbConnection;
 
     public static void getConnection() throws SQLException {
@@ -30,7 +30,7 @@ public class SQLite {
         statement.setQueryTimeout(30);
 
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (application_Int INTEGER PRIMARY KEY, username TEXT, user_id BIGINT, nickname TEXT, years INTEGER, sex TEXT, bio TEXT, why_we TEXT)");
-        statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (Id INTEGER PRIMARY KEY, application_Int INTEGER, nickname TEXT)");
+        statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (Id INTEGER PRIMARY KEY, application_Int INTEGER, nickname TEXT, user_id BIGINT, IP TEXT)");
     }
 
     public static void addApplication(int application_Int, String username, String user_id, String nickname, int years, String sex, String bio, String why_we) throws SQLException {
@@ -86,13 +86,54 @@ public class SQLite {
             data = rs.getInt("application_Int");
         return data;
     }
+
+    public static int getPlayerApp(String nickname) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        statement.setQueryTimeout(30);
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE nickname = '%s'", nickname));
+        int data = 0;
+        while (rs.next())
+            data = rs.getInt("application_Int");
+        return data;
+    }
     public static int getPlayerID(String nickname) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
-        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE Id = '%s'", nickname));
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE nickname = '%s'", nickname));
         int data = 0;
         while (rs.next())
             data = rs.getInt("Id");
         return data;
     }
+    public static boolean hasPlayerIp(String ip) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        statement.setQueryTimeout(30);
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", ip));
+        return (rs != null);
+    }
+    public static boolean hasPlayerDiscordId(long discordId) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        statement.setQueryTimeout(30);
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE user_id = '%d'", discordId));
+        return (rs != null);
+    }
+
+    public static long getPlayerDiscordIdOrDefault(String ip) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        statement.setQueryTimeout(30);
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", nickname));
+        long data = 0;
+        while (rs.next())
+            data = rs.getLong("user_id");
+
+        return (data != 0)
+                ? data
+                : null;
+    }
+    public static void setPlayerIp(String ip,long user_id) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        statement.setQueryTimeout(30);
+        statement.executeUpdate(String.format("UPDATE players SET IP = '%s' WHERE user_id = '%s'", ip, user_id));
+    }
+
 }

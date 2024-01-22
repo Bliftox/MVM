@@ -1,4 +1,4 @@
-package org.harbingers_of_chaos.mvm;
+package org.harbingers_of_chaos.mvlib;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import com.google.gson.annotations.Expose;
 
 import net.fabricmc.loader.api.FabricLoader;
+import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 
 public class Config {
     public static Config INSTANCE;

@@ -1,5 +1,7 @@
 package org.harbingers_of_chaos.mvlib;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import java.sql.*;
 
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
@@ -60,11 +62,11 @@ public class mySQL {
         return data;
     }
 
-    public static void addPlayer(int id, int application_Int, String nickname) throws SQLException {
+    public static void addPlayer(int id, int application_Int, String nickname, String user_id) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
 
-        statement.executeUpdate(String.format("INSERT INTO player VALUES('%d','%d','%s')", id, application_Int, nickname));
+        statement.executeUpdate(String.format("INSERT INTO player VALUES('%d','%d','%s','%s',null)", id, application_Int, nickname,user_id));
     }
 
     public static String getPlayerNickname(int id) throws SQLException {
@@ -118,17 +120,21 @@ public class mySQL {
         return (rs != null);
     }
 
-    public static long getPlayerDiscordIdOrDefault(String ip) throws SQLException {
-        Statement statement = dbConnection.createStatement();
-        statement.setQueryTimeout(30);
-        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", nickname));
+    public static long getPlayerDiscordId(String ip) throws SQLException {
+            Statement statement = dbConnection.createStatement();
+            statement.setQueryTimeout(30);
+            ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", nickname));
         long data = 0;
         while (rs.next())
             data = rs.getLong("user_id");
 
-        return (data != 0)
-                ? data
-                : null;
+        return data;
+    }
+    public static Object getPlayerDiscordIdOrDefault(String ip) throws SQLException {
+        Long v;
+        return (((v = getPlayerDiscordId(ip)) != null) || hasPlayerIp(ip))
+                ? v
+                : ObjectUtils.NULL;
     }
     public static void setPlayerIp(String ip,long user_id) throws SQLException {
         Statement statement = dbConnection.createStatement();

@@ -31,7 +31,7 @@ public class AccountLinking {
     private final SecureRandom random = new SecureRandom();
     public Optional<Long> getLinkedAccount(String ip){
         try {
-            return Optional.ofNullable(mySQL.getPlayerDiscordIdOrDefault(ip));
+            return Optional.ofNullable((Long) mySQL.getPlayerDiscordIdOrDefault(ip));
         } catch (SQLException e) {
             return Optional.empty();
         }

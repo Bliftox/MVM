@@ -58,20 +58,10 @@ public class AcceptButton {
                     event.getChannel().deleteMessageById(event.getMessage().getId()).queue();
 
                     Config.INSTANCE.game.players++;
-                    mySQL.addPlayer(Config.INSTANCE.game.players,appInt,nickname);
+                    mySQL.addPlayer(Config.INSTANCE.game.players,appInt,nickname, String.valueOf(authorId));
 //                    Member member = guild.getMember(UserSnowflake.fromId(authorId));
 //                    guild.modifyNickname(guild.getMember(UserSnowflake.fromId(authorId)),nickname).queue();
-
-                    try {
-                        Whitelist whitelist = MystiVerseModServer.getMinecraftServer().getPlayerManager().getWhitelist();
-                        WhitelistEntry whitelistEntry = new WhitelistEntry(profiles.JsonUrl(nickname));
-//                        LOGGER.info("nickname:" + authorId);
-                        LOGGER.info("uuid:" + profiles.JsonUrl(nickname).toString());
-                        whitelist.add(whitelistEntry);
-                    } catch (Exception e) {
-                        LOGGER.warn("Access application error: " + e);
-                    }
-                    LOGGER.info("Заявка от Id:" + authorId);
+                   LOGGER.info("Заявка от Id:" + authorId);
                 } catch (Exception e) {
                     LOGGER.warn("Access application error: " + e);
                 }

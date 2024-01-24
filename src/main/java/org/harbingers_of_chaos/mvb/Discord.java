@@ -33,6 +33,7 @@ public class Discord {
     private static JDA jda;
 
     public static void start() {
+        ACCOUNT_LINKING = new AccountLinking();
         if (Config.INSTANCE.discord.token.isEmpty()) {
             MystiVerseModServer.LOGGER.fatal("Unable to load, no Discord token is specified!");
             return;

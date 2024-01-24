@@ -113,6 +113,12 @@ public class mySQL {
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", ip));
         return (rs != null);
     }
+    public static boolean hasPlayerNick(String nickname) throws SQLException {
+        Statement statement = dbConnection.createStatement();
+        statement.setQueryTimeout(30);
+        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE nickname = '%s'", nickname));
+        return (rs != null);
+    }
     public static boolean hasPlayerDiscordId(long discordId) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);

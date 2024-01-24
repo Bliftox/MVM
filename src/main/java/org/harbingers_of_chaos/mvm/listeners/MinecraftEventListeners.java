@@ -18,7 +18,7 @@ public final class MinecraftEventListeners {
     private MinecraftEventListeners() {}
 
     public static void init(AccountLinking accountLinking) {
-        PlayerConnectedCallback.EVENT.register((player, server, fromVanish) -> {
+        PlayerConnectedCallback.EVENT.register((player, server) -> {
             LOGGER.info("connect"+player.getIp());
             if (accountLinking.getLinkedAccount(player.getIp()).isEmpty()) {
                 Discord.kickForUnlinkedAccount(player);

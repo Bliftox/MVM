@@ -8,11 +8,11 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import java.sql.SQLException;
 
 public interface PlayerConnectedCallback {
-    Event<PlayerConnectedCallback> EVENT = EventFactory.createArrayBacked(PlayerConnectedCallback.class, (listeners) -> (player, server, fromVanish) -> {
+    Event<PlayerConnectedCallback> EVENT = EventFactory.createArrayBacked(PlayerConnectedCallback.class, (listeners) -> (player, server) -> {
         for (PlayerConnectedCallback listener : listeners) {
-            listener.onConnected(player, server, fromVanish);
+            listener.onConnected(player, server);
         }
     });
 
-    void onConnected(ServerPlayerEntity player, MinecraftServer server, boolean fromVanish);
+    void onConnected(ServerPlayerEntity player, MinecraftServer server);
 }

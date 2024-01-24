@@ -10,7 +10,7 @@ public final class EventRedirect {
 
     public static void init() {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            PlayerConnectedCallback.EVENT.invoker().onConnected(handler.player, server, false);
+            PlayerConnectedCallback.EVENT.invoker().onConnected(handler.player, server);
         });
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             Discord.start();

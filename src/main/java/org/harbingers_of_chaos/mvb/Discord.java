@@ -8,7 +8,10 @@ import com.google.gson.GsonBuilder;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
@@ -70,18 +73,19 @@ public class Discord {
 
 
         try {
-            jda = JDABuilder.createDefault(Config.INSTANCE.discord.token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
-                    //.setActivity(Activity.playing("Лучший в мире сервер MystiVerse"))
+            jda = JDABuilder.createDefault(Config.INSTANCE.discord.token,GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
+                    .setActivity(Activity.playing("Лучший в мире сервер MystiVerse"))
                     .addEventListeners(new CommandHandler())
                     .addEventListeners(new ApplicationHandler())
                     .addEventListeners(new RejectWithReasonButton())
                     .addEventListeners(new SuggestHandler())
-                    .addEventListeners(new cityHandler())
-                    .addEventListeners(new cityModalHandler())
+//                    .addEventListeners(new cityHandler())
+//                    .addEventListeners(new cityModalHandler())
+                    .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .addEventListeners(new DiscordMessageListener())
                     .disableCache(CacheFlag.VOICE_STATE, CacheFlag.EMOJI, CacheFlag.STICKER, CacheFlag.SCHEDULED_EVENTS)
             //.addEventListeners(new NewsEmbedHandler())
-                    .build();
+                    .build().awaitReady();;
         } catch (Exception e) {
             MystiVerseModServer.LOGGER.fatal("Exception initializing JDA", e);
         }

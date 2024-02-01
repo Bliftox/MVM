@@ -14,5 +14,5 @@ public interface PlayerConnectedCallback {
         }
     });
 
-    void onConnected(ServerPlayerEntity player, MinecraftServer server);
+    void onConnected(ServerPlayerEntity player, MinecraftServer server) ;
 }

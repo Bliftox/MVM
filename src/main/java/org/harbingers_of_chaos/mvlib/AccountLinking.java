@@ -29,19 +29,11 @@ public class AccountLinking {
     private final BiMap<String, String> codeIpBiMap = HashBiMap.create();
 
     private final SecureRandom random = new SecureRandom();
-    public Optional<Long> getLinkedAccount(String ip){
-        try {
-            return Optional.ofNullable((Long) mySQL.getPlayerDiscordIdOrDefault(ip));
-        } catch (SQLException e) {
-            return Optional.empty();
-        }
-    }
     public QueuingResult tryQueueForLinking(String ip){
-        try {
-            if (mySQL.hasPlayerIp(ip)) {
-                return QueuingResult.ACCOUNT_LINKED;
-            }
-        } catch (SQLException e) {}
+
+        if (mySQL.hasPlayerIp(ip)) {
+            return QueuingResult.ACCOUNT_LINKED;
+        }
 
         if (codeIpBiMap.inverse().containsKey(ip)) {
             return QueuingResult.ACCOUNT_QUEUED;

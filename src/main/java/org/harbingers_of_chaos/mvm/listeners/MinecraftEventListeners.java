@@ -3,13 +3,18 @@ package org.harbingers_of_chaos.mvm.listeners;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.GameProfileArgumentType;
+import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import org.harbingers_of_chaos.mvb.Discord;
 import org.harbingers_of_chaos.mvlib.AccountLinking;
+import org.harbingers_of_chaos.mvlib.mySQL;
 import org.harbingers_of_chaos.mvm.command.Start;
 import org.harbingers_of_chaos.mvm.event.PlayerConnectedCallback;
+
+import java.sql.SQLException;
 
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
@@ -19,8 +24,13 @@ public final class MinecraftEventListeners {
 
     public static void init(AccountLinking accountLinking) {
         PlayerConnectedCallback.EVENT.register((player, server) -> {
-            LOGGER.info("connect"+player.getIp());
-            if (accountLinking.getLinkedAccount(player.getIp()).isEmpty()) {
+            LOGGER.info("connect:"+ mySQL.hasPlayerNick(player.getName().getString()));
+            LOGGER.info("connect:"+ mySQL.hasPlayerIp(player.getIp()));
+
+            if (!mySQL.hasPlayerIp(player.getIp())) {
+                Discord.kickForUnlinkedAccount(player);
+                return;
+            }else if (mySQL.getPlayerIp(player.getIp()) != player.getName().getString()){
                 Discord.kickForUnlinkedAccount(player);
                 return;
             }
@@ -57,8 +67,6 @@ public final class MinecraftEventListeners {
                     .then(CommandManager.argument("target", GameProfileArgumentType.gameProfile())
                             .executes(Start::eChest))
                     .build();
-
-
 
 
             dispatcher.getRoot().addChild(startNode);

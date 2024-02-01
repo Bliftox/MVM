@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
 
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
+
 public class DiscordMessageListener extends ListenerAdapter {
     private static AccountLinking accountLinking;
     public static void init(AccountLinking accountLinking) {
@@ -21,13 +23,12 @@ public class DiscordMessageListener extends ListenerAdapter {
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         User user = event.getAuthor();
         Message message = event.getMessage();
-
-        if (user.isBot()) {
-            return;
-        }
+            LOGGER.info("s");
+        if (user.isBot()) {return;}
 
         if (message.getChannel() instanceof PrivateChannel channel) {
             String code = message.getContentRaw();
+            LOGGER.info(code);
             AccountLinking.LinkingResult result = null;
             try {
                 result = accountLinking.tryLinkAccount(code, user.getIdLong());

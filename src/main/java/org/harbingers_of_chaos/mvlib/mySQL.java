@@ -5,6 +5,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.sql.*;
 
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 
 
@@ -107,40 +108,59 @@ public class mySQL {
             data = rs.getInt("Id");
         return data;
     }
-    public static boolean hasPlayerIp(String ip) throws SQLException {
-        Statement statement = dbConnection.createStatement();
-        statement.setQueryTimeout(30);
-        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", ip));
-        return (rs != null);
+    public static boolean hasPlayerIp(String ip) {
+        try(PreparedStatement statement = dbConnection.prepareStatement(String.format("SELECT * FROM player WHERE IP = '%s'", ip))) {
+            statement.setQueryTimeout(30);
+            LOGGER.info("[MVM]ConnectPlayer:hasPlayerIp:"+ip);
+            try(ResultSet rs = statement.executeQuery()){
+                if(rs.next()){
+                    return true;
+                }
+            } catch (SQLException e) {
+                LOGGER.warn("[MVM]ConnectPlayer:hasPlayerIp:statement:"+e);
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]ConnectPlayer:hasPlayerIp:PreparedStatement:"+e);
+        }
+        return false;
     }
-    public static boolean hasPlayerNick(String nickname) throws SQLException {
-        Statement statement = dbConnection.createStatement();
-        statement.setQueryTimeout(30);
-        ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE nickname = '%s'", nickname));
-        return (rs != null);
+    public static boolean hasPlayerNick(String nickname)  {
+        try(PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM player WHERE nickname = '"+nickname+"'")) {
+            statement.setQueryTimeout(30);
+            LOGGER.info("[MVM]ConnectPlayer:hasPlayerNick:"+nickname);
+            try(ResultSet rs = statement.executeQuery()){
+                if(rs.next()){
+                    return true;
+                }
+            } catch (SQLException e) {
+                LOGGER.warn("[MVM]ConnectPlayer:hasPlayerNick:statement:"+e);
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]ConnectPlayer:hasPlayerNick:PreparedStatement:"+e);
+        }
+
+        return false;
+
     }
     public static boolean hasPlayerDiscordId(long discordId) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE user_id = '%d'", discordId));
-        return (rs != null);
+        return rs.next();
     }
 
-    public static long getPlayerDiscordId(String ip) throws SQLException {
+    public static Object getPlayerIp(String ip)  {
+        long data = 0;
+        try {
             Statement statement = dbConnection.createStatement();
             statement.setQueryTimeout(30);
             ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", nickname));
-        long data = 0;
-        while (rs.next())
-            data = rs.getLong("user_id");
-
+            while (rs.next())
+                data = rs.getLong("user_id");
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]ConnectPlayer:hasPlayerNick:PreparedStatement:"+e);
+        }
         return data;
-    }
-    public static Object getPlayerDiscordIdOrDefault(String ip) throws SQLException {
-        Long v;
-        return (((v = getPlayerDiscordId(ip)) != null) || hasPlayerIp(ip))
-                ? v
-                : ObjectUtils.NULL;
     }
     public static void setPlayerIp(String ip,long user_id) throws SQLException {
         Statement statement = dbConnection.createStatement();

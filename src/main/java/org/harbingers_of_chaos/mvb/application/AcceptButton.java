@@ -1,11 +1,14 @@
 package org.harbingers_of_chaos.mvb.application;
 
+import com.mojang.authlib.GameProfile;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.minecraft.server.Whitelist;
+import net.minecraft.util.dynamic.DynamicSerializableUuid;
 import net.minecraft.server.WhitelistEntry;
+import org.apache.logging.log4j.core.util.UuidUtil;
 import org.harbingers_of_chaos.mvb.Discord;
 
 import java.awt.*;
@@ -61,7 +64,12 @@ public class AcceptButton {
                     mySQL.addPlayer(Config.INSTANCE.game.players,appInt,nickname, String.valueOf(authorId));
 //                    Member member = guild.getMember(UserSnowflake.fromId(authorId));
 //                    guild.modifyNickname(guild.getMember(UserSnowflake.fromId(authorId)),nickname).queue();
-                   LOGGER.info("Заявка от Id:" + authorId);
+
+                    Whitelist whitelist = MystiVerseModServer.getMinecraftServer().getPlayerManager().getWhitelist();
+                    WhitelistEntry whitelistEntry = new WhitelistEntry(new GameProfile(DynamicSerializableUuid.getOfflinePlayerUuid(nickname),nickname));
+                    whitelist.add(whitelistEntry);
+
+                    LOGGER.info("Заявка от Id:" + authorId);
                 } catch (Exception e) {
                     LOGGER.warn("Access application error: " + e);
                 }

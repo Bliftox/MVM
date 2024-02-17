@@ -29,6 +29,7 @@ public class mySQL {
     }
 
     public static void createDB() throws SQLException {
+        if(!dbConnection.isValid(30))getConnection();
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
 
@@ -37,6 +38,8 @@ public class mySQL {
     }
 
     public static void addApplication(int application_Int, String username, String user_id, String nickname, int years, String sex, String bio, String why_we) throws SQLException {
+
+        if(!dbConnection.isValid(30))getConnection();
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
 
@@ -44,6 +47,8 @@ public class mySQL {
     }
 
     public static long getApplicationUser_id(int appInt) throws SQLException {
+        if(!dbConnection.isValid(30))getConnection();
+
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM application WHERE application_Int = '%d'", appInt));
@@ -54,6 +59,7 @@ public class mySQL {
     }
 
     public static String getApplicationNickname(int appInt) throws SQLException {
+        if(!dbConnection.isValid(30))getConnection();
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM application WHERE application_Int = '%d'", appInt));
@@ -64,6 +70,8 @@ public class mySQL {
     }
 
     public static void addPlayer(int id, int application_Int, String nickname, String user_id) throws SQLException {
+        if(!dbConnection.isValid(30))getConnection();
+
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
 
@@ -71,6 +79,7 @@ public class mySQL {
     }
 
     public static String getPlayerNickname(int id) throws SQLException {
+        if(!dbConnection.isValid(30))getConnection();
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE Id = '%d'", id));
@@ -91,6 +100,7 @@ public class mySQL {
     }
 
     public static int getPlayerApp(String nickname) throws SQLException {
+        if(!dbConnection.isValid(30))getConnection();
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE nickname = '%s'", nickname));
@@ -100,6 +110,7 @@ public class mySQL {
         return data;
     }
     public static String getPlayerNickToIP(String nickname)  {
+        if(!dbConnection.isValid(30))getConnection();
         try{Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE nickname = '%s'", nickname));
@@ -113,6 +124,7 @@ public class mySQL {
         return "";
     }
     public static boolean hasPlayerIp(String ip) {
+        if(!dbConnection.isValid(30))getConnection();
         try(PreparedStatement statement = dbConnection.prepareStatement(String.format("SELECT * FROM player WHERE IP = '%s'", ip))) {
             statement.setQueryTimeout(30);
             LOGGER.info("[MVM]ConnectPlayer:hasPlayerIp:"+ip);
@@ -129,6 +141,7 @@ public class mySQL {
         return false;
     }
     public static boolean hasPlayerNick(String nickname)  {
+        if(!dbConnection.isValid(30))getConnection();
         try(PreparedStatement statement = dbConnection.prepareStatement("SELECT * FROM player WHERE nickname = '"+nickname+"'")) {
             statement.setQueryTimeout(30);
             LOGGER.info("[MVM]ConnectPlayer:hasPlayerNick:"+nickname);
@@ -167,6 +180,7 @@ public class mySQL {
         return data;
     }
     public static void setPlayerIp(String ip,long user_id) throws SQLException {
+        if(!dbConnection.isValid(30))getConnection();
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         statement.executeUpdate(String.format("UPDATE player SET IP = '%s' WHERE user_id = '%s'", ip, user_id));

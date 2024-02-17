@@ -8,6 +8,8 @@ import java.security.SecureRandom;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
+
 public class AccountLinking {
     public enum LinkingResult {
         INVALID_CODE,
@@ -31,10 +33,6 @@ public class AccountLinking {
     private final SecureRandom random = new SecureRandom();
     public QueuingResult tryQueueForLinking(String ip){
 
-        if (mySQL.hasPlayerIp(ip)) {
-            return QueuingResult.ACCOUNT_LINKED;
-        }
-
         if (codeIpBiMap.inverse().containsKey(ip)) {
             return QueuingResult.ACCOUNT_QUEUED;
         }
@@ -49,9 +47,6 @@ public class AccountLinking {
     }
 
     public LinkingResult tryLinkAccount(String code, Long discordId) throws SQLException {
-        if (mySQL.hasPlayerDiscordId(discordId)) {
-            return LinkingResult.ACCOUNT_LINKED;
-        }
 
         if (!codeIpBiMap.containsKey(code)) {
             return LinkingResult.INVALID_CODE;
@@ -59,14 +54,9 @@ public class AccountLinking {
 
         String ip = codeIpBiMap.get(code);
         codeIpBiMap.remove(code);
-
-        if (mySQL.hasPlayerIp(ip)) {
-            return LinkingResult.ACCOUNT_LINKED;
-        }
-
         mySQL.setPlayerIp(ip, discordId);
-
-        return LinkingResult.SUCCESS;
+        LOGGER.warn("set");
+        return LinkingResult.ACCOUNT_LINKED;
     }
     private String randomId() {
         StringBuilder builder = new StringBuilder();

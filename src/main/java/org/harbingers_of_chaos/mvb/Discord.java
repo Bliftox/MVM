@@ -14,7 +14,9 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.ClickEvent;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.harbingers_of_chaos.mvb.CityHandler.cityHandler;
@@ -100,11 +102,24 @@ public class Discord {
         String code = ACCOUNT_LINKING.getCode(ip);
 
         MutableText reason = Text.empty()
-                .append(Text.literal("This server requires a linked Discord account!\n"))
-                .append(Text.literal("Your linking code is "))
+                .append(Text.literal("Для этого сервера требуется связанная учетная запись Discord!\n"))
+                .append(Text.literal("Ваш код: "))
                 .append(Text.literal(code)
+                        .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, code)))
                         .formatted(Formatting.BLUE, Formatting.UNDERLINE))
-                .append(Text.literal("\nPlease DM the bot this linking code to link your account"));
+                .append(Text.literal("\nОтправьте боту этот код, чтобы связать свою учетную запись."));
+
+        player.networkHandler.disconnect(reason);
+    }
+    public static void kickForApp(ServerPlayerEntity player){
+
+        MutableText reason = Text.empty()
+//                .append(Text.literal("This server requires a linked Discord account!\n"))
+//                .append(Text.literal("Your linking code is \n"))
+                .append(Text.literal("Надо создать заявну в "))
+                .append(Text.literal("дс канале"))
+                .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+                        "https://discord.com/channels/1143266536958722240/1205795712294461490")));
 
         player.networkHandler.disconnect(reason);
     }

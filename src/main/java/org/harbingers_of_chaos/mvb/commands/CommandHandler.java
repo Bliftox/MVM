@@ -2,6 +2,7 @@ package org.harbingers_of_chaos.mvb.commands;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -15,6 +16,7 @@ public class CommandHandler extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) {return;}
+        if (event.getMessage().getChannel() instanceof PrivateChannel channel) {return;}
         String message = event.getMessage().getContentDisplay();
         User messageAuthor = event.getAuthor();
 
@@ -37,7 +39,7 @@ public class CommandHandler extends ListenerAdapter {
                     LOGGER.info("Command stop");
 
                 } else if (message.equalsIgnoreCase("$buttons")) {
-                    event.getMessage().reply("jepa").addActionRow(Button.primary("Hello", "Jepa")).queue();
+                    event.getMessage().reply("  ").addActionRow(Button.primary("Hello", "Создать заявку")).queue();
                     event.getMessage().reply("jepa1").addActionRow(Button.primary("suggestButton", "suggestion")).queue();
                     event.getMessage().reply("cityJepa").addActionRow(Button.primary("cityButton", "City")).queue();
                     LOGGER.info("Command buttons");

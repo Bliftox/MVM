@@ -15,7 +15,6 @@ import net.minecraft.util.Util;
 import net.minecraft.util.WorldSavePath;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.harbingers_of_chaos.mvb.Discord;
 import org.harbingers_of_chaos.mvlib.Config;
 
 import com.google.gson.Gson;
@@ -43,8 +42,8 @@ public class MystiVerseModServer implements ModInitializer {
         Registry.register(Registries.CUSTOM_STAT, "identifier", IDENTIFIER);
         Stats.CUSTOM.getOrCreateStat(IDENTIFIER, StatFormatter.DEFAULT);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            Discord.send(Config.instance.game.serverStopMessage);
-            Discord.stop();
+//            Discord.send(Config.instance.game.serverStopMessage);
+//            Discord.stop();
             try {
                 Config.save();
             } catch (Exception e) {

@@ -15,20 +15,13 @@ public final class MinecraftEventListeners {
         PlayerConnectedCallback.EVENT.register((player, server) -> {
             LOGGER.info("connect:"+ mySQL.hasPlayerNick(player.getName().getString()));
             LOGGER.info("connect:"+ mySQL.hasPlayerIp(player.getIp()));
-            if(!mySQL.hasPlayerNick(player.getName().getString())) {
-                Discord.kickForApp(player);
-                return;
-            }else if (!mySQL.hasPlayerIp(player.getIp())) {
-                LOGGER.info(player.getIp());
-                LOGGER.info("s");
+
+            if (!mySQL.hasPlayerIp(player.getIp())) {
                 Discord.kickForUnlinkedAccount(player);
                 return;
-            }else if (!mySQL.getPlayerNickToIP(player.getName().getString()).equals(player.getIp())){
-                LOGGER.info(player.getIp());
-                LOGGER.info(mySQL.getPlayerNickToIP(player.getName().getString()));
-                LOGGER.info("a");
+            }else if (mySQL.getPlayerIp(player.getIp()) != player.getName().getString()){
                 Discord.kickForUnlinkedAccount(player);
-                    return;
+                return;
             }
         });
     }

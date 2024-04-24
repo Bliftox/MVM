@@ -23,17 +23,16 @@ public class DiscordMessageListener extends ListenerAdapter {
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         User user = event.getAuthor();
         Message message = event.getMessage();
+            LOGGER.info("s");
         if (user.isBot()) {return;}
 
         if (message.getChannel() instanceof PrivateChannel channel) {
             String code = message.getContentRaw();
+            LOGGER.info(code);
             AccountLinking.LinkingResult result = null;
             try {
                 result = accountLinking.tryLinkAccount(code, user.getIdLong());
-                LOGGER.info("A");
-            } catch (SQLException e) {
-                LOGGER.warn(e);
-            }
+            } catch (SQLException e) {}
             switch (result) {
                 case INVALID_CODE ->
                         channel

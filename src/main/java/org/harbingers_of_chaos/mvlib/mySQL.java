@@ -99,18 +99,14 @@ public class mySQL {
             data = rs.getInt("application_Int");
         return data;
     }
-    public static String getPlayerNickToIP(String nickname)  {
-        try{Statement statement = dbConnection.createStatement();
+    public static int getPlayerID(String nickname) throws SQLException {
+        Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
         ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE nickname = '%s'", nickname));
-        String data = "";
+        int data = 0;
         while (rs.next())
-            data = rs.getString("IP");
-            return data;
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickToIP:"+e);
-        }
-        return "";
+            data = rs.getInt("Id");
+        return data;
     }
     public static boolean hasPlayerIp(String ip) {
         try(PreparedStatement statement = dbConnection.prepareStatement(String.format("SELECT * FROM player WHERE IP = '%s'", ip))) {
@@ -153,14 +149,14 @@ public class mySQL {
         return rs.next();
     }
 
-    public static Object getPlayerIpToNick(String ip)  {
+    public static Object getPlayerIp(String ip)  {
         long data = 0;
         try {
             Statement statement = dbConnection.createStatement();
             statement.setQueryTimeout(30);
-            ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", ip));
+            ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", nickname));
             while (rs.next())
-                data = rs.getLong("nickname");
+                data = rs.getLong("user_id");
         } catch (SQLException e) {
             LOGGER.warn("[MVM]ConnectPlayer:hasPlayerNick:PreparedStatement:"+e);
         }
@@ -169,7 +165,7 @@ public class mySQL {
     public static void setPlayerIp(String ip,long user_id) throws SQLException {
         Statement statement = dbConnection.createStatement();
         statement.setQueryTimeout(30);
-        statement.executeUpdate(String.format("UPDATE player SET IP = '%s' WHERE user_id = '%s'", ip, user_id));
+        statement.executeUpdate(String.format("UPDATE players SET IP = '%s' WHERE user_id = '%s'", ip, user_id));
     }
 
 }

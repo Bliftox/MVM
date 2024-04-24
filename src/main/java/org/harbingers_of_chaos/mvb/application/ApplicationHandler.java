@@ -38,6 +38,7 @@ public class ApplicationHandler extends ListenerAdapter {
     private static Guild guild;
     private static int appInt;
 
+
     @Override
     public void onModalInteraction(@NotNull ModalInteractionEvent event) {
         try {

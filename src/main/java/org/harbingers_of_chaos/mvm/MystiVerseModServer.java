@@ -1,24 +1,18 @@
 package org.harbingers_of_chaos.mvm;
 
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.command.argument.GameProfileArgumentType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.StatFormatter;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.WorldSavePath;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.harbingers_of_chaos.mvb.Discord;
@@ -36,11 +30,9 @@ public class MystiVerseModServer implements ModInitializer {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().setLenient().create();
     private static MinecraftServer minecraftServer;
-    public static boolean isLuckPerms = false;
     public static final Identifier IDENTIFIER = new Identifier("mvm", "identifier");
     @Override
     public void onInitialize() {
-        isLuckPerms = FabricLoader.getInstance().isModLoaded("luckperms");
 
         try {
             Config.load();
@@ -48,7 +40,7 @@ public class MystiVerseModServer implements ModInitializer {
             LOGGER.warn("Failed to load config using defaults : ", e);
         }
         EventRedirect.init();
-        Registry.register(Registry.CUSTOM_STAT, "identifier", IDENTIFIER);
+        Registry.register(Registries.CUSTOM_STAT, "identifier", IDENTIFIER);
         Stats.CUSTOM.getOrCreateStat(IDENTIFIER, StatFormatter.DEFAULT);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             Discord.send(Config.INSTANCE.game.serverStopMessage);

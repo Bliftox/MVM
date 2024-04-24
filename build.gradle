@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.2-SNAPSHOT'
+    id 'fabric-loom' version '1.6.9'
     id 'maven-publish'
 }
 sourceCompatibility = JavaVersion.VERSION_17
@@ -65,10 +65,6 @@ dependencies {
     include("com.squareup.okio:okio-jvm:3.2.0")
     include("com.neovisionaries:nv-websocket-client:2.14")
     include(implementation("mysql:mysql-connector-java:8.0.30"))
-
-    modImplementation "me.lucko:fabric-permissions-api:0.2-SNAPSHOT"
-    include "me.lucko:fabric-permissions-api:0.2-SNAPSHOT"
-    compileOnly 'net.luckperms:api:5.3'
 }
 
 processResources {

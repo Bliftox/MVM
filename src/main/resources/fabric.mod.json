@@ -11,12 +11,8 @@
     "repo": "https://github.com/NoDarckName/MVM"
   },
   "license": "All-Rights-Reserved",
-  "icon": "assets/mvm/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "org.harbingers_of_chaos.mvm.client.MystiVerseModServerClient"
-    ],
     "main": [
       "org.harbingers_of_chaos.mvm.MystiVerseModServer"
     ]

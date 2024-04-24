@@ -6,8 +6,8 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.minecraft.server.Whitelist;
-import net.minecraft.util.dynamic.DynamicSerializableUuid;
 import net.minecraft.server.WhitelistEntry;
+import net.minecraft.util.Uuids;
 import org.apache.logging.log4j.core.util.UuidUtil;
 import org.harbingers_of_chaos.mvb.Discord;
 
@@ -66,7 +66,7 @@ public class AcceptButton {
 //                    guild.modifyNickname(guild.getMember(UserSnowflake.fromId(authorId)),nickname).queue();
 
                     Whitelist whitelist = MystiVerseModServer.getMinecraftServer().getPlayerManager().getWhitelist();
-                    WhitelistEntry whitelistEntry = new WhitelistEntry(new GameProfile(DynamicSerializableUuid.getOfflinePlayerUuid(nickname),nickname));
+                    WhitelistEntry whitelistEntry = new WhitelistEntry(new GameProfile(Uuids.getOfflinePlayerUuid(nickname),nickname));
                     whitelist.add(whitelistEntry);
 
                     LOGGER.info("Заявка от Id:" + authorId);

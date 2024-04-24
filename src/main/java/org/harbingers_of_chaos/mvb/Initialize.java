@@ -13,7 +13,7 @@ public class Initialize implements Bot {
 
         @Override
         public void start() {
-                jda = JDABuilder.createDefault(Config.INSTANCE.discord.token)
+                jda = JDABuilder.createDefault(Config.instance.discord.token)
                         .setMemberCachePolicy(MemberCachePolicy.ALL)
                         .setChunkingFilter(ChunkingFilter.ALL)
                         .enableIntents(GatewayIntent.GUILD_MESSAGES,
@@ -32,6 +32,6 @@ public class Initialize implements Bot {
 
         @Override
         public void log(@NotNull String s) {
-
+                jda.getGuildById()
         }
 }

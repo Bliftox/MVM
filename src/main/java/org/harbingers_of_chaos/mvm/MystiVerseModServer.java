@@ -29,7 +29,7 @@ public class MystiVerseModServer implements ModInitializer {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().setLenient().create();
     private static MinecraftServer minecraftServer;
-    public static final Identifier IDENTIFIER = new Identifier("mvm", "identifier");
+//    public static final Identifier IDENTIFIER = new Identifier("mvm", "identifier");
     @Override
     public void onInitialize() {
 
@@ -39,8 +39,8 @@ public class MystiVerseModServer implements ModInitializer {
             LOGGER.warn("Failed to load config using defaults : ", e);
         }
         EventRedirect.init();
-        Registry.register(Registries.CUSTOM_STAT, "identifier", IDENTIFIER);
-        Stats.CUSTOM.getOrCreateStat(IDENTIFIER, StatFormatter.DEFAULT);
+//        Registry.register(Registries.CUSTOM_STAT, "identifier", IDENTIFIER);
+//        Stats.CUSTOM.getOrCreateStat(IDENTIFIER, StatFormatter.DEFAULT);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
 //            Discord.send(Config.instance.game.serverStopMessage);
 //            Discord.stop();

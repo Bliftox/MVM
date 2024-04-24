@@ -38,9 +38,9 @@ public class Config {
 
     public static class Discord {
         @Expose public String webhook = "";
-        @Expose public String channel = "1189900614226944110";
-        @Expose public String LogChat = "1189900614226944110";
-        @Expose public String Chat = "1189996402164629575";
+        @Expose public String applicationsLogChannelId = "1189900614226944110";
+        @Expose public String logChannelId = "1189900614226944110";
+        @Expose public String applicationsChannelId = "1189996402164629575";
         @Expose public String token = "";
         @Expose public int appInt = 0;
     }

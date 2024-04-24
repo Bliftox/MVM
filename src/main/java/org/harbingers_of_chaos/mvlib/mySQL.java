@@ -1,7 +1,5 @@
 package org.harbingers_of_chaos.mvlib;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 import java.sql.*;
 
 import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
@@ -21,7 +19,7 @@ public class mySQL {
     static Connection dbConnection;
 
     public static void getConnection() throws SQLException {
-        dbConnection = DriverManager.getConnection(Config.INSTANCE.sqLite.url, Config.INSTANCE.sqLite.user, Config.INSTANCE.sqLite.password);
+        dbConnection = DriverManager.getConnection(Config.instance.sqLite.url, Config.instance.sqLite.user, Config.instance.sqLite.password);
     }
 
     public static void closeConnection() throws SQLException {

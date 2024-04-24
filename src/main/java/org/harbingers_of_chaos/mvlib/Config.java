@@ -9,23 +9,23 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 
 public class Config {
-    public static Config INSTANCE;
+    public static Config instance;
 
     public static void load() throws Exception {
         var configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
 
         if (Files.exists(configPath)) {
-            INSTANCE = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
+            instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
         } else {
-            INSTANCE = new Config();
-            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(INSTANCE), StandardCharsets.UTF_8);
+            instance = new Config();
+            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
         }
     }
     public static void save() throws Exception {
         var configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
 
         if (Files.exists(configPath)) {
-            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(INSTANCE), StandardCharsets.UTF_8);
+            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
         } else {
             MystiVerseModServer.LOGGER.error("MVM:No config");
         }

@@ -43,7 +43,7 @@ public class MystiVerseModServer implements ModInitializer {
         Registry.register(Registries.CUSTOM_STAT, "identifier", IDENTIFIER);
         Stats.CUSTOM.getOrCreateStat(IDENTIFIER, StatFormatter.DEFAULT);
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            Discord.send(Config.INSTANCE.game.serverStopMessage);
+            Discord.send(Config.instance.game.serverStopMessage);
             Discord.stop();
             try {
                 Config.save();

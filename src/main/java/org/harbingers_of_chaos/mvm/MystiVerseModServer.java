@@ -29,7 +29,7 @@ public class MystiVerseModServer implements ModInitializer {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().setLenient().create();
     private static MinecraftServer minecraftServer;
-//    public static final Identifier IDENTIFIER = new Identifier("mvm", "identifier");
+    public static final Identifier IDENTIFIER = new Identifier("mvm", "identifier");
     @Override
     public void onInitialize() {
 

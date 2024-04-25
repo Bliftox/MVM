@@ -42,7 +42,7 @@ public class Config {
         @Expose public String guildId = "1143266536958722240";
         @Expose public String logChannelId = "1189900614226944110";
         @Expose public String applicationsChannelId = "1189996402164629575";
-        @Expose public String token = "";
+        @Expose public String token = "MTIzMzAzMDI0NDM0OTI0NzUzMA.GKHeQX.2PtrJ9PF-M7yR8X5NvKF6ISry4pFwHDhycJjpY";
         @Expose public int appInt = 0;
     }
     public static class SQLite{

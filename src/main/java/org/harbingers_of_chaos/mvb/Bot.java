@@ -1,10 +1,48 @@
 package org.harbingers_of_chaos.mvb;
 
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.harbingers_of_chaos.mvlib.Config;
 import org.jetbrains.annotations.NotNull;
 
-public interface Bot {
-        void start();
-        void stop();
+public class Bot {
+        private static JDA jda;
 
-        void log(@NotNull String s);
+        public  static void main(String[] args) throws Exception {
+                startup();
+        }
+
+
+        public static void startup() {
+                jda = JDABuilder.createDefault(Config.instance.discord.token)
+                        .setMemberCachePolicy(MemberCachePolicy.ALL)
+                        .setChunkingFilter(ChunkingFilter.ALL)
+                        .enableIntents(GatewayIntent.GUILD_MESSAGES,
+                                GatewayIntent.MESSAGE_CONTENT,
+                                GatewayIntent.DIRECT_MESSAGES,
+                                GatewayIntent.GUILD_MEMBERS,
+                                GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
+                                GatewayIntent.GUILD_WEBHOOKS)
+                        .addEventListeners(new Command())
+                        .build();
+        }
+
+        public static void shutdown() {
+                jda.shutdown();
+        }
+
+        public void log(@NotNull String s) {
+                jda.getGuildById(Config.instance.discord.guildId).getTextChannelById(Config.instance.discord.logChannelId).sendMessage(s).queue();
+        }
+
+        public JDA getJda() {
+                return jda;
+        }
+
+        public void setJda(JDA jda) {
+                this.jda = jda;
+        }
 }

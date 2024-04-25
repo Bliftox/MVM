@@ -2,25 +2,27 @@
   "schemaVersion": 1,
   "id": "mvm",
   "version": "${version}",
-
   "name": "MystiVerseModServer",
   "description": "",
-  "authors": [],
-  "contact": {},
-
+  "authors": [
+    "DN"
+  ],
+  "contact": {
+    "repo": "https://github.com/NoDarckName/MVM"
+  },
   "license": "All-Rights-Reserved",
-  "icon": "assets/mvm/icon.png",
-
   "environment": "*",
-  "entrypoints": {},
-
-      "mixins": [
-        "mvm.mixins.json"
-      ],
-
+  "entrypoints": {
+    "main": [
+      "org.harbingers_of_chaos.mvm.MystiVerseModServer"
+    ]
+  },
+  "mixins": [
+    "mvm.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-        "fabric": "*",
+    "fabric": "*",
     "minecraft": "${minecraft_version}"
   }
 }

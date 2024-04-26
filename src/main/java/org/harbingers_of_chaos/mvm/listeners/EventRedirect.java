@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 //import org.harbingers_of_chaos.mvb.Discord;
 import org.harbingers_of_chaos.mvlib.Config;
 import org.harbingers_of_chaos.mvm.event.PlayerConnectedCallback;
+
+
 public final class EventRedirect {
     private EventRedirect() {}
 

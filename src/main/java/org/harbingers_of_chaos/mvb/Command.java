@@ -36,6 +36,7 @@ public class Command extends ListenerAdapter {
 
                 List<CommandData> commandDataList = new ArrayList<>();
                 commandDataList.add(Commands.slash("заявка", "Заполнить заявку"));
+                commandDataList.add(Commands.slash("идея", "Предложить идею"));
 
                 event.getGuild().updateCommands().addCommands(commandDataList).queue();
         }

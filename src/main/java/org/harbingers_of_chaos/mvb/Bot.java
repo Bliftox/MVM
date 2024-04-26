@@ -5,10 +5,14 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.harbingers_of_chaos.mvb.Command;
+import org.harbingers_of_chaos.mvb.applications.Application;
+import org.harbingers_of_chaos.mvb.applications.ApplicationModalReason;
+import org.harbingers_of_chaos.mvb.applications.Blank;
+import org.harbingers_of_chaos.mvb.applications.Form;
+import org.harbingers_of_chaos.mvb.suggestions.Idee;
 import org.harbingers_of_chaos.mvlib.Config;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 public class Bot {
         private static JDA jda;
@@ -29,7 +33,7 @@ public class Bot {
                                 GatewayIntent.GUILD_MEMBERS,
                                 GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
                                 GatewayIntent.GUILD_WEBHOOKS)
-                        .addEventListeners(new Command(), new Blank(), new Form(), new Application())
+                        .addEventListeners(new Command(), new Blank(), new Form(), new Application(), new ApplicationModalReason(), new Idee())
                         .build();
         }
 

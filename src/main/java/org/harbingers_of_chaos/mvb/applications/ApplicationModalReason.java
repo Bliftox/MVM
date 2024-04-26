@@ -1,4 +1,4 @@
-package org.harbingers_of_chaos.mvb;
+package org.harbingers_of_chaos.mvb.applications;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;

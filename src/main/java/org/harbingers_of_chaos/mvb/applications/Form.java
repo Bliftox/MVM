@@ -1,7 +1,5 @@
-package org.harbingers_of_chaos.mvb;
+package org.harbingers_of_chaos.mvb.applications;
 
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -9,10 +7,6 @@ import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Form extends ListenerAdapter {
         public static final String APPLICATION_MODAL_ID = "applicationForm";

@@ -17,7 +17,12 @@ import org.jetbrains.annotations.NotNull;
 public class Bot {
         private static JDA jda;
 
-        public  static void main(String[] args) throws Exception {
+        public  static void main(String[] args){
+                try {
+                        Config.load();
+                } catch (Exception e) {
+//                        LOGGER.warn("Failed to load config using defaults : ", e);
+                }
                 startup();
 
         }

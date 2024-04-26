@@ -2,6 +2,8 @@ package org.harbingers_of_chaos.mvlib;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.google.gson.annotations.Expose;
 
@@ -12,17 +14,17 @@ public class Config {
     public static Config instance;
 
     public static void load() throws Exception {
-        var configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
+        Path configPath = Paths.get("mvm.json");
 
-//        if (Files.exists(configPath)) {
-//            instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
-//        } else {
+        if (Files.exists(configPath)) {
+            instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
+        } else {
             instance = new Config();
-//            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
-//        }
+            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
+        }
     }
     public static void save() throws Exception {
-        var configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
+        Path configPath = Paths.get("mvm.json");
 
         if (Files.exists(configPath)) {
             Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
@@ -51,9 +53,6 @@ public class Config {
         @Expose public String user = "";
 
     }
-
-
-
     public static class Game {
         @Expose public String serverStartMessage = "Server has started!";
         @Expose public String serverStopMessage = "Server has stopped!";
@@ -61,7 +60,6 @@ public class Config {
         @Expose public int players = 0;
         @Expose public boolean mirrorDeath = true;
         @Expose public boolean mirrorAdvancements = true;
-        @Expose public String filePath = "/home/ling/IdeaProjects/MVM/src/main/resources/configs";
     }
 
     public static class Crashes {

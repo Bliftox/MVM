@@ -2,6 +2,8 @@ package org.harbingers_of_chaos.mvlib;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.google.gson.annotations.Expose;
 
@@ -12,7 +14,7 @@ public class Config {
     public static Config instance;
 
     public static void load() throws Exception {
-        var configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
+        Path configPath = Paths.get("mvm.json");
 
         if (Files.exists(configPath)) {
             instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
@@ -22,7 +24,7 @@ public class Config {
         }
     }
     public static void save() throws Exception {
-        var configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
+        Path configPath = Paths.get("mvm.json");
 
         if (Files.exists(configPath)) {
             Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
@@ -42,7 +44,7 @@ public class Config {
         @Expose public String guildId = "1143266536958722240";
         @Expose public String logChannelId = "1189900614226944110";
         @Expose public String applicationsChannelId = "1189996402164629575";
-        @Expose public String token = "";
+        @Expose public String token = "MTIzMzAzMDI0NDM0OTI0NzUzMA.GKHeQX.2PtrJ9PF-M7yR8X5NvKF6ISry4pFwHDhycJjpY";
         @Expose public int appInt = 0;
     }
     public static class SQLite{
@@ -51,7 +53,6 @@ public class Config {
         @Expose public String user = "";
 
     }
-
     public static class Game {
         @Expose public String serverStartMessage = "Server has started!";
         @Expose public String serverStopMessage = "Server has stopped!";

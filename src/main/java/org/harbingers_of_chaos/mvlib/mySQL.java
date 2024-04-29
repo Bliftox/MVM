@@ -2,7 +2,7 @@ package org.harbingers_of_chaos.mvlib;
 
 import java.sql.*;
 
-import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
+//import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 
@@ -152,9 +152,9 @@ public class mySQL {
         try {
             Statement statement = dbConnection.createStatement();
             statement.setQueryTimeout(30);
-            ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", nickname));
-            while (rs.next())
-                data = rs.getLong("user_id");
+//            ResultSet rs = statement.executeQuery(String.format("SELECT * FROM player WHERE IP = '%s'", nickname));
+//            while (rs.next())
+//                data = rs.getLong("user_id");
         } catch (SQLException e) {
             LOGGER.warn("[MVM]ConnectPlayer:hasPlayerNick:PreparedStatement:"+e);
         }

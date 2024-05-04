@@ -15,11 +15,6 @@ public class AccountLinking {
         SUCCESS
     }
 
-    public enum UnlinkingResult {
-        ACCOUNT_UNLINKED,
-        SUCCESS
-    }
-
     public enum QueuingResult {
         ACCOUNT_QUEUED,
         ACCOUNT_LINKED,
@@ -31,9 +26,9 @@ public class AccountLinking {
     private final SecureRandom random = new SecureRandom();
     public QueuingResult tryQueueForLinking(String ip){
 
-        if (mySQL.hasPlayerIp(ip)) {
-            return QueuingResult.ACCOUNT_LINKED;
-        }
+//        if (MySQL.hasPlayerIp(ip)) {
+//            return QueuingResult.ACCOUNT_LINKED;
+//        }
 
         if (codeIpBiMap.inverse().containsKey(ip)) {
             return QueuingResult.ACCOUNT_QUEUED;
@@ -48,10 +43,11 @@ public class AccountLinking {
         return codeIpBiMap.inverse().getOrDefault(ip, null);
     }
 
-    public LinkingResult tryLinkAccount(String code, Long discordId) throws SQLException {
-        if (mySQL.hasPlayerDiscordId(discordId)) {
-            return LinkingResult.ACCOUNT_LINKED;
-        }
+    public LinkingResult tryLinkAccount(String code, String discordId) {
+
+//        if (MySQL.hasPlayerIp2DiscordId(discordId)) {
+//            return LinkingResult.ACCOUNT_LINKED;
+//        }
 
         if (!codeIpBiMap.containsKey(code)) {
             return LinkingResult.INVALID_CODE;
@@ -60,11 +56,11 @@ public class AccountLinking {
         String ip = codeIpBiMap.get(code);
         codeIpBiMap.remove(code);
 
-        if (mySQL.hasPlayerIp(ip)) {
+        if (MySQL.hasPlayerIp(ip)) {
             return LinkingResult.ACCOUNT_LINKED;
         }
 
-        mySQL.setPlayerIp(ip, discordId);
+        MySQL.setPlayerIp(ip, discordId);
 
         return LinkingResult.SUCCESS;
     }

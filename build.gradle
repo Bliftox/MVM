@@ -50,6 +50,7 @@ dependencies {
     })
     include("org.apache.commons:commons-collections4:4.4")
     include(implementation("mysql:mysql-connector-java:8.0.30"))
+//    implementation("mysql:mysql-connector-java:8.0.30")
 }
 
 processResources {

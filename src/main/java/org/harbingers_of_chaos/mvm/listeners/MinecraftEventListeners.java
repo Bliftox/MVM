@@ -1,28 +1,56 @@
 package org.harbingers_of_chaos.mvm.listeners;
 
-//import org.harbingers_of_chaos.mvb.Discord;
-import org.harbingers_of_chaos.mvlib.AccountLinking;
-import org.harbingers_of_chaos.mvlib.mySQL;
+//import org.harbingers_of_chaos.mvb.Bot;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+import org.harbingers_of_chaos.mvlib.MySQL;
 import org.harbingers_of_chaos.mvm.event.PlayerConnectedCallback;
 
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.ACCOUNT_LINKING;
 
 
-public final class MinecraftEventListeners {
-    private MinecraftEventListeners() {}
+public class  MinecraftEventListeners {
 
-    public static void init(AccountLinking accountLinking) {
+
+    public static void init(/*AccountLinking accountLinking*/) {
         PlayerConnectedCallback.EVENT.register((player, server) -> {
-            LOGGER.info("connect:"+ mySQL.hasPlayerNick(player.getName().getString()));
-            LOGGER.info("connect:"+ mySQL.hasPlayerIp(player.getIp()));
+            LOGGER.info("connect:"+ MySQL.hasPlayerNick(player.getName().getString()));
+            LOGGER.info("connect:"+ MySQL.hasPlayerIp(player.getIp()));
 
-//            if (!mySQL.hasPlayerIp(player.getIp())) {
-//                Discord.kickForUnlinkedAccount(player);
-//                return;
-//            }else if (mySQL.getPlayerIp(player.getIp()) != player.getName().getString()){
-//                Discord.kickForUnlinkedAccount(player);
-//                return;
-//            }
+            if (MySQL.hasPlayerNick(player.getName().getString())) {
+                if(MySQL.hasPlayerIp(player.getIp())){
+                    if(MySQL.getPlayerNickname2Ip(player.getIp()).equals(player.getName().getString())) return;
+                    else kickBecauseRepeatedIp(player);
+                }else kickForUnlinkedAccount(player);
+            }else kickForRegistrationAccount(player);
         });
+    }
+    private static void kickBecauseRepeatedIp(ServerPlayerEntity player){
+        MutableText reason = Text.empty()
+                .append(Text.literal("Повторный IP сообщите администрации сервера\n"));
+
+        player.networkHandler.disconnect(reason);
+    }
+    private static void kickForRegistrationAccount(ServerPlayerEntity player){
+        MutableText reason = Text.empty()
+                .append(Text.literal("Fufhlfuofulful!\n"));
+        player.networkHandler.disconnect(reason);
+    }
+    public static void kickForUnlinkedAccount(ServerPlayerEntity player){
+        String ip = player.getIp();
+        ACCOUNT_LINKING.tryQueueForLinking(ip);
+        String code = ACCOUNT_LINKING.getCode(ip);
+
+        MutableText reason = Text.empty()
+                .append(Text.literal("This server requires a linked Discord account!\n"))
+                .append(Text.literal("Your linking code is "))
+                .append(Text.literal(code)
+                        .formatted(Formatting.BLUE, Formatting.UNDERLINE))
+                .append(Text.literal("\nPlease DM the bot this linking code to link your account"));
+
+        player.networkHandler.disconnect(reason);
     }
 }

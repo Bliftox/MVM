@@ -14,7 +14,7 @@ public class Config {
     public static Config instance;
 
     public static void load() throws Exception {
-        Path configPath = Paths.get("mvm.json");
+        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
 
         if (Files.exists(configPath)) {
             instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
@@ -24,7 +24,7 @@ public class Config {
         }
     }
     public static void save() throws Exception {
-        Path configPath = Paths.get("mvm.json");
+        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
 
         if (Files.exists(configPath)) {
             Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
@@ -34,7 +34,7 @@ public class Config {
     }
 
     @Expose public Discord discord = new Discord();
-    @Expose public SQLite sqLite = new SQLite();
+    @Expose public MySQLConfig mySQLConfig = new MySQLConfig();
     @Expose public Game game = new Game();
     @Expose public Crashes crashes = new Crashes();
 
@@ -44,10 +44,10 @@ public class Config {
         @Expose public String guildId = "1143266536958722240";
         @Expose public String logChannelId = "1189900614226944110";
         @Expose public String applicationsChannelId = "1189996402164629575";
-        @Expose public String token = "MTIzMzAzMDI0NDM0OTI0NzUzMA.GKHeQX.2PtrJ9PF-M7yR8X5NvKF6ISry4pFwHDhycJjpY";
+        @Expose public String token = "";
         @Expose public int appInt = 0;
     }
-    public static class SQLite{
+    public static class MySQLConfig{
         @Expose public String password = "";
         @Expose public String url = "";
         @Expose public String user = "";

@@ -20,12 +20,10 @@ public class  MinecraftEventListeners {
             LOGGER.info("connect:"+ MySQL.hasPlayerNick(player.getName().getString()));
             LOGGER.info("connect:"+ MySQL.hasPlayerIp(player.getIp()));
 
-            if (MySQL.hasPlayerNick(player.getName().getString())) {
-                if(MySQL.hasPlayerIp(player.getIp())){
-                    if(MySQL.getPlayerNickname2Ip(player.getIp()).equals(player.getName().getString())) return;
-                    else kickBecauseRepeatedIp(player);
-                }else kickForUnlinkedAccount(player);
-            }else kickForRegistrationAccount(player);
+            if (!MySQL.hasPlayerNick(player.getName().getString())) kickForRegistrationAccount(player);
+            if(!MySQL.hasPlayerIp(player.getIp())) kickForUnlinkedAccount(player);
+            if(!MySQL.getPlayerNickname2Ip(player.getIp()).equals(player.getName().getString())) kickBecauseRepeatedIp(player);
+
         });
     }
     private static void kickBecauseRepeatedIp(ServerPlayerEntity player){

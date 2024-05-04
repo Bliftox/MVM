@@ -44,7 +44,7 @@ public class MySQL implements DataBase {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (applicationId TEXT, ds_id BIGINT, nickname TEXT," +
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (applicationId TEXT, ds_id TEXT, nickname TEXT," +
                     " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT, fieldFive TEXT)");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (application_Int TEXT, nickname TEXT, ds_id TEXT, IP TEXT)");
         } catch (SQLException e) {
@@ -91,6 +91,20 @@ public class MySQL implements DataBase {
             LOGGER.warn("[MVM]getApplicationFields:"+e);
         }
         return fields;
+    }
+
+    public String getApplicationDsId(String applicationId) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT ds_id,FROM application WHERE applicationId = '"+applicationId+"'");
+            if(rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]getApplicationFields:"+e);
+        }
+        return "";
     }
 
     public static boolean hasPlayerIp(String ip) {

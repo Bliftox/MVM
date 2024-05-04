@@ -36,7 +36,8 @@ public class  MinecraftEventListeners {
     }
     private static void kickForRegistrationAccount(ServerPlayerEntity player){
         MutableText reason = Text.empty()
-                .append(Text.literal("Fufhlfuofulful!\n"));
+                .append(Text.literal("Создайте заявку в дискорд сервере!\n"))
+                .append(Text.literal("И ожидайте одобрение администрацией сервера.\n"));
         player.networkHandler.disconnect(reason);
     }
     public static void kickForUnlinkedAccount(ServerPlayerEntity player){
@@ -45,11 +46,10 @@ public class  MinecraftEventListeners {
         String code = ACCOUNT_LINKING.getCode(ip);
 
         MutableText reason = Text.empty()
-                .append(Text.literal("This server requires a linked Discord account!\n"))
-                .append(Text.literal("Your linking code is "))
+                .append(Text.literal("Ваш код авторизации "))
                 .append(Text.literal(code)
                         .formatted(Formatting.BLUE, Formatting.UNDERLINE))
-                .append(Text.literal("\nPlease DM the bot this linking code to link your account"));
+                .append(Text.literal("\nОтправте его в лс боту Chorny"));
 
         player.networkHandler.disconnect(reason);
     }

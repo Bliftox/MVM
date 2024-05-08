@@ -5,6 +5,8 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.data.DataObject;
+import org.harbingers_of_chaos.mvlib.MySQL;
+import org.harbingers_of_chaos.mvlib.discord.DataBase;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +27,6 @@ public class ApplicationModalReason extends ListenerAdapter {
 
                         embed.setDescription(String.format("```%s```", event.getValue("reason")));
 
-                        // нужно получить айди пользователя из базы данных
                         channel.sendMessageEmbeds(embed.build()).setContent("").queue();
                 } catch (IOException e) {
                         e.printStackTrace();

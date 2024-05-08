@@ -87,7 +87,7 @@ public class Application extends ListenerAdapter {
                         removeRoles(event, member, Config.instance.discord.inProgressRoleIds, guild);
 
                         TextInput reason = TextInput.create("reason", "Причина", TextInputStyle.PARAGRAPH).setPlaceholder("Не обязательно").setMaxLength(500).build();
-                        Modal.Builder modal = Modal.create("reasonModal", "Укажите причина отказа").addActionRows(ActionRow.of(reason));
+                        Modal.Builder modal = Modal.create(memberId, "Укажите причина отказа").addActionRows(ActionRow.of(reason));
                         event.replyModal(modal.build()).queue();
                 }
         }

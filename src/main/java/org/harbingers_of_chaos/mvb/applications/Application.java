@@ -16,15 +16,11 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 import org.harbingers_of_chaos.mvb.Bot;
-import org.harbingers_of_chaos.mvlib.Config;
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.harbingers_of_chaos.mvlib.MySQL;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;

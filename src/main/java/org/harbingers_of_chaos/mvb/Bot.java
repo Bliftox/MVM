@@ -5,14 +5,13 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import org.harbingers_of_chaos.mvb.Command;
 import org.harbingers_of_chaos.mvb.applications.Application;
 import org.harbingers_of_chaos.mvb.applications.ApplicationModalReason;
 import org.harbingers_of_chaos.mvb.applications.Blank;
 import org.harbingers_of_chaos.mvb.applications.Form;
 import org.harbingers_of_chaos.mvb.linkingCode.CodeListener;
 import org.harbingers_of_chaos.mvb.suggestions.Idee;
-import org.harbingers_of_chaos.mvlib.Config;
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.jetbrains.annotations.NotNull;
 
 public class Bot {

@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.utils.data.DataObject;
+import net.fabricmc.loader.api.FabricLoader;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -18,7 +19,8 @@ public class Blank extends ListenerAdapter {
         public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
                 if (event.getName().equals("заявка")) {
                         try {
-                                DataObject json = DataObject.fromJson(Files.newInputStream(Path.of("/home/ling/IdeaProjects/MVM/src/main/resources/configs/application_button.json")));
+                                Path application_button = FabricLoader.getInstance().getConfigDir().resolve("mvm").resolve("application_button.json");
+                                DataObject json = DataObject.fromJson(Files.newInputStream(application_button));
                                 EmbedBuilder embedBuilder = EmbedBuilder.fromData(json);
 
                                 TextChannel textChannel = event.getChannel().asTextChannel();

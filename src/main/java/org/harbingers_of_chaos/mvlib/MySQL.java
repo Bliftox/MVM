@@ -1,7 +1,7 @@
 package org.harbingers_of_chaos.mvlib;
 
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.harbingers_of_chaos.mvlib.discord.DataBase;
-import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 
 import java.sql.*;
 import java.util.ArrayList;

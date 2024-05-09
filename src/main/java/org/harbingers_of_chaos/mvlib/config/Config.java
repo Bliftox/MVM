@@ -1,9 +1,8 @@
-package org.harbingers_of_chaos.mvlib;
+package org.harbingers_of_chaos.mvlib.config;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import com.google.gson.annotations.Expose;
 

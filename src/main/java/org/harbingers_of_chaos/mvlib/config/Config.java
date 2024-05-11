@@ -13,7 +13,7 @@ public class Config {
     public static Config instance;
 
     public static void load() throws Exception {
-        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
+        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm").resolve("mvm.json");
 
         if (Files.exists(configPath)) {
             instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);

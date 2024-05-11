@@ -45,8 +45,8 @@ public class Application extends ListenerAdapter {
 
                 EmbedBuilder embed = new EmbedBuilder();
                 String application = String.format("## Ник: ```%s```\n## Лет: ```%s```\n## Пол: ```%s```\n## Био: ```%s```\n## Чупапи  ```%s``` ",
-                        event.getValue("0").getAsString(), event.getValue("1").getAsString(), event.getValue("2").getAsString(),
-                        event.getValue("3").getAsString(), event.getValue("4").getAsString());
+                        event.getValue("application_filed_0").getAsString(), event.getValue("application_filed_1").getAsString(), event.getValue("application_filed_2").getAsString(),
+                        event.getValue("application_filed_3").getAsString(), event.getValue("application_filed_4").getAsString());
 
                 embed.setColor(Color.decode("#ff0066"));
                 embed.setTimestamp(Instant.now());
@@ -69,6 +69,8 @@ public class Application extends ListenerAdapter {
 
         @Override
         public void onButtonInteraction(ButtonInteractionEvent event) {
+                if (event.getButton().getId().equals(SEND_BUTTON_ID)) return;
+
                 Guild guild = event.getGuild();
                 TextChannel channel = guild.getTextChannelById("1233361269453750272");
                 String applicationId = event.getMessageId();

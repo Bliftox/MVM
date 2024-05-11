@@ -46,14 +46,16 @@ public class Config {
         @Expose public String applicationsChannelId = "1189996402164629575";
         @Expose public String token = "";
 
-        @Expose public boolean accessRoleEnable = true;
+        @Expose public boolean applicationsEnable = true;
+        @Expose public boolean changeNickname = true;
+
         @Expose public String[] accessRoleIds = {"1160295664668913816"};
 
-        @Expose public boolean rejectRoleEnable = true;
         @Expose public String[] rejectRoleIds = {"1160295664668913816"};
 
-        @Expose public boolean inProgressRoleEnable = true;
         @Expose public String[] inProgressRoleIds = {"1160295664668913816"};
+
+        @Expose public String[] mentionRoleIds = {"1160295664668913816"};
     }
     public static class MySQLConfig{
         @Expose public String password = "";

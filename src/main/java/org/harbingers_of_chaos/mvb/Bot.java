@@ -37,7 +37,7 @@ public class Bot {
                                 GatewayIntent.GUILD_MEMBERS,
                                 GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
                                 GatewayIntent.GUILD_WEBHOOKS)
-                        .addEventListeners(new Command(), new Application(), new ApplicationAccept(), new ApplicationReject(), new Idee(), new CodeListener())
+                        .addEventListeners(new Command(), new Application(), new ApplicationAccept(), new ApplicationReject(), new Idee(), new CodeListener(), new CheckGuild())
                         .build();
         }
 

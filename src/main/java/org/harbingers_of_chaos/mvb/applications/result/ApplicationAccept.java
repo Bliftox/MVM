@@ -9,7 +9,8 @@ import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.harbingers_of_chaos.mvb.Bot;
 import org.harbingers_of_chaos.mvb.applications.Application;
-import org.harbingers_of_chaos.mvlib.Config;
+import org.harbingers_of_chaos.mvlib.MySQL;
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,12 +40,9 @@ public class ApplicationAccept extends ListenerAdapter {
             String id;
             String nickname;
 
-            try {
                 id = new MySQL().getApplicationUserId(event.getMessageId());
-                nickname = new MySQL().getFieldsValue(event.getMessageId()).get(0);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+                nickname = new MySQL().getApplicationFields(event.getMessageId()).get(0);
+
 
             if (textChannel != null) {
                 sendMessageAndEmbed(event, id, textChannel);

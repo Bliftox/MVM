@@ -15,8 +15,8 @@ import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import org.harbingers_of_chaos.mvb.Bot;
-import org.harbingers_of_chaos.mvlib.Config;
 import org.harbingers_of_chaos.mvlib.MySQL;
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 import org.jetbrains.annotations.NotNull;
 

@@ -7,17 +7,12 @@ import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.exceptions.HierarchyException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.bukkit.Bukkit;
 import org.harbingers_of_chaos.mvb.Bot;
 import org.harbingers_of_chaos.mvb.applications.Application;
-import org.harbingers_of_chaos.mvlib.Config;
+import org.harbingers_of_chaos.mvlib.MySQL;
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.ling.ldbot.discord.applications.Application;
-import org.ling.ldbot.main.LDBot;
 
 import javax.xml.crypto.Data;
 import java.awt.*;
@@ -48,11 +43,8 @@ public class ApplicationReject extends ListenerAdapter {
 
 
             String id;
-            try {
                 id = new MySQL().getApplicationUserId(event.getMessageId());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+
 
             if (textChannel != null) {
                 sendMessageAndEmbed(event, id, textChannel);

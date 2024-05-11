@@ -23,7 +23,7 @@ public class Config {
         }
     }
     public static void save() throws Exception {
-        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
+        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm").resolve("mvm.json");
 
         if (Files.exists(configPath)) {
             Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
@@ -39,10 +39,10 @@ public class Config {
 
     public static class Discord {
         @Expose public String webhook = "";
-        @Expose public String applicationsLogChannelId = "1189900614226944110";
-        @Expose public String guildId = "1143266536958722240";
-        @Expose public String logChannelId = "1189900614226944110";
-        @Expose public String applicationsChannelId = "1189996402164629575";
+        @Expose public String applicationsLogChannelId = "1233351984132788276";
+        @Expose public String guildId = "1233351984132788276";
+        @Expose public String logChannelId = "1233351984132788276";
+        @Expose public String applicationsChannelId = "1233351984132788276";
         @Expose public String token = "";
 
         @Expose public boolean applicationsEnable = true;

@@ -13,6 +13,8 @@ import org.harbingers_of_chaos.mvb.suggestions.Idee;
 import org.harbingers_of_chaos.mvlib.config.Config;
 import org.jetbrains.annotations.NotNull;
 
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
+
 public class Bot {
         private static JDA jda;
 
@@ -37,7 +39,7 @@ public class Bot {
                                 GatewayIntent.GUILD_MEMBERS,
                                 GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
                                 GatewayIntent.GUILD_WEBHOOKS)
-                        .addEventListeners(new Command(), new Application(), new ApplicationAccept(), new ApplicationReject(), new Idee(), new CodeListener(), new CheckGuild())
+                        .addEventListeners(new Command(), new Application(), new ApplicationAccept(), new ApplicationReject(), new Idee(), new CodeListener())
                         .build();
         }
 
@@ -46,6 +48,7 @@ public class Bot {
         }
 
         public static void log(@NotNull String s) {
+
                 jda.getGuildById(Config.instance.discord.guildId).getTextChannelById(Config.instance.discord.logChannelId).sendMessage(s).queue();
         }
 

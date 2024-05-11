@@ -74,7 +74,7 @@ public class Application extends ListenerAdapter {
                 Guild guild = event.getGuild();
                 TextChannel channel = guild.getTextChannelById("1233361269453750272");
                 String applicationId = event.getMessageId();
-                String memberId = new MySQL().getApplicationDsId(applicationId);
+                String memberId = new MySQL().getApplicationUserId(applicationId);
                 Member member = guild.getMemberById(memberId);
 
                 if (event.getButton().getId().equals(ACCESS_BUTTON_ID)) {

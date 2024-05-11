@@ -93,7 +93,7 @@ public class MySQL implements DataBase {
         return fields;
     }
 
-    public String getApplicationDsId(String applicationId) {
+    public String getApplicationUserId(String applicationId) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
@@ -105,6 +105,36 @@ public class MySQL implements DataBase {
             LOGGER.warn("[MVM]getApplicationFields:"+e);
         }
         return "";
+    }
+    public boolean hasApplicationUserId(String UserId) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE ds_id = '"+UserId+"'");
+            if(rs.next()) {
+                if (rs.getInt(1) > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]hasApplicationUserId:"+e);
+        }
+        return false;
+    }
+    public boolean hasApplication(String applicationId) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE applicationId = '"+applicationId+"'");
+            if(rs.next()) {
+                if (rs.getInt(1) > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]hasApplication:"+e);
+        }
+        return false;
     }
 
     public static boolean hasPlayerIp(String ip) {

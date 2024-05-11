@@ -10,7 +10,7 @@ import org.harbingers_of_chaos.mvb.applications.result.ApplicationAccept;
 import org.harbingers_of_chaos.mvb.applications.result.ApplicationReject;
 import org.harbingers_of_chaos.mvb.linkingCode.CodeListener;
 import org.harbingers_of_chaos.mvb.suggestions.Idee;
-import org.harbingers_of_chaos.mvlib.Config;
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.jetbrains.annotations.NotNull;
 
 public class Bot {

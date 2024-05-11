@@ -1,9 +1,8 @@
-package org.harbingers_of_chaos.mvlib;
+package org.harbingers_of_chaos.mvlib.config;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import com.google.gson.annotations.Expose;
 
@@ -14,7 +13,7 @@ public class Config {
     public static Config instance;
 
     public static void load() throws Exception {
-        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
+        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm").resolve("mvm.json");
 
         if (Files.exists(configPath)) {
             instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);

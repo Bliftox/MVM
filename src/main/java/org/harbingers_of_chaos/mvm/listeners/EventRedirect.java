@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 
 import org.harbingers_of_chaos.mvb.Bot;
-import org.harbingers_of_chaos.mvlib.Config;
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.harbingers_of_chaos.mvlib.MySQL;
 import org.harbingers_of_chaos.mvm.event.PlayerConnectedCallback;
 

@@ -1,7 +1,7 @@
 package org.harbingers_of_chaos.mvlib;
 
+import org.harbingers_of_chaos.mvlib.config.Config;
 import org.harbingers_of_chaos.mvlib.discord.DataBase;
-import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class MySQL implements DataBase {
             statement.setQueryTimeout(30);
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (applicationId TEXT, ds_id TEXT, nickname TEXT," +
-                    " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT, fieldFive TEXT)");
+                    " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT)");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (application_Int TEXT, nickname TEXT, ds_id TEXT, IP TEXT)");
         } catch (SQLException e) {
             LOGGER.warn("[MVM]CreateDBt:"+e);
@@ -58,7 +58,7 @@ public class MySQL implements DataBase {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
-            statement.executeUpdate(String.format("INSERT INTO application VALUES('%s','%s','%s','%s','%s','%s','%s','%s')", applicationId, memberId, fields.get(0), fields.get(1), fields.get(2), fields.get(3), fields.get(4), fields.get(5)));
+            statement.executeUpdate(String.format("INSERT INTO application VALUES('%s','%s','%s','%s','%s','%s','%s')", applicationId, memberId, fields.get(0), fields.get(1), fields.get(2), fields.get(3), fields.get(4)));
         } catch (SQLException e) {
             LOGGER.warn("[MVM]saveApplication:"+e);
         }
@@ -93,11 +93,11 @@ public class MySQL implements DataBase {
         return fields;
     }
 
-    public String getApplicationDsId(String applicationId) {
+    public String getApplicationUserId(String applicationId) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
-            ResultSet rs = statement.executeQuery("SELECT ds_id,FROM application WHERE applicationId = '"+applicationId+"'");
+            ResultSet rs = statement.executeQuery("SELECT ds_id FROM application WHERE applicationId = '"+applicationId+"'");
             if(rs.next()) {
                 return rs.getString(1);
             }
@@ -105,6 +105,36 @@ public class MySQL implements DataBase {
             LOGGER.warn("[MVM]getApplicationFields:"+e);
         }
         return "";
+    }
+    public boolean hasApplicationUserId(String UserId) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE ds_id = '"+UserId+"'");
+            if(rs.next()) {
+                if (rs.getInt(1) > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]hasApplicationUserId:"+e);
+        }
+        return false;
+    }
+    public boolean hasApplication(String applicationId) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE applicationId = '"+applicationId+"'");
+            if(rs.next()) {
+                if (rs.getInt(1) > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]hasApplication:"+e);
+        }
+        return false;
     }
 
     public static boolean hasPlayerIp(String ip) {

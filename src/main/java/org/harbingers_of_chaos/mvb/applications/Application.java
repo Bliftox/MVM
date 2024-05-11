@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
+import net.dv8tion.jda.api.interactions.modals.ModalMapping;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import org.harbingers_of_chaos.mvb.Bot;
 import org.harbingers_of_chaos.mvlib.MySQL;
@@ -22,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Application extends ListenerAdapter {
 
@@ -132,20 +135,19 @@ public class Application extends ListenerAdapter {
                 return;
             }
 
-            String fieldOneValue = event.getValue(Fields.APPLICATION_FIELD_ZERO.name()).getAsString();
-            String fieldTwoValue = event.getValue(Fields.APPLICATION_FIELD_ONE.name()).getAsString();
-            String fieldThreeValue = event.getValue(Fields.APPLICATION_FIELD_TWO.name()).getAsString();
-            String fieldFourValue = event.getValue(Fields.APPLICATION_FIELD_THREE.name()).getAsString();
-            String fieldFiveValue = event.getValue(Fields.APPLICATION_FIELD_FOUR.name()).getAsString();
+            List<String> fields = new ArrayList<>();
+            for (ModalMapping value : event.getValues()) {
+                fields.add(value.getAsString());
+            }
 
             EmbedBuilder applicationEmbed = new EmbedBuilder()
                     .setDescription(
                             "## [📋] Заявка от " + event.getUser().getName() + "\n" +
-                                    "### 🎗️ Ваш ник в игре" + "\n```text\n" + fieldOneValue + "\n```" +
-                                    "\n\n### 🎨 Сколько вам лет?" + "\n```text\n" + fieldTwoValue + "\n```" +
-                                    "\n\n### 📜 Немного о себе" + "\n```text\n" + fieldThreeValue + "\n```" +
-                                    "\n\n### 🍄 Почему именно на сервер?" + "\n```text\n" + fieldFourValue + "\n```" +
-                                    "\n\n### ⚠️ Любите играть с читами?" + "\n```text\n" + fieldFiveValue + "\n```"
+                                    "### 🎗️ Ваш ник в игре" + "\n```text\n" + fields.get(0) + "\n```" +
+                                    "\n\n### 🎨 Сколько вам лет?" + "\n```text\n" + fields.get(1) + "\n```" +
+                                    "\n\n### 📜 Немного о себе" + "\n```text\n" + fields.get(2) + "\n```" +
+                                    "\n\n### 🍄 Почему именно на сервер?" + "\n```text\n" + fields.get(3) + "\n```" +
+                                    "\n\n### ⚠️ Любите играть с читами?" + "\n```text\n" + fields.get(4) + "\n```"
                     )
 
                     .setColor(Color.decode("#ff9933"))
@@ -159,15 +161,22 @@ public class Application extends ListenerAdapter {
 
                 String[] mentionRoleIds = Config.instance.discord.mentionRoleIds;
 
-                MessageCreateAction message =  textChannel.sendMessageEmbeds(applicationEmbed.build())
+                MessageCreateAction rawMessage =  textChannel.sendMessageEmbeds(applicationEmbed.build())
                         .addActionRow(
                                 Button.of(ButtonStyle.SUCCESS, BUTTON_ACCEPT_ID, BUTTON_ACCEPT_LABEL, Emoji.fromUnicode("✅")),
                                 Button.of(ButtonStyle.DANGER, BUTTON_REJECT_ID, BUTTON_REJECT_LABEL, Emoji.fromUnicode("⛔")));
 
                 for (String roleId : mentionRoleIds)
-                    message.setContent(message.getContent() + String.format("%s, ", event.getGuild().getRoleById(roleId).getAsMention()));
+                    rawMessage.setContent(rawMessage.getContent() + String.format("%s, ", event.getGuild().getRoleById(roleId).getAsMention()));
 
-                message.queue();
+                rawMessage.queue(message -> {
+                    new MySQL().saveApplication(
+                            message.getId(),
+                            event.getMember().getId(),
+                            fields
+                    );
+                }
+                );
 
                 event.reply("✅ Успешно создано!").setEphemeral(true).queue();
             } catch (NullPointerException e) {

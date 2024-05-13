@@ -54,7 +54,7 @@ public class ApplicationReject extends ListenerAdapter {
 
             manageRoles(event, id);
 
-            event.getMessage().delete().queue();
+            event.getChannel().asTextChannel().deleteMessageById(event.getMessageId()).queue();
             MystiVerseModServer.LOGGER.info("[LDBot] The application from " + event.getGuild().getMemberById(id).getEffectiveName() + " has been successfully rejected.");
         }
     }

@@ -81,9 +81,9 @@ public class MySQL implements DataBase {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
-            ResultSet rs = statement.executeQuery("SELECT nickname,fieldOne,fieldTwo,fieldThree,fieldFour,fieldFive FROM application WHERE applicationId = '"+applicationId+"'");
+            ResultSet rs = statement.executeQuery("SELECT nickname,fieldOne,fieldTwo,fieldThree,fieldFour FROM application WHERE applicationId = '"+applicationId+"'");
             if(rs.next()) {
-                for(int i = 1; i < 7; i++) {
+                for(int i = 1; i < 5; i++) {
                     fields.add(rs.getString(i));
                 }
             }
@@ -167,7 +167,34 @@ public class MySQL implements DataBase {
         }
         return false;
     }
+    public static String getPlayerId2Nickname(String nickname) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
 
+            ResultSet rs = statement.executeQuery("SELECT ds_id FROM player WHERE nickname = '"+nickname+"'");
+            if(rs.next()) {
+                return rs.getString(1);
+            }
+
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+        }
+        return "";
+    }
+    public static String getPlayerId2Ip(String ip) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT ds_id FROM player WHERE IP = '"+ip+"'");
+            if(rs.next()) {
+                return rs.getString(1);
+            }
+
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+        }
+        return "";
+    }
     public static String getPlayerNickname2Ip(String ip) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
@@ -182,10 +209,24 @@ public class MySQL implements DataBase {
         }
         return "";
     }
-    public static void setPlayerIp(String ip,String ds_id) {
+    public static String getPlayerNickname2Id(String id) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
+            ResultSet rs = statement.executeQuery("SELECT nickname FROM player WHERE ds_id = '"+id+"'");
+            if(rs.next()) {
+                return rs.getString(1);
+            }
+
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+        }
+        return "";
+    }
+    public static void setPlayerIp(String ip,String ds_id) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+            LOGGER.info("set "+ip);
             statement.executeUpdate(String.format("UPDATE player SET IP = '%s' WHERE ds_id = '%s'", ip, ds_id));
         } catch (SQLException e) {
             LOGGER.warn("[MVM]ConnectPlayer:getPlayerIp:" + e);

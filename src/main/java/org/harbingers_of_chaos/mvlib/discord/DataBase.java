@@ -16,9 +16,9 @@ public interface DataBase {
 
         List<String> getApplicationFields(String applicationId);
 
-        String getApplicationUserId(String applicationId) throws SQLException;
+        String getApplicationUserId(String applicationId);
 
-        boolean applicationExists(String applicationId) throws SQLException;
+        boolean hasApplication(String applicationId);
 
-        boolean isUserInDatabase(String userId);
+        boolean hasApplicationUserId(String userId);
 }

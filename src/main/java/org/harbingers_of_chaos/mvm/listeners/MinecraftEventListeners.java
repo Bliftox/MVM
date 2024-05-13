@@ -40,7 +40,8 @@ public class  MinecraftEventListeners {
     }
     public static void kickForUnlinkedAccount(ServerPlayerEntity player){
         String ip = player.getIp();
-        ACCOUNT_LINKING.tryQueueForLinking(ip);
+        String id = MySQL.getPlayerId2Nickname(player.getName().getString());
+        ACCOUNT_LINKING.tryQueueForLinking(ip,id);
         String code = ACCOUNT_LINKING.getCode(ip);
 
         MutableText reason = Text.empty()

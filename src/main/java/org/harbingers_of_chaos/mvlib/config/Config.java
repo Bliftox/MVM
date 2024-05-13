@@ -9,10 +9,17 @@ import com.google.gson.annotations.Expose;
 import net.fabricmc.loader.api.FabricLoader;
 import org.harbingers_of_chaos.mvm.MystiVerseModServer;
 
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
+
 public class Config {
     public static Config instance;
 
     public static void load() throws Exception {
+        Path dirPath = FabricLoader.getInstance().getConfigDir().resolve("mvm");
+        if (!Files.exists(dirPath)) {
+            LOGGER.info(dirPath.toFile().mkdirs() ? "dir mvm created" : "dir mvm not created");
+        }
+
         Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm").resolve("mvm.json");
 
         if (Files.exists(configPath)) {

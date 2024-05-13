@@ -53,7 +53,10 @@ public class ApplicationAccept extends ListenerAdapter {
             changeNickname(event, id, nickname);
             manageRoles(event, id);
 
-            event.getMessage().delete().queue();
+            event.getChannel().asTextChannel().deleteMessageById(event.getMessageId()).queue();
+            new MySQL().savePlayer(event.getMessageId(),new MySQL().getApplicationUserId(event.getMessageId()),new MySQL().getApplicationFields(event.getMessageId()).get(0));
+
+
             MystiVerseModServer.LOGGER.info("[LDBot] The application from " + event.getGuild().getMemberById(id).getEffectiveName() + " has been successfully accepted.");
         }
     }

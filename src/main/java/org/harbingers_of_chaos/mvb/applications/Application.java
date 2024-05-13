@@ -79,7 +79,7 @@ public class Application extends ListenerAdapter {
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
         if (event.getComponentId().equals(RESUME_BUTTON_ID)) {
 
-            if (new MySQL().isUserInDatabase(event.getUser().getId())) {
+            if (new MySQL().hasApplicationUserId(event.getUser().getId())) {
                 event.reply("⚠️ Вы уже подали заявку!").setEphemeral(true).queue();
                 return;
             }

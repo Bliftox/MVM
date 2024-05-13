@@ -9,7 +9,6 @@ import org.harbingers_of_chaos.mvlib.config.Config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.harbingers_of_chaos.mvlib.MySQL;
-import org.harbingers_of_chaos.mvlib.config.Embend;
 import org.harbingers_of_chaos.mvm.listeners.EventRedirect;
 import org.harbingers_of_chaos.mvm.listeners.MinecraftEventListeners;
 
@@ -23,7 +22,6 @@ public class MystiVerseModServer implements ModInitializer {
     @Override
     public void onInitialize() {
         try {
-            Embend.load();
             Config.load();
         } catch (Exception e) {
             LOGGER.warn("Failed to load config using defaults : ", e);

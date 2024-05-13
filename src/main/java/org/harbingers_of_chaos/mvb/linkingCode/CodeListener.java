@@ -22,7 +22,8 @@ public class CodeListener extends ListenerAdapter {
 
         if (message.getChannel() instanceof PrivateChannel channel) {
             String code = message.getContentRaw();
-            LOGGER.info(code);
+//            LOGGER.info(code);
+//            LOGGER.info(user.getId());
 
             switch (ACCOUNT_LINKING.tryLinkAccount(code, user.getId())) {
                 case INVALID_CODE ->
@@ -31,7 +32,11 @@ public class CodeListener extends ListenerAdapter {
                                 .queue();
                 case ACCOUNT_LINKED ->
                         channel
-                                    .sendMessage(MessageCreateData.fromContent("Ваш аккаунт уже был привязан!"))
+                                .sendMessage(MessageCreateData.fromContent("Ваш аккаунт уже был привязан!"))
+                                .queue();
+                case REPEAT_IP ->
+                        channel
+                                .sendMessage(MessageCreateData.fromContent("Этот ip уже был привязан!"))
                                 .queue();
                 case SUCCESS ->
                         channel

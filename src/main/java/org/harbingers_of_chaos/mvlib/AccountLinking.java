@@ -5,13 +5,14 @@ import com.google.common.collect.HashBiMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.security.SecureRandom;
-import java.sql.SQLException;
-import java.util.Optional;
+
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 public class AccountLinking {
     public enum LinkingResult {
         INVALID_CODE,
         ACCOUNT_LINKED,
+        REPEAT_IP,
         SUCCESS
     }
 
@@ -21,20 +22,22 @@ public class AccountLinking {
         SUCCESS
     }
 
-    private final BiMap<String, String> codeIpBiMap = HashBiMap.create();
+    private static final BiMap<String, String> codeIpBiMap = HashBiMap.create();
+    private static final BiMap<String, String> IpIdBiMap = HashBiMap.create();
 
     private final SecureRandom random = new SecureRandom();
-    public QueuingResult tryQueueForLinking(String ip){
+    public QueuingResult tryQueueForLinking(String ip, String ds_id){
 
-//        if (MySQL.hasPlayerIp(ip)) {
-//            return QueuingResult.ACCOUNT_LINKED;
-//        }
-
-        if (codeIpBiMap.inverse().containsKey(ip)) {
-            return QueuingResult.ACCOUNT_QUEUED;
+        if (MySQL.hasPlayerIp(ip)&&MySQL.getPlayerId2Ip(ip).equals(ds_id)) {
+            return QueuingResult.ACCOUNT_LINKED;
         }
 
-        codeIpBiMap.put(randomId(), ip);
+        if (codeIpBiMap.inverse().containsKey(new String[] {ip,ds_id})) {
+            return QueuingResult.ACCOUNT_QUEUED;
+        }
+//        LOGGER.info(ds_id);
+        codeIpBiMap.put(randomId(),ip);
+        IpIdBiMap.put(ip,ds_id);
         return QueuingResult.SUCCESS;
     }
 
@@ -45,9 +48,9 @@ public class AccountLinking {
 
     public LinkingResult tryLinkAccount(String code, String discordId) {
 
-//        if (MySQL.hasPlayerIp2DiscordId(discordId)) {
-//            return LinkingResult.ACCOUNT_LINKED;
-//        }
+        if (MySQL.hasPlayerNick(MySQL.getPlayerNickname2Id(discordId))) {
+            return LinkingResult.ACCOUNT_LINKED;
+        }
 
         if (!codeIpBiMap.containsKey(code)) {
             return LinkingResult.INVALID_CODE;
@@ -55,11 +58,16 @@ public class AccountLinking {
 
         String ip = codeIpBiMap.get(code);
         codeIpBiMap.remove(code);
-
-        if (MySQL.hasPlayerIp(ip)) {
-            return LinkingResult.ACCOUNT_LINKED;
+//        LOGGER.info(ip);
+//        LOGGER.info(IpIdBiMap.get(ip));
+//        LOGGER.info(discordId);
+        if (!IpIdBiMap.get(ip).equals(discordId)) {
+            return LinkingResult.INVALID_CODE;
         }
 
+        if (MySQL.hasPlayerIp(ip)) {
+            return LinkingResult.REPEAT_IP;
+        }
         MySQL.setPlayerIp(ip, discordId);
 
         return LinkingResult.SUCCESS;

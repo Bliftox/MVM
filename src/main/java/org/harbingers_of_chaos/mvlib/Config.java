@@ -40,10 +40,10 @@ public class Config {
 
     public static class Discord {
         @Expose public String webhook = "";
-        @Expose public String applicationsLogChannelId = "1189900614226944110";
-        @Expose public String guildId = "1143266536958722240";
-        @Expose public String logChannelId = "1189900614226944110";
-        @Expose public String applicationsChannelId = "1189996402164629575";
+        @Expose public String applicationsLogChannelId = "";
+        @Expose public String guildId = "";
+        @Expose public String logChannelId = "";
+        @Expose public String applicationsChannelId = "";
         @Expose public String token = "";
         @Expose public int appInt = 0;
     }

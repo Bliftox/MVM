@@ -28,7 +28,7 @@ public class Bot {
 
 
         public static void startup() {
-                jda = JDABuilder.createDefault("MTIzMzAzMDI0NDM0OTI0NzUzMA.GKHeQX.2PtrJ9PF-M7yR8X5NvKF6ISry4pFwHDhycJjpY")
+                jda = JDABuilder.createDefault(Config.instance.discord.token)
                         .setMemberCachePolicy(MemberCachePolicy.ALL)
                         .setChunkingFilter(ChunkingFilter.ALL)
                         .enableIntents(GatewayIntent.GUILD_MESSAGES,

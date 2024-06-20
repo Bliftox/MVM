@@ -13,6 +13,8 @@ import org.harbingers_of_chaos.mvb.suggestions.Idee;
 import org.harbingers_of_chaos.mvlib.config.Config;
 import org.jetbrains.annotations.NotNull;
 
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
+
 public class Bot {
         private static JDA jda;
 
@@ -20,7 +22,7 @@ public class Bot {
                 try {
                         Config.load();
                 } catch (Exception e) {
-//                        LOGGER.warn("Failed to load config using defaults : ", e);
+                        LOGGER.warn("Failed to load config using defaults : ", e);
                 }
                 startup();
 
@@ -28,6 +30,7 @@ public class Bot {
 
 
         public static void startup() {
+                LOGGER.info("Starting Bot"+Config.instance.discord.token);
                 jda = JDABuilder.createDefault(Config.instance.discord.token)
                         .setMemberCachePolicy(MemberCachePolicy.ALL)
                         .setChunkingFilter(ChunkingFilter.ALL)

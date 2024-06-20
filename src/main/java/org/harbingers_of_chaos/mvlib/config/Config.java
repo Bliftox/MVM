@@ -1,5 +1,6 @@
 package org.harbingers_of_chaos.mvlib.config;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,13 +15,15 @@ import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 public class Config {
     public static Config instance;
 
+    private static Path dirPath = FabricLoader.getInstance().getConfigDir().resolve("mvm");
+    //private static Path dirPath = new File("D:\\idea\\MVM-1.20.1\\run").toPath();
+    private static Path configPath = dirPath.resolve("mvm.json");
+
+
     public static void load() throws Exception {
-        Path dirPath = FabricLoader.getInstance().getConfigDir().resolve("mvm");
         if (!Files.exists(dirPath)) {
             LOGGER.info(dirPath.toFile().mkdirs() ? "dir mvm created" : "dir mvm not created");
         }
-
-        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm").resolve("mvm.json");
 
         if (Files.exists(configPath)) {
             instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
@@ -30,8 +33,6 @@ public class Config {
         }
     }
     public static void save() throws Exception {
-        Path configPath = FabricLoader.getInstance().getConfigDir().resolve("mvm.json");
-
         if (Files.exists(configPath)) {
             Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
         } else {
@@ -64,6 +65,7 @@ public class Config {
         @Expose public String[] mentionRoleIds = {"1160295664668913816"};
     }
     public static class MySQLConfig{
+        @Expose public boolean enabled = true;
         @Expose public String password = "";
         @Expose public String url = "";
         @Expose public String user = "";

@@ -26,6 +26,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
+
 public class Application extends ListenerAdapter {
 
     public enum Fields {
@@ -79,7 +81,7 @@ public class Application extends ListenerAdapter {
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
         if (event.getComponentId().equals(RESUME_BUTTON_ID)) {
 
-            if (new MySQL().hasApplicationUserId(event.getUser().getId())) {
+            if (new MySQL().hasApplicationUserId(event.getUser().getId()) && new MySQL().hasOrabotUserId(event.getUser().getId())) {
                 event.reply("⚠️ Вы уже подали заявку!").setEphemeral(true).queue();
                 return;
             }
@@ -167,7 +169,7 @@ public class Application extends ListenerAdapter {
                                 Button.of(ButtonStyle.DANGER, BUTTON_REJECT_ID, BUTTON_REJECT_LABEL, Emoji.fromUnicode("⛔")));
 
                 for (String roleId : mentionRoleIds)
-                    rawMessage.setContent(rawMessage.getContent() + String.format("%s, ", event.getGuild().getRoleById(roleId).getAsMention()));
+                    rawMessage.setContent(rawMessage.getContent()/* + String.format("%s, ", event.getGuild().getRoleById(roleId).getAsMention())*/);
 
                 rawMessage.queue(message -> {
                     new MySQL().saveApplication(

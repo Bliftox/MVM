@@ -28,8 +28,7 @@ public class MystiVerseModServer implements ModInitializer {
         }
         EventRedirect.init();
         MinecraftEventListeners.init();
-
-        MySQL.connection();
-        MySQL.createDB();
+            MySQL.connection("database.db");
+            MySQL.createDB();
     }
 }

@@ -49,6 +49,14 @@ dependencies {
         exclude module: "opus-java"
     })
     include("org.apache.commons:commons-collections4:4.4")
+
+    modImplementation "org.xerial:sqlite-jdbc:3.44.1.0"//shadowCommon "org.xerial:sqlite-jdbc:3.44.1.0"
+    modImplementation "mysql:mysql-connector-java:8.0.33"
+//    shadowCommon "mysql:mysql-connector-java:8.0.33"
+
+
+
+
     include(implementation("mysql:mysql-connector-java:8.0.30"))
 //    implementation("mysql:mysql-connector-java:8.0.30")
 }

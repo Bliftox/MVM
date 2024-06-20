@@ -1,8 +1,10 @@
 package org.harbingers_of_chaos.mvlib;
 
+import net.fabricmc.loader.api.FabricLoader;
 import org.harbingers_of_chaos.mvlib.config.Config;
 import org.harbingers_of_chaos.mvlib.discord.DataBase;
 
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,19 @@ import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 public class MySQL implements DataBase {
     static Connection dbConnection;
 
-    public static void connection(){
+    public static void connection(String dbPath){
         try {
-            dbConnection = DriverManager.getConnection(
-                    Config.instance.mySQLConfig.url, Config.instance.mySQLConfig.user, Config.instance.mySQLConfig.password);
-        } catch (SQLException e) {
+            if(Config.instance.mySQLConfig.enabled) {
+                dbConnection = DriverManager.getConnection(
+                        Config.instance.mySQLConfig.url, Config.instance.mySQLConfig.user, Config.instance.mySQLConfig.password);
+            }else{
+                Class.forName("org.sqlite.JDBC");
+                Path path = FabricLoader.getInstance().getConfigDir().resolve("mvm");
+                String url = "jdbc:sqlite:" + path.resolve(dbPath).toString();
+                dbConnection = DriverManager.getConnection(url);
+            }
+            LOGGER.info("Connected to database");
+        } catch (SQLException | ClassNotFoundException e) {
             LOGGER.warn("[MVM]Connection:"+e);
         }
     }
@@ -45,7 +55,7 @@ public class MySQL implements DataBase {
             statement.setQueryTimeout(30);
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (applicationId TEXT, ds_id TEXT, nickname TEXT," +
-                    " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT)");
+                    " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT, obrab TEXT)");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (application_Int TEXT, nickname TEXT, ds_id TEXT, IP TEXT)");
         } catch (SQLException e) {
             LOGGER.warn("[MVM]CreateDBt:"+e);
@@ -57,9 +67,9 @@ public class MySQL implements DataBase {
     public void saveApplication(String applicationId, String memberId, List<String> fields) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
-
-            statement.executeUpdate(String.format("INSERT INTO application VALUES('%s','%s','%s','%s','%s','%s','%s')", applicationId, memberId, fields.get(0), fields.get(1), fields.get(2), fields.get(3), fields.get(4)));
+            statement.executeUpdate(String.format("INSERT INTO application VALUES('%s','%s','%s','%s','%s','%s','%s','true')", applicationId, memberId, fields.get(0), fields.get(1), fields.get(2), fields.get(3), fields.get(4)));
         } catch (SQLException e) {
+
             LOGGER.warn("[MVM]saveApplication:"+e);
         }
     }
@@ -118,6 +128,19 @@ public class MySQL implements DataBase {
             }
         } catch (SQLException e) {
             LOGGER.warn("[MVM]hasApplicationUserId:"+e);
+        }
+        return false;
+    }
+    public boolean hasOrabotUserId(String UserId) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT obrab FROM application WHERE ds_id = '"+UserId+"'");
+            if(rs.next()) {
+                return rs.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]hasOrabotUserId:"+e);
         }
         return false;
     }
@@ -195,6 +218,20 @@ public class MySQL implements DataBase {
         }
         return "";
     }
+    public static String getPlayerIp2Id(String id) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT IP FROM player WHERE ds_id = '"+id+"'");
+            if(rs.next()) {
+                return rs.getString(1);
+            }
+
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+        }
+        return "";
+    }
     public static String getPlayerNickname2Ip(String ip) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
@@ -228,6 +265,16 @@ public class MySQL implements DataBase {
             statement.setQueryTimeout(30);
             LOGGER.info("set "+ip);
             statement.executeUpdate(String.format("UPDATE player SET IP = '%s' WHERE ds_id = '%s'", ip, ds_id));
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM]ConnectPlayer:getPlayerIp:" + e);
+        }
+    }
+
+    public void setObrab(String applicationId) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            statement.executeUpdate(String.format("UPDATE application SET obrab =  'false' WHERE applicationId = '%s'", applicationId));
         } catch (SQLException e) {
             LOGGER.warn("[MVM]ConnectPlayer:getPlayerIp:" + e);
         }

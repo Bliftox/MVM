@@ -20,19 +20,21 @@ public class  MinecraftEventListeners {
             LOGGER.info("connect:"+ MySQL.hasPlayerNick(player.getName().getString()));
             LOGGER.info("connect:"+ MySQL.hasPlayerIp(player.getIp()));
 
-            if (!MySQL.hasPlayerNick(player.getName().getString())) kickForRegistrationAccount(player);
-            if(!MySQL.hasPlayerIp(player.getIp())) kickForUnlinkedAccount(player);
-            if(!MySQL.getPlayerNickname2Ip(player.getIp()).equals(player.getName().getString())) kickBecauseRepeatedIp(player);
+            if(!MySQL.hasPlayerNick(player.getName().getString()))                                  kickForRegistrationAccount(player);
+            if(!MySQL.hasPlayerIp(player.getIp()))                                                  kickForUnlinkedAccount(player);
+//            if(!MySQL.getPlayerNickname2Ip(player.getIp()).equals(player.getName().getString()))    kickBecauseRepeatedIp(player);
 
         });
     }
     private static void kickBecauseRepeatedIp(ServerPlayerEntity player){
+        LOGGER.info("Повторный IP сообщите администрации сервера");
         MutableText reason = Text.empty()
                 .append(Text.literal("Повторный IP сообщите администрации сервера\n"));
 
         player.networkHandler.disconnect(reason);
     }
     private static void kickForRegistrationAccount(ServerPlayerEntity player){
+        LOGGER.info("Создайте заявку в дискорд сервере!\n");
         MutableText reason = Text.empty()
                 .append(Text.literal("Создайте заявку в дискорд сервере!\n"))
                 .append(Text.literal("И ожидайте одобрение администрацией сервера.\n"));
@@ -43,6 +45,7 @@ public class  MinecraftEventListeners {
         String id = MySQL.getPlayerId2Nickname(player.getName().getString());
         ACCOUNT_LINKING.tryQueueForLinking(ip,id);
         String code = ACCOUNT_LINKING.getCode(ip);
+        LOGGER.info("Ваш код авторизации"+code );
 
         MutableText reason = Text.empty()
                 .append(Text.literal("Ваш код авторизации "))

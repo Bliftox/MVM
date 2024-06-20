@@ -32,12 +32,14 @@ public class AccountLinking {
             return QueuingResult.ACCOUNT_LINKED;
         }
 
-        if (codeIpBiMap.inverse().containsKey(new String[] {ip,ds_id})) {
-            return QueuingResult.ACCOUNT_QUEUED;
+//        if (codeIpBiMap.inverse().containsKey(new String[] {ip,ds_id})) {
+//            return QueuingResult.ACCOUNT_QUEUED;
+//        }
+//        LOGGER.info(ip);
+        if (codeIpBiMap.inverse().getOrDefault(ip, null) == null) {
+            codeIpBiMap.put(randomId(),ip);
+            IpIdBiMap.put(ip,ds_id);
         }
-//        LOGGER.info(ds_id);
-        codeIpBiMap.put(randomId(),ip);
-        IpIdBiMap.put(ip,ds_id);
         return QueuingResult.SUCCESS;
     }
 
@@ -48,7 +50,7 @@ public class AccountLinking {
 
     public LinkingResult tryLinkAccount(String code, String discordId) {
 
-        if (MySQL.hasPlayerNick(MySQL.getPlayerNickname2Id(discordId))) {
+        if (MySQL.hasPlayerIp(MySQL.getPlayerIp2Id(discordId))) {
             return LinkingResult.ACCOUNT_LINKED;
         }
 
@@ -58,9 +60,6 @@ public class AccountLinking {
 
         String ip = codeIpBiMap.get(code);
         codeIpBiMap.remove(code);
-//        LOGGER.info(ip);
-//        LOGGER.info(IpIdBiMap.get(ip));
-//        LOGGER.info(discordId);
         if (!IpIdBiMap.get(ip).equals(discordId)) {
             return LinkingResult.INVALID_CODE;
         }

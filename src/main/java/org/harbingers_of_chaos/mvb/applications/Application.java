@@ -133,7 +133,7 @@ public class Application extends ListenerAdapter {
         if (event.getModalId().equals(APPLICATION_MODAL_ID)) {
 
             if ((Config.instance.discord.applicationsChannelId == null) || Config.instance.discord.applicationsChannelId.isEmpty()) {
-                MystiVerseModServer.LOGGER.warn("The value for [applications.channelId] is incorrect.");
+                LOGGER.warn("[LDBot] The value for [applications.channelId] is incorrect.");
                 return;
             }
 
@@ -182,7 +182,7 @@ public class Application extends ListenerAdapter {
 
                 event.reply("✅ Успешно создано!").setEphemeral(true).queue();
             } catch (NullPointerException e) {
-                MystiVerseModServer.LOGGER.warn("It's impossible to send the application because the channel doesn't exist.");
+                LOGGER.warn("[LDBot] It's impossible to send the application because the channel doesn't exist.");
             }
         }
     }

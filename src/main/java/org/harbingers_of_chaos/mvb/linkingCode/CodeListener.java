@@ -22,8 +22,8 @@ public class CodeListener extends ListenerAdapter {
 
         if (message.getChannel() instanceof PrivateChannel channel) {
             String code = message.getContentRaw();
-//            LOGGER.info(code);
-//            LOGGER.info(user.getId());
+            LOGGER.info("[LDBot] " + code);
+            LOGGER.info("[LDBot] " + user.getId());
 
             switch (ACCOUNT_LINKING.tryLinkAccount(code, user.getId())) {
                 case INVALID_CODE ->

@@ -5,6 +5,7 @@ import com.google.common.collect.HashBiMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.security.SecureRandom;
+import java.util.Random;
 
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
@@ -31,13 +32,12 @@ public class AccountLinking {
         if (MySQL.hasPlayerIp(ip)&&MySQL.getPlayerId2Ip(ip).equals(ds_id)) {
             return QueuingResult.ACCOUNT_LINKED;
         }
-
-//        if (codeIpBiMap.inverse().containsKey(new String[] {ip,ds_id})) {
-//            return QueuingResult.ACCOUNT_QUEUED;
-//        }
-//        LOGGER.info(ip);
         if (codeIpBiMap.inverse().getOrDefault(ip, null) == null) {
-            codeIpBiMap.put(randomId(),ip);
+            String code = randomId();
+            LOGGER.info("[MVM] Code : {}", code);
+            LOGGER.info("[MVM] Ip : {}", ip);
+            LOGGER.info("[MVM] Ds_id : {}", ds_id);
+            codeIpBiMap.put(code,ip);
             IpIdBiMap.put(ip,ds_id);
         }
         return QueuingResult.SUCCESS;
@@ -49,8 +49,13 @@ public class AccountLinking {
     }
 
     public LinkingResult tryLinkAccount(String code, String discordId) {
+        LOGGER.info("[LDBot] Trying to link account " + code + " to " + discordId);
 
-        if (MySQL.hasPlayerIp(MySQL.getPlayerIp2Id(discordId))) {
+        String ip = IpIdBiMap.inverse().getOrDefault(discordId, null);
+
+        LOGGER.info("[LDBot] Has IP " + ip);
+        LOGGER.info("[LDBot] Has Real IP " + MySQL.getPlayerIp2Id(discordId));
+        if (MySQL.hasPlayerIp2Id(ip,discordId)) {
             return LinkingResult.ACCOUNT_LINKED;
         }
 
@@ -58,28 +63,22 @@ public class AccountLinking {
             return LinkingResult.INVALID_CODE;
         }
 
-        String ip = codeIpBiMap.get(code);
-        codeIpBiMap.remove(code);
-        if (!IpIdBiMap.get(ip).equals(discordId)) {
+        if (!IpIdBiMap.getOrDefault(ip,null).equals(discordId)) {
+            LOGGER.info("[LDBot] Не тот акк");
             return LinkingResult.INVALID_CODE;
         }
-
         if (MySQL.hasPlayerIp(ip)) {
             return LinkingResult.REPEAT_IP;
         }
         MySQL.setPlayerIp(ip, discordId);
-
+        codeIpBiMap.remove(code);
+        IpIdBiMap.remove(ip);
         return LinkingResult.SUCCESS;
     }
     private String randomId() {
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < 8; i++) {
-            int num = random.nextInt(36);
-            char c = (char) (num < 10 ? '0' + num : 'a' + num - 10);
-            builder.append(c);
-        }
-
-        return builder.toString();
+        return new Random().ints(48, 58)
+                .limit(3)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }

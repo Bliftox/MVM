@@ -51,12 +51,12 @@ public class ApplicationReject extends ListenerAdapter {
             if (textChannel != null) {
                 sendMessageAndEmbed(event, id, textChannel);
             } else {
-                LOGGER.warn("It's impossible to send the reject notification because the channel doesn't exist.");
+                LOGGER.warn("[LDBot] It's impossible to send the reject notification because the channel doesn't exist.");
             }
 
             manageRoles(event, id);
             new MySQL().setObrab(event.getMessageId());
-            LOGGER.info(new MySQL().getApplicationUserId(event.getMessageId()));
+            LOGGER.info("[LDBot] "+new MySQL().getApplicationUserId(event.getMessageId()));
             event.getChannel().asTextChannel().deleteMessageById(event.getMessageId()).queue();
             LOGGER.info("[LDBot] The application from " + event.getGuild().getMemberById(id).getEffectiveName() + " has been successfully rejected.");
         }
@@ -78,11 +78,11 @@ public class ApplicationReject extends ListenerAdapter {
                 try {
                     event.getGuild().addRoleToMember(UserSnowflake.fromId(id), event.getGuild().getRoleById(roleId)).queue();
                 } catch (HierarchyException e) {
-                    LOGGER.warn("Cannot change user role higher than bot");
+                    LOGGER.warn("[LDBot] Cannot change user role higher than bot");
                 } catch (IllegalArgumentException e) {
-                    LOGGER.warn("Role does not exist");
+                    LOGGER.warn("[LDBot] Role does not exist");
                 } catch (NullPointerException e) {
-                    LOGGER.warn("Cannot change user role higher than bot");
+                    LOGGER.warn("[LDBot] Cannot change user role higher than bot");
                 }
             }
         }
@@ -92,11 +92,11 @@ public class ApplicationReject extends ListenerAdapter {
                 try {
                     event.getGuild().removeRoleFromMember(UserSnowflake.fromId(id), event.getGuild().getRoleById(roleId)).queue();
                 } catch (HierarchyException e) {
-                    LOGGER.warn("Cannot change user role higher than bot");
+                    LOGGER.warn("[LDBot] Cannot change user role higher than bot");
                 } catch (IllegalArgumentException e) {
-                    LOGGER.warn("Role does not exist");
+                    LOGGER.warn("[LDBot] Role does not exist");
                 } catch (NullPointerException e) {
-                    LOGGER.warn("Cannot change user role higher than bot");
+                    LOGGER.warn("[LDBot] Cannot change user role higher than bot");
                 }
             }
         }

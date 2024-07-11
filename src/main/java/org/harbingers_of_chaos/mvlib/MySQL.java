@@ -36,9 +36,9 @@ public class MySQL implements DataBase {
                 String url = "jdbc:sqlite:" + path.resolve(dbPath).toString();
                 dbConnection = DriverManager.getConnection(url);
             }
-            LOGGER.info("Connected to database");
+            LOGGER.info("[MVM] Connected to database");
         } catch (SQLException | ClassNotFoundException e) {
-            LOGGER.warn("[MVM]Connection:"+e);
+            LOGGER.warn("[MVM] Connection : ", e);
         }
     }
 
@@ -46,7 +46,7 @@ public class MySQL implements DataBase {
         try {
             dbConnection.close();
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]CloseConnection:"+e);
+            LOGGER.warn("[MVM] CloseConnection : ", e);
         }
     }
 
@@ -58,7 +58,7 @@ public class MySQL implements DataBase {
                     " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT, obrab TEXT)");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (application_Int TEXT, nickname TEXT, ds_id TEXT, IP TEXT)");
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]CreateDBt:"+e);
+            LOGGER.warn("[MVM] CreateDBt : ", e);
         }
     }
 
@@ -70,7 +70,7 @@ public class MySQL implements DataBase {
             statement.executeUpdate(String.format("INSERT INTO application VALUES('%s','%s','%s','%s','%s','%s','%s','true')", applicationId, memberId, fields.get(0), fields.get(1), fields.get(2), fields.get(3), fields.get(4)));
         } catch (SQLException e) {
 
-            LOGGER.warn("[MVM]saveApplication:"+e);
+            LOGGER.warn("[MVM] SaveApplication : ", e);
         }
     }
 
@@ -81,7 +81,7 @@ public class MySQL implements DataBase {
 
             statement.executeUpdate(String.format("INSERT INTO player VALUES('%s','%s','%s',null)", applicationId, nickname, memberId));
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]savePlayer:"+e);
+            LOGGER.warn("[MVM] SavePlayer : ", e);
         }
     }
 
@@ -98,7 +98,7 @@ public class MySQL implements DataBase {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]getApplicationFields:"+e);
+            LOGGER.warn("[MVM] GetApplicationFields : ", e);
         }
         return fields;
     }
@@ -112,7 +112,7 @@ public class MySQL implements DataBase {
                 return rs.getString(1);
             }
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]getApplicationFields:"+e);
+            LOGGER.warn("[MVM] GetApplicationUserId : ", e);
         }
         return "";
     }
@@ -127,7 +127,7 @@ public class MySQL implements DataBase {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]hasApplicationUserId:"+e);
+            LOGGER.warn("[MVM] HasApplicationUserId : ", e);
         }
         return false;
     }
@@ -140,7 +140,7 @@ public class MySQL implements DataBase {
                 return rs.getBoolean(1);
             }
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]hasOrabotUserId:"+e);
+            LOGGER.warn("[MVM] HasOrabotUserId : ", e);
         }
         return false;
     }
@@ -155,7 +155,7 @@ public class MySQL implements DataBase {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]hasApplication:"+e);
+            LOGGER.warn("[MVM] HasApplication : ", e);
         }
         return false;
     }
@@ -171,7 +171,23 @@ public class MySQL implements DataBase {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:hasPlayerIp:"+e);
+            LOGGER.warn("[MVM] ConnectPlayer:hasPlayerIp : ", e);
+        }
+        return false;
+    }
+    public static boolean hasPlayerIp2Id(String ip, String id) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            ResultSet rs = statement.executeQuery("SELECT IP FROM player WHERE ds_id = '"+id+"'");
+            if(rs.next()) {
+                if(rs.next()) {
+                    return rs.getString(1).equals(ip);
+                }
+
+            }
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM] ConnectPlayer:hasPlayerIp : ", e);
         }
         return false;
     }
@@ -186,7 +202,7 @@ public class MySQL implements DataBase {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:hasPlayerNick:"+e);
+            LOGGER.warn("[MVM] ConnectPlayer:hasPlayerNick : ", e);
         }
         return false;
     }
@@ -200,7 +216,7 @@ public class MySQL implements DataBase {
             }
 
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
         }
         return "";
     }
@@ -214,7 +230,7 @@ public class MySQL implements DataBase {
             }
 
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
         }
         return "";
     }
@@ -228,7 +244,7 @@ public class MySQL implements DataBase {
             }
 
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
         }
         return "";
     }
@@ -242,7 +258,7 @@ public class MySQL implements DataBase {
             }
 
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
         }
         return "";
     }
@@ -256,17 +272,17 @@ public class MySQL implements DataBase {
             }
 
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:getPlayerNickname2Ip:" + e);
+            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
         }
         return "";
     }
     public static void setPlayerIp(String ip,String ds_id) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
-            LOGGER.info("set "+ip);
+            LOGGER.info("[MVM] Set ip to "+ip);
             statement.executeUpdate(String.format("UPDATE player SET IP = '%s' WHERE ds_id = '%s'", ip, ds_id));
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:getPlayerIp:" + e);
+            LOGGER.warn("[MVM] ConnectPlayer:getPlayerIp:", e);
         }
     }
 
@@ -276,7 +292,7 @@ public class MySQL implements DataBase {
 
             statement.executeUpdate(String.format("UPDATE application SET obrab =  'false' WHERE applicationId = '%s'", applicationId));
         } catch (SQLException e) {
-            LOGGER.warn("[MVM]ConnectPlayer:getPlayerIp:" + e);
+            LOGGER.warn("[MVM] ConnectPlayer:getPlayerIp:", e);
         }
     }
 

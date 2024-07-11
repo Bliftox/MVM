@@ -22,7 +22,7 @@ public class Bot {
                 try {
                         Config.load();
                 } catch (Exception e) {
-                        LOGGER.warn("Failed to load config using defaults : ", e);
+                        LOGGER.warn("[LDBot] Failed to load config using defaults : ", e);
                 }
                 startup();
 
@@ -30,7 +30,6 @@ public class Bot {
 
 
         public static void startup() {
-                LOGGER.info("Starting Bot"+Config.instance.discord.token);
                 jda = JDABuilder.createDefault(Config.instance.discord.token)
                         .setMemberCachePolicy(MemberCachePolicy.ALL)
                         .setChunkingFilter(ChunkingFilter.ALL)
@@ -42,6 +41,8 @@ public class Bot {
                                 GatewayIntent.GUILD_WEBHOOKS)
                         .addEventListeners(new Command(), new Application(), new ApplicationAccept(), new ApplicationReject(), new Idee(), new CodeListener())
                         .build();
+
+                LOGGER.info("[LDBot] Starting Bot");
         }
 
         public static void shutdown() {

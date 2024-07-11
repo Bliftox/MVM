@@ -18,6 +18,8 @@ import java.awt.*;
 import java.sql.SQLException;
 import java.time.Instant;
 
+import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
+
 public class ApplicationAccept extends ListenerAdapter {
     private static final Color ACCEPT_COLOR = Color.decode("#66ff66");
 
@@ -47,7 +49,7 @@ public class ApplicationAccept extends ListenerAdapter {
             if (textChannel != null) {
                 sendMessageAndEmbed(event, id, textChannel);
             } else {
-                MystiVerseModServer.LOGGER.warn("It's impossible to send the accept notification because the channel doesn't exist.");
+                LOGGER.warn("[LDBot] It's impossible to send the accept notification because the channel doesn't exist.");
             }
 
             changeNickname(event, id, nickname);
@@ -57,7 +59,7 @@ public class ApplicationAccept extends ListenerAdapter {
             new MySQL().savePlayer(event.getMessageId(),new MySQL().getApplicationUserId(event.getMessageId()),new MySQL().getApplicationFields(event.getMessageId()).get(0));
 
 
-            MystiVerseModServer.LOGGER.info("[LDBot] The application from " + event.getGuild().getMemberById(id).getEffectiveName() + " has been successfully accepted.");
+           LOGGER.info("[LDBot] The application from " + event.getGuild().getMemberById(id).getEffectiveName() + " has been successfully accepted.");
         }
     }
 
@@ -76,7 +78,7 @@ public class ApplicationAccept extends ListenerAdapter {
             try {
                 event.getGuild().getMemberById(id).modifyNickname(nickname).queue();
             } catch (HierarchyException e) {
-                MystiVerseModServer.LOGGER.warn("Cannot change user role higher than bot");
+               LOGGER.warn("[LDBot] Cannot change user role higher than bot");
             }
         }
     }
@@ -87,11 +89,11 @@ public class ApplicationAccept extends ListenerAdapter {
                 try {
                     event.getGuild().addRoleToMember(UserSnowflake.fromId(id), event.getGuild().getRoleById(roleId)).queue();
                 } catch (HierarchyException e) {
-                    MystiVerseModServer.LOGGER.warn("Cannot change user role higher than bot");
+                   LOGGER.warn("[LDBot] Cannot change user role higher than bot");
                 } catch (IllegalArgumentException e) {
-                    MystiVerseModServer.LOGGER.warn("Role does not exist");
+                   LOGGER.warn("[LDBot] Role does not exist");
                 } catch (NullPointerException e) {
-                    MystiVerseModServer.LOGGER.warn("Cannot change user role higher than bot");
+                   LOGGER.warn("[LDBot] Cannot change user role higher than bot");
                 }
             }
         }
@@ -101,11 +103,11 @@ public class ApplicationAccept extends ListenerAdapter {
                 try {
                     event.getGuild().removeRoleFromMember(UserSnowflake.fromId(id), event.getGuild().getRoleById(roleId)).queue();
                 } catch (HierarchyException e) {
-                    MystiVerseModServer.LOGGER.warn("Cannot change user role higher than bot");
+                   LOGGER.warn("[LDBot] Cannot change user role higher than bot");
                 } catch (IllegalArgumentException e) {
-                    MystiVerseModServer.LOGGER.warn("Role does not exist");
+                   LOGGER.warn("[LDBot] Role does not exist");
                 } catch (NullPointerException e) {
-                    MystiVerseModServer.LOGGER.warn("Cannot change user role higher than bot");
+                   LOGGER.warn("[LDBot] Cannot change user role higher than bot");
                 }
             }
         }  

@@ -1,6 +1,7 @@
 package org.harbingers_of_chaos.mvlib.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,23 +21,31 @@ public class Config {
     private static Path configPath = dirPath.resolve("mvm.json");
 
 
-    public static void load() throws Exception {
+    public static void load(){
         if (!Files.exists(dirPath)) {
-            LOGGER.info(dirPath.toFile().mkdirs() ? "dir mvm created" : "dir mvm not created");
+            LOGGER.info("[MVM] " + (dirPath.toFile().mkdirs() ? "dir mvm created" : "dir mvm not created"));
         }
 
-        if (Files.exists(configPath)) {
-            instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
-        } else {
-            instance = new Config();
-            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
+        try {
+            if (Files.exists(configPath)) {
+                instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
+            } else {
+                instance = new Config();
+                Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
+            }
+        } catch (IOException e) {
+        LOGGER.error("[MVM] "+e.getMessage());
         }
     }
-    public static void save() throws Exception {
+    public static void save(){
         if (Files.exists(configPath)) {
-            Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
+            try {
+                Files.writeString(configPath, MystiVerseModServer.GSON.toJson(instance), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                LOGGER.error("[MVM] "+e.getMessage());
+            }
         } else {
-            MystiVerseModServer.LOGGER.error("MVM:No config");
+            LOGGER.error("[MVM] No config");
         }
     }
 

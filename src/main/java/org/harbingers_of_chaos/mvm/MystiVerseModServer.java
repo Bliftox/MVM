@@ -11,6 +11,7 @@ import org.harbingers_of_chaos.mvlib.config.Config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.harbingers_of_chaos.mvlib.MySQL;
+import org.harbingers_of_chaos.mvweb.Website;
 
 public class MystiVerseModServer implements ModInitializer {
     public static final String MOD_ID = "mws";
@@ -27,7 +28,11 @@ public class MystiVerseModServer implements ModInitializer {
         loadEvents();
     }
     private void loadEvents() {
-        ServerLifecycleEvents.SERVER_STARTING.register(server -> Bot.startup());
+        ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+            Bot.startup();
+            Website.startup();
+
+        });
         ServerLifecycleEvents.SERVER_STARTED.register(server -> Bot.log(Config.instance.game.serverStartMessage));
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {

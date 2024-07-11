@@ -52,6 +52,7 @@ public class Config {
     @Expose public Discord discord = new Discord();
     @Expose public MySQLConfig mySQLConfig = new MySQLConfig();
     @Expose public Game game = new Game();
+    @Expose public Web web = new Web();
     @Expose public Crashes crashes = new Crashes();
 
     public static class Discord {
@@ -87,6 +88,9 @@ public class Config {
         @Expose public int players = 0;
         @Expose public boolean mirrorDeath = true;
         @Expose public boolean mirrorAdvancements = true;
+    }
+    public static class Web {
+        @Expose public int port = 808;
     }
 
     public static class Crashes {

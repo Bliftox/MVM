@@ -1,6 +1,5 @@
 package org.harbingers_of_chaos.mvlib.config;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -25,7 +24,6 @@ public class Config {
         if (!Files.exists(dirPath)) {
             LOGGER.info("[MVM] " + (dirPath.toFile().mkdirs() ? "dir mvm created" : "dir mvm not created"));
         }
-
         try {
             if (Files.exists(configPath)) {
                 instance = MystiVerseModServer.GSON.fromJson(Files.readString(configPath), Config.class);
@@ -49,30 +47,9 @@ public class Config {
         }
     }
 
-    @Expose public Discord discord = new Discord();
     @Expose public MySQLConfig mySQLConfig = new MySQLConfig();
     @Expose public Game game = new Game();
-    @Expose public Crashes crashes = new Crashes();
 
-    public static class Discord {
-        @Expose public String webhook = "";
-        @Expose public String applicationsLogChannelId = "";
-        @Expose public String guildId = "";
-        @Expose public String logChannelId = "";
-        @Expose public String applicationsChannelId = "";
-        @Expose public String token = "";
-
-        @Expose public boolean applicationsEnable = true;
-        @Expose public boolean changeNickname = true;
-
-        @Expose public String[] accessRoleIds = {"1160295664668913816"};
-
-        @Expose public String[] rejectRoleIds = {"1160295664668913816"};
-
-        @Expose public String[] inProgressRoleIds = {"1160295664668913816"};
-
-        @Expose public String[] mentionRoleIds = {"1160295664668913816"};
-    }
     public static class MySQLConfig{
         @Expose public boolean enabled = true;
         @Expose public String password = "";
@@ -84,12 +61,6 @@ public class Config {
         @Expose public String serverStartMessage = "Server has started!";
         @Expose public String serverStopMessage = "Server has stopped!";
         @Expose public String serverCrashMessage = "Server has crashed!";
-        @Expose public int players = 0;
-        @Expose public boolean mirrorDeath = true;
-        @Expose public boolean mirrorAdvancements = true;
-    }
-
-    public static class Crashes {
-        @Expose public boolean uploadToMclogs = true;
+        @Expose public Boolean questionnaire = false;
     }
 }

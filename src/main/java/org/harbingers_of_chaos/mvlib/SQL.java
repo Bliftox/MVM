@@ -1,15 +1,12 @@
 package org.harbingers_of_chaos.mvlib;
 
 import net.fabricmc.loader.api.FabricLoader;
+import org.harbingers_of_chaos.mvlib.api.ASQApi;
 import org.harbingers_of_chaos.mvlib.config.Config;
-import org.harbingers_of_chaos.mvlib.discord.DataBase;
 
 import java.nio.file.Path;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
-//import static org.harbingers_of_chaos.mvb.application.ApplicationHandler.nickname;
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
 
@@ -22,10 +19,10 @@ import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
  *
  */
 
-public class MySQL implements DataBase {
+public class SQL implements ASQApi {
     static Connection dbConnection;
 
-    public static void connection(String dbPath){
+    public static void connection(){
         try {
             if(Config.instance.mySQLConfig.enabled) {
                 dbConnection = DriverManager.getConnection(
@@ -33,7 +30,7 @@ public class MySQL implements DataBase {
             }else{
                 Class.forName("org.sqlite.JDBC");
                 Path path = FabricLoader.getInstance().getConfigDir().resolve("mvm");
-                String url = "jdbc:sqlite:" + path.resolve(dbPath).toString();
+                String url = "jdbc:sqlite:" + path.resolve("database.db").toString();
                 dbConnection = DriverManager.getConnection(url);
             }
             LOGGER.info("[MVM] Connected to database");
@@ -54,111 +51,111 @@ public class MySQL implements DataBase {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (applicationId TEXT, ds_id TEXT, nickname TEXT," +
-                    " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT, obrab TEXT)");
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (application_Int TEXT, nickname TEXT, ds_id TEXT, IP TEXT)");
+//            statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (applicationId TEXT, ds_id TEXT, nickname TEXT," +
+//                    " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT, obrab TEXT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (application_Id TEXT, nickname TEXT, id TEXT, IP TEXT, password TEXT)");
         } catch (SQLException e) {
             LOGGER.warn("[MVM] CreateDBt : ", e);
         }
     }
-
-
-    @Override
-    public void saveApplication(String applicationId, String memberId, List<String> fields) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-            statement.executeUpdate(String.format("INSERT INTO application VALUES('%s','%s','%s','%s','%s','%s','%s','true')", applicationId, memberId, fields.get(0), fields.get(1), fields.get(2), fields.get(3), fields.get(4)));
-        } catch (SQLException e) {
-
-            LOGGER.warn("[MVM] SaveApplication : ", e);
-        }
-    }
-
-    @Override
-    public void savePlayer(String applicationId, String memberId, String nickname) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            statement.executeUpdate(String.format("INSERT INTO player VALUES('%s','%s','%s',null)", applicationId, nickname, memberId));
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] SavePlayer : ", e);
-        }
-    }
-
-    @Override
-    public List<String> getApplicationFields(String applicationId) {
-        List<String> fields = new ArrayList<>(6);
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT nickname,fieldOne,fieldTwo,fieldThree,fieldFour FROM application WHERE applicationId = '"+applicationId+"'");
-            if(rs.next()) {
-                for(int i = 1; i < 5; i++) {
-                    fields.add(rs.getString(i));
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] GetApplicationFields : ", e);
-        }
-        return fields;
-    }
-
-    public String getApplicationUserId(String applicationId) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT ds_id FROM application WHERE applicationId = '"+applicationId+"'");
-            if(rs.next()) {
-                return rs.getString(1);
-            }
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] GetApplicationUserId : ", e);
-        }
-        return "";
-    }
-    public boolean hasApplicationUserId(String UserId) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE ds_id = '"+UserId+"'");
-            if(rs.next()) {
-                if (rs.getInt(1) > 0) {
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] HasApplicationUserId : ", e);
-        }
-        return false;
-    }
-    public boolean hasOrabotUserId(String UserId) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT obrab FROM application WHERE ds_id = '"+UserId+"'");
-            if(rs.next()) {
-                return rs.getBoolean(1);
-            }
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] HasOrabotUserId : ", e);
-        }
-        return false;
-    }
-    public boolean hasApplication(String applicationId) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE applicationId = '"+applicationId+"'");
-            if(rs.next()) {
-                if (rs.getInt(1) > 0) {
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] HasApplication : ", e);
-        }
-        return false;
-    }
+//
+//
+//    @Override
+//    public void saveApplication(String applicationId, String memberId, List<String> fields) {
+//        try (Statement statement = dbConnection.createStatement()){
+//            statement.setQueryTimeout(30);
+//            statement.executeUpdate(String.format("INSERT INTO application VALUES('%s','%s','%s','%s','%s','%s','%s','true')", applicationId, memberId, fields.get(0), fields.get(1), fields.get(2), fields.get(3), fields.get(4)));
+//        } catch (SQLException e) {
+//
+//            LOGGER.warn("[MVM] SaveApplication : ", e);
+//        }
+//    }
+//
+//    @Override
+//    public void savePlayer(String applicationId, String memberId, String nickname) {
+//        try (Statement statement = dbConnection.createStatement()){
+//            statement.setQueryTimeout(30);
+//
+//            statement.executeUpdate(String.format("INSERT INTO player VALUES('%s','%s','%s',null)", applicationId, nickname, memberId));
+//        } catch (SQLException e) {
+//            LOGGER.warn("[MVM] SavePlayer : ", e);
+//        }
+//    }
+//
+//    @Override
+//    public List<String> getApplicationFields(String applicationId) {
+//        List<String> fields = new ArrayList<>(6);
+//        try (Statement statement = dbConnection.createStatement()){
+//            statement.setQueryTimeout(30);
+//
+//            ResultSet rs = statement.executeQuery("SELECT nickname,fieldOne,fieldTwo,fieldThree,fieldFour FROM application WHERE applicationId = '"+applicationId+"'");
+//            if(rs.next()) {
+//                for(int i = 1; i < 5; i++) {
+//                    fields.add(rs.getString(i));
+//                }
+//            }
+//        } catch (SQLException e) {
+//            LOGGER.warn("[MVM] GetApplicationFields : ", e);
+//        }
+//        return fields;
+//    }
+//
+//    public String getApplicationUserId(String applicationId) {
+//        try (Statement statement = dbConnection.createStatement()){
+//            statement.setQueryTimeout(30);
+//
+//            ResultSet rs = statement.executeQuery("SELECT ds_id FROM application WHERE applicationId = '"+applicationId+"'");
+//            if(rs.next()) {
+//                return rs.getString(1);
+//            }
+//        } catch (SQLException e) {
+//            LOGGER.warn("[MVM] GetApplicationUserId : ", e);
+//        }
+//        return "";
+//    }
+//    public boolean hasApplicationUserId(String UserId) {
+//        try (Statement statement = dbConnection.createStatement()){
+//            statement.setQueryTimeout(30);
+//
+//            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE ds_id = '"+UserId+"'");
+//            if(rs.next()) {
+//                if (rs.getInt(1) > 0) {
+//                    return true;
+//                }
+//            }
+//        } catch (SQLException e) {
+//            LOGGER.warn("[MVM] HasApplicationUserId : ", e);
+//        }
+//        return false;
+//    }
+//    public boolean hasOrabotUserId(String UserId) {
+//        try (Statement statement = dbConnection.createStatement()){
+//            statement.setQueryTimeout(30);
+//
+//            ResultSet rs = statement.executeQuery("SELECT obrab FROM application WHERE ds_id = '"+UserId+"'");
+//            if(rs.next()) {
+//                return rs.getBoolean(1);
+//            }
+//        } catch (SQLException e) {
+//            LOGGER.warn("[MVM] HasOrabotUserId : ", e);
+//        }
+//        return false;
+//    }
+//    public boolean hasApplication(String applicationId) {
+//        try (Statement statement = dbConnection.createStatement()){
+//            statement.setQueryTimeout(30);
+//
+//            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE applicationId = '"+applicationId+"'");
+//            if(rs.next()) {
+//                if (rs.getInt(1) > 0) {
+//                    return true;
+//                }
+//            }
+//        } catch (SQLException e) {
+//            LOGGER.warn("[MVM] HasApplication : ", e);
+//        }
+//        return false;
+//    }
 
     public static boolean hasPlayerIp(String ip) {
         try (Statement statement = dbConnection.createStatement()){

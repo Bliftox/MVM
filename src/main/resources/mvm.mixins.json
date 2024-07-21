@@ -8,7 +8,8 @@
   "client": [
   ],
   "server": [
-    "PlayerListMixin"
+    "PlayerListMixin",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

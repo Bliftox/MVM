@@ -29,7 +29,7 @@ public class AccountLinking {
     private final SecureRandom random = new SecureRandom();
     public QueuingResult tryQueueForLinking(String ip, String ds_id){
 
-        if (MySQL.hasPlayerIp(ip)&&MySQL.getPlayerId2Ip(ip).equals(ds_id)) {
+        if (SQL.hasPlayerIp(ip)&&SQL.getPlayerId2Ip(ip).equals(ds_id)) {
             return QueuingResult.ACCOUNT_LINKED;
         }
         if (codeIpBiMap.inverse().getOrDefault(ip, null) == null) {
@@ -54,8 +54,8 @@ public class AccountLinking {
         String ip = IpIdBiMap.inverse().getOrDefault(discordId, null);
 
         LOGGER.info("[LDBot] Has IP " + ip);
-        LOGGER.info("[LDBot] Has Real IP " + MySQL.getPlayerIp2Id(discordId));
-        if (MySQL.hasPlayerIp2Id(ip,discordId)) {
+        LOGGER.info("[LDBot] Has Real IP " + SQL.getPlayerIp2Id(discordId));
+        if (SQL.hasPlayerIp2Id(ip,discordId)) {
             return LinkingResult.ACCOUNT_LINKED;
         }
 
@@ -67,10 +67,10 @@ public class AccountLinking {
             LOGGER.info("[LDBot] Не тот акк");
             return LinkingResult.INVALID_CODE;
         }
-        if (MySQL.hasPlayerIp(ip)) {
+        if (SQL.hasPlayerIp(ip)) {
             return LinkingResult.REPEAT_IP;
         }
-        MySQL.setPlayerIp(ip, discordId);
+        SQL.setPlayerIp(ip, discordId);
         codeIpBiMap.remove(code);
         IpIdBiMap.remove(ip);
         return LinkingResult.SUCCESS;

@@ -51,7 +51,7 @@ public class Config {
     @Expose public Game game = new Game();
 
     public static class MySQLConfig{
-        @Expose public boolean enabled = true;
+        @Expose public boolean enabled = false;
         @Expose public String password = "";
         @Expose public String url = "";
         @Expose public String user = "";

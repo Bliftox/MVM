@@ -29,9 +29,9 @@ public class AccountLinking {
     private final SecureRandom random = new SecureRandom();
     public QueuingResult tryQueueForLinking(String ip, String ds_id){
 
-        if (SQL.hasPlayerIp(ip)&&SQL.getPlayerId2Ip(ip).equals(ds_id)) {
-            return QueuingResult.ACCOUNT_LINKED;
-        }
+//        if (SQL.hasPlayerIp(ip)&&SQL.getPlayerId2Ip(ip).equals(ds_id)) {
+//            return QueuingResult.ACCOUNT_LINKED;
+//        }
         if (codeIpBiMap.inverse().getOrDefault(ip, null) == null) {
             String code = randomId();
             LOGGER.info("[MVM] Code : {}", code);
@@ -54,10 +54,10 @@ public class AccountLinking {
         String ip = IpIdBiMap.inverse().getOrDefault(discordId, null);
 
         LOGGER.info("[LDBot] Has IP " + ip);
-        LOGGER.info("[LDBot] Has Real IP " + SQL.getPlayerIp2Id(discordId));
-        if (SQL.hasPlayerIp2Id(ip,discordId)) {
-            return LinkingResult.ACCOUNT_LINKED;
-        }
+//        LOGGER.info("[LDBot] Has Real IP " + SQL.getPlayerIp2Id(discordId));
+//        if (SQL.hasPlayerIp2Id(ip,discordId)) {
+//            return LinkingResult.ACCOUNT_LINKED;
+//        }
 
         if (!codeIpBiMap.containsKey(code)) {
             return LinkingResult.INVALID_CODE;
@@ -67,10 +67,10 @@ public class AccountLinking {
             LOGGER.info("[LDBot] Не тот акк");
             return LinkingResult.INVALID_CODE;
         }
-        if (SQL.hasPlayerIp(ip)) {
-            return LinkingResult.REPEAT_IP;
-        }
-        SQL.setPlayerIp(ip, discordId);
+//        if (SQL.hasPlayerIp(ip)) {
+//            return LinkingResult.REPEAT_IP;
+//        }
+//        SQL.setPlayerIp(ip, discordId);
         codeIpBiMap.remove(code);
         IpIdBiMap.remove(ip);
         return LinkingResult.SUCCESS;

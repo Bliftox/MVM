@@ -1,25 +1,21 @@
 package org.harbingers_of_chaos.mvlib;
 
 import net.fabricmc.loader.api.FabricLoader;
-import org.harbingers_of_chaos.mvlib.api.ASQApi;
-import org.harbingers_of_chaos.mvlib.config.Config;
+import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.Arrays;
+
+import org.harbingers_of_chaos.mvlib.api.SQLApi;
+import org.harbingers_of_chaos.mvlib.config.Config;
 
 import static org.harbingers_of_chaos.mvm.MystiVerseModServer.LOGGER;
 
-
-
-/*
- *
- * Many thanks to the developer of this database, without it I would have suffered and continued to play with crutches.
- * I'll leave this here <3
- * https://github.com/anzuath/DeathNote/blob/main/DeathNoteInternals/src/main/java/com/github/steeldev/deathnote/util/Database.java
- *
- */
-
-public class SQL implements ASQApi {
+public class SQL implements SQLApi {
     static Connection dbConnection;
 
     public static void connection(){
@@ -30,7 +26,7 @@ public class SQL implements ASQApi {
             }else{
                 Class.forName("org.sqlite.JDBC");
                 Path path = FabricLoader.getInstance().getConfigDir().resolve("mvm");
-                String url = "jdbc:sqlite:" + path.resolve("database.db").toString();
+                String url = "jdbc:sqlite:" + path.resolve("database.db");
                 dbConnection = DriverManager.getConnection(url);
             }
             LOGGER.info("[MVM] Connected to database");
@@ -53,243 +49,89 @@ public class SQL implements ASQApi {
 
 //            statement.executeUpdate("CREATE TABLE IF NOT EXISTS application (applicationId TEXT, ds_id TEXT, nickname TEXT," +
 //                    " fieldOne TEXT, fieldTwo TEXT, fieldThree TEXT, fieldFour TEXT, obrab TEXT)");
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (application_Id TEXT, nickname TEXT, id TEXT, IP TEXT, password TEXT)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS player (application_Id TEXT, nickname TEXT, id TEXT, IP TEXT, password INTEGER)");
         } catch (SQLException e) {
             LOGGER.warn("[MVM] CreateDBt : ", e);
         }
     }
-//
-//
-//    @Override
-//    public void saveApplication(String applicationId, String memberId, List<String> fields) {
-//        try (Statement statement = dbConnection.createStatement()){
-//            statement.setQueryTimeout(30);
-//            statement.executeUpdate(String.format("INSERT INTO application VALUES('%s','%s','%s','%s','%s','%s','%s','true')", applicationId, memberId, fields.get(0), fields.get(1), fields.get(2), fields.get(3), fields.get(4)));
-//        } catch (SQLException e) {
-//
-//            LOGGER.warn("[MVM] SaveApplication : ", e);
-//        }
-//    }
-//
-//    @Override
-//    public void savePlayer(String applicationId, String memberId, String nickname) {
-//        try (Statement statement = dbConnection.createStatement()){
-//            statement.setQueryTimeout(30);
-//
-//            statement.executeUpdate(String.format("INSERT INTO player VALUES('%s','%s','%s',null)", applicationId, nickname, memberId));
-//        } catch (SQLException e) {
-//            LOGGER.warn("[MVM] SavePlayer : ", e);
-//        }
-//    }
-//
-//    @Override
-//    public List<String> getApplicationFields(String applicationId) {
-//        List<String> fields = new ArrayList<>(6);
-//        try (Statement statement = dbConnection.createStatement()){
-//            statement.setQueryTimeout(30);
-//
-//            ResultSet rs = statement.executeQuery("SELECT nickname,fieldOne,fieldTwo,fieldThree,fieldFour FROM application WHERE applicationId = '"+applicationId+"'");
-//            if(rs.next()) {
-//                for(int i = 1; i < 5; i++) {
-//                    fields.add(rs.getString(i));
-//                }
-//            }
-//        } catch (SQLException e) {
-//            LOGGER.warn("[MVM] GetApplicationFields : ", e);
-//        }
-//        return fields;
-//    }
-//
-//    public String getApplicationUserId(String applicationId) {
-//        try (Statement statement = dbConnection.createStatement()){
-//            statement.setQueryTimeout(30);
-//
-//            ResultSet rs = statement.executeQuery("SELECT ds_id FROM application WHERE applicationId = '"+applicationId+"'");
-//            if(rs.next()) {
-//                return rs.getString(1);
-//            }
-//        } catch (SQLException e) {
-//            LOGGER.warn("[MVM] GetApplicationUserId : ", e);
-//        }
-//        return "";
-//    }
-//    public boolean hasApplicationUserId(String UserId) {
-//        try (Statement statement = dbConnection.createStatement()){
-//            statement.setQueryTimeout(30);
-//
-//            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE ds_id = '"+UserId+"'");
-//            if(rs.next()) {
-//                if (rs.getInt(1) > 0) {
-//                    return true;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            LOGGER.warn("[MVM] HasApplicationUserId : ", e);
-//        }
-//        return false;
-//    }
-//    public boolean hasOrabotUserId(String UserId) {
-//        try (Statement statement = dbConnection.createStatement()){
-//            statement.setQueryTimeout(30);
-//
-//            ResultSet rs = statement.executeQuery("SELECT obrab FROM application WHERE ds_id = '"+UserId+"'");
-//            if(rs.next()) {
-//                return rs.getBoolean(1);
-//            }
-//        } catch (SQLException e) {
-//            LOGGER.warn("[MVM] HasOrabotUserId : ", e);
-//        }
-//        return false;
-//    }
-//    public boolean hasApplication(String applicationId) {
-//        try (Statement statement = dbConnection.createStatement()){
-//            statement.setQueryTimeout(30);
-//
-//            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM application WHERE applicationId = '"+applicationId+"'");
-//            if(rs.next()) {
-//                if (rs.getInt(1) > 0) {
-//                    return true;
-//                }
-//            }
-//        } catch (SQLException e) {
-//            LOGGER.warn("[MVM] HasApplication : ", e);
-//        }
-//        return false;
-//    }
 
-    public static boolean hasPlayerIp(String ip) {
+
+    public static void addPlayer(String name) {
+        try (Statement statement = dbConnection.createStatement()){
+            LOGGER.info("[MVM] Add player : {}", name);
+            statement.setQueryTimeout(30);
+            statement.executeUpdate("INSERT INTO player VALUES(null,'"+name+"',null,null,null)");
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM] SavePlayer : ", e);
+        }
+    }
+    public static boolean hasPlayer(String name) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM player WHERE IP = '"+ip+"'");
-            if(rs.next()) {
-                if (rs.getInt(1) > 0) {
-                    return true;
-                }
-            }
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM player WHERE nickname = '"+name+"'");
+            return rs.getInt(1) > 0;
         } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:hasPlayerIp : ", e);
+            LOGGER.warn("[MVM] SQL:getPassword:", e);
         }
         return false;
     }
-    public static boolean hasPlayerIp2Id(String ip, String id) {
+
+
+    public static int getPassword(String name) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+            ResultSet rs = statement.executeQuery("SELECT password FROM player WHERE nickname = '"+name+"'");
+            if(rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM] SQL:getPassword:", e);
+        }
+        return 0;
+    }
+    public static boolean hasPassword(String name) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
-            ResultSet rs = statement.executeQuery("SELECT IP FROM player WHERE ds_id = '"+id+"'");
-            if(rs.next()) {
-                if(rs.next()) {
-                    return rs.getString(1).equals(ip);
-                }
-
-            }
+            ResultSet rs = statement.executeQuery("SELECT password FROM player WHERE nickname = '"+name+"'");
+            return rs.getString(1) != null;
         } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:hasPlayerIp : ", e);
+            LOGGER.warn("[MVM] SQL:getPassword:", e);
         }
         return false;
     }
-    public static boolean hasPlayerNick(String nickname)  {
+    public static void setPassword(ServerPlayerEntity player, String password) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM player WHERE nickname = '"+nickname+"'");
-            if(rs.next()) {
-                if (rs.getInt(1) > 0) {
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:hasPlayerNick : ", e);
-        }
-        return false;
-    }
-    public static String getPlayerId2Nickname(String nickname) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT ds_id FROM player WHERE nickname = '"+nickname+"'");
-            if(rs.next()) {
-                return rs.getString(1);
-            }
-
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
-        }
-        return "";
-    }
-    public static String getPlayerId2Ip(String ip) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT ds_id FROM player WHERE IP = '"+ip+"'");
-            if(rs.next()) {
-                return rs.getString(1);
-            }
-
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
-        }
-        return "";
-    }
-    public static String getPlayerIp2Id(String id) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT IP FROM player WHERE ds_id = '"+id+"'");
-            if(rs.next()) {
-                return rs.getString(1);
-            }
-
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
-        }
-        return "";
-    }
-    public static String getPlayerNickname2Ip(String ip) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT nickname FROM player WHERE IP = '"+ip+"'");
-            if(rs.next()) {
-                return rs.getString(1);
-            }
-
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
-        }
-        return "";
-    }
-    public static String getPlayerNickname2Id(String id) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-
-            ResultSet rs = statement.executeQuery("SELECT nickname FROM player WHERE ds_id = '"+id+"'");
-            if(rs.next()) {
-                return rs.getString(1);
-            }
-
-        } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:getPlayerNickname2Ip:", e);
-        }
-        return "";
-    }
-    public static void setPlayerIp(String ip,String ds_id) {
-        try (Statement statement = dbConnection.createStatement()){
-            statement.setQueryTimeout(30);
-            LOGGER.info("[MVM] Set ip to "+ip);
-            statement.executeUpdate(String.format("UPDATE player SET IP = '%s' WHERE ds_id = '%s'", ip, ds_id));
-        } catch (SQLException e) {
+            int pass = Arrays.hashCode(MessageDigest.getInstance("SHA-256")
+                    .digest(password.getBytes(StandardCharsets.UTF_8)));
+            statement.executeUpdate("UPDATE player SET password = "+pass+" WHERE nickname = '"+player.getEntityName()+"'");
+            LOGGER.info("[MVM] Set password to {}", pass);
+            AuthAccount.setAuth(player,password);
+        } catch (SQLException | NoSuchAlgorithmException e) {
             LOGGER.warn("[MVM] ConnectPlayer:getPlayerIp:", e);
         }
     }
 
-    public void setObrab(String applicationId) {
+
+    public static boolean hasIP(String name, String ip) {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
-            statement.executeUpdate(String.format("UPDATE application SET obrab =  'false' WHERE applicationId = '%s'", applicationId));
+            ResultSet rs = statement.executeQuery("SELECT IP FROM player WHERE nickname = '"+name+"'");
+            if(rs.next()) return ip.equals(rs.getString(1));
+
         } catch (SQLException e) {
-            LOGGER.warn("[MVM] ConnectPlayer:getPlayerIp:", e);
+            LOGGER.warn("[MVM] SQL:getPassword:", e);
+        }
+        return false;
+    }
+    public static void setIP(String name, String ip) {
+        try (Statement statement = dbConnection.createStatement()){
+            statement.setQueryTimeout(30);
+
+            statement.executeUpdate("UPDATE player SET IP = "+ip+" WHERE nickname = '"+name+"'");
+            LOGGER.info("[MVM] Set IP to {}", ip);
+        } catch (SQLException e) {
+            LOGGER.warn("[MVM] SQL.setIP:", e);
         }
     }
 

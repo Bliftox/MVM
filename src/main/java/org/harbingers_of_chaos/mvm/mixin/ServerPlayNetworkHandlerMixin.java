@@ -85,27 +85,11 @@ public abstract class ServerPlayNetworkHandlerMixin {
     public void onCommandExecution(CommandExecutionC2SPacket packet, CallbackInfo ci) {
         if (AuthAccount.canPlay(this.player.getEntityName())) return;
         String command = packet.command();
+
         int index = command.indexOf(" ");
         if(command.contains(" ")){
-            if(command.substring(0,index).equals("sad")) {
-                if (!SQL.hasPassword(this.player.getEntityName())) {
-                    String args = command.substring(index + 1, command.length()), arg1 = "", arg2 = "";
-                    LOGGER.info(args);
-                    if (!args.isEmpty()) {
-                        if (args.contains(" ")) {
-                            arg1 = args.substring(0, args.indexOf(" "));
-                            if (args.substring(args.indexOf(" ")).contains(" ")) {
-                                arg2 = args.substring(args.indexOf(" ") + 1);
-                                if (arg1.equals(arg2)) {
-                                    SQL.setPassword(this.player, arg1);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        ci.cancel();
+            if(!command.substring(0,index).equals("register")) ci.cancel();
+        }else if(!command.equals("register")) ci.cancel();
     }
 
 

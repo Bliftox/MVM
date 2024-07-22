@@ -1,7 +1,10 @@
 package org.harbingers_of_chaos.mvm;
 
+import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.server.command.ServerCommandSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.harbingers_of_chaos.mvlib.AccountLinking;
@@ -10,6 +13,9 @@ import org.harbingers_of_chaos.mvlib.config.Config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.harbingers_of_chaos.mvlib.SQL;
+import org.harbingers_of_chaos.mvm.command.RegCommand;
+
+import java.util.function.Consumer;
 
 public class MystiVerseModServer implements ModInitializer {
     public static final String MOD_ID = "mws";
@@ -23,12 +29,18 @@ public class MystiVerseModServer implements ModInitializer {
         try {Config.load();} catch (Exception e) {LOGGER.warn("[MVM] Failed to load config using defaults : ", e);}
         SQL.connection();
         SQL.createDB();
-        loadEvents();
+        registerEvents();
+        registerCommands();
     }
-    private void loadEvents() {
+    private void registerEvents() {
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             SQL.disconnect();
             Config.save();
+        });
+    }
+    private void registerCommands() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, environment) -> {
+            RegCommand.register(dispatcher);
         });
     }
 }

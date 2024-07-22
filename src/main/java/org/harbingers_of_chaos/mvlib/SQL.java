@@ -69,7 +69,8 @@ public class SQL implements SQLApi {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
             ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM player WHERE nickname = '"+name+"'");
-            return rs.getInt(1) > 0;
+            LOGGER.info("[MVM] Has player : {}", rs.getInt(1));
+            return rs.getInt(1) <= 0;
         } catch (SQLException e) {
             LOGGER.warn("[MVM] SQL:getPassword:", e);
         }
@@ -128,8 +129,8 @@ public class SQL implements SQLApi {
         try (Statement statement = dbConnection.createStatement()){
             statement.setQueryTimeout(30);
 
-            statement.executeUpdate("UPDATE player SET IP = "+ip+" WHERE nickname = '"+name+"'");
-            LOGGER.info("[MVM] Set IP to {}", ip);
+            LOGGER.info("[MVM] Set {} IP to {}",name, ip);
+            statement.executeUpdate("UPDATE player SET IP = '"+ip+"' WHERE nickname = '"+name+"'");
         } catch (SQLException e) {
             LOGGER.warn("[MVM] SQL.setIP:", e);
         }

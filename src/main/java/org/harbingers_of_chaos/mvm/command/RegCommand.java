@@ -27,6 +27,20 @@ public class RegCommand {
                         )
                 )
         );
+        dispatcher.register(literal("reg")
+                .then(argument("password", StringArgumentType.word())
+                        .then(argument("repeatPassword", StringArgumentType.word())
+                                .executes(RegCommand::run)
+                        )
+                )
+        );
+        dispatcher.register(literal("r")
+                .then(argument("password", StringArgumentType.word())
+                        .then(argument("repeatPassword", StringArgumentType.word())
+                                .executes(RegCommand::run)
+                        )
+                )
+        );
     }
     private static int run(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
         ServerPlayerEntity player = ctx.getSource().getPlayer();
@@ -40,7 +54,7 @@ public class RegCommand {
          if (password.equals(passwordRepeat)) {
              SQL.setPassword(player, password);
          }else throw new SimpleCommandExceptionType(new LiteralMessage("Пароли не одинаковые")).create();
-        ctx.getSource().sendFeedback(() -> Text.literal("command.general.authenticated"), false);
+        ctx.getSource().sendFeedback(() -> Text.literal("Вы вошли"), false);
 
         return 1;
     }

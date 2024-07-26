@@ -1,6 +1,10 @@
 plugins {
-    id 'fabric-loom' version '1.6.9'
+    id 'java'
     id 'maven-publish'
+    id 'fabric-loom' version '1.+'
+    id 'org.springframework.boot' version '3.3.+'
+    id 'io.spring.dependency-management' version '1.1.+'
+
 }
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
@@ -14,57 +18,29 @@ repositories {
         url = "https://m2.dv8tion.net/releases/"
         content { includeGroup "net.dv8tion" }
     }
-//    maven {
-//        url = "https://maven.nucleoid.xyz/"
-//        content { includeGroup "eu.pb4" }
-//    }
-//    maven {
-//        name = "TerraformersMC"
-//        url = "https://maven.terraformersmc.com/"
-//    }
-//    maven {
-//        url = 'https://maven.cafeteria.dev'
-//        content {
-//            includeGroup 'net.adriantodt.fabricmc'
-//        }
-//    }
-//    maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
-//    maven { url "https://maven.shedaniel.me/" }
-//    maven { url 'https://maven.nucleoid.xyz' }
-//    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     mavenCentral()
-//    maven { url 'https://jitpack.io' }
 }
-
 dependencies {
-    // To change the versions see the gradle.properties file
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+//    // To change the versions see the gradle.properties file
+    minecraft ("com.mojang:minecraft:${project.minecraft_version}"){
+        exclude(group : 'org.slf4j', module : 'slf4j-api')
+    }
+    mappings ("net.fabricmc:yarn:${project.yarn_mappings}:v2"){
+        exclude(group : 'org.slf4j', module : 'slf4j-api')
+    }
+
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    //Discord
-    include(implementation("net.dv8tion:JDA:5.0.0-beta.24") {
-        exclude module: "opus-java"
-    })
-    include(implementation("net.sf.trove4j:core:3.1.0"))
-    include(implementation("org.apache.commons:commons-collections4:4.4"))
-    include(implementation("org.slf4j:slf4j-api:2.0.13"))
-    include(implementation("com.neovisionaries:nv-websocket-client:2.14"))
-    include(implementation("com.fasterxml.jackson.core:jackson-core:2.17.0"))
-    include(implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0"))
-    include(implementation("com.fasterxml.jackson.core:jackson-annotations:2.17.0"))
-    include(implementation("com.squareup.okhttp3:okhttp:4.12.0"))
-    include(implementation("com.squareup.okio:okio-jvm:3.6.0"))
 
     //SQL
     include(implementation("mysql:mysql-connector-java:${project.mysql_version}"))
     include(implementation("org.xerial:sqlite-jdbc:${project.sqlite_version}"))
 
     //Web
-    implementation("org.apache.tomcat:tomcat-catalina:${project.tomcat_version}")
+    implementation project(":website")
+
 }
 
 processResources {
@@ -111,18 +87,18 @@ jar {
 }
 
 // configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
-    }
-}
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//        }
+//    }
+//
+//    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+//    repositories {
+//        // Add repositories to publish to here.
+//        // Notice: This block does NOT have the same function as the block in the top level.
+//        // The repositories here will be used for publishing your artifact, not for
+//        // retrieving dependencies.
+//    }
+//}

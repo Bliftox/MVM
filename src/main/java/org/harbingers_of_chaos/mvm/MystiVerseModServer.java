@@ -1,17 +1,16 @@
 package org.harbingers_of_chaos.mvm;
 
+import com.ling.aplication.AplicationApplication;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.harbingers_of_chaos.mvb.Bot;
 import org.harbingers_of_chaos.mvlib.AccountLinking;
 import org.harbingers_of_chaos.mvlib.config.Config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.harbingers_of_chaos.mvlib.MySQL;
-import org.harbingers_of_chaos.mvweb.Website;
 
 public class MystiVerseModServer implements ModInitializer {
     public static final String MOD_ID = "mws";
@@ -29,15 +28,12 @@ public class MystiVerseModServer implements ModInitializer {
     }
     private void loadEvents() {
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-            Bot.startup();
-            Website.startup();
+            AplicationApplication.main(new String[]{"server.port=8083"});
 
         });
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> Bot.log(Config.instance.game.serverStartMessage));
+//        ServerLifecycleEvents.SERVER_STARTED.register(server -> Bot.log(Config.instance.game.serverStartMessage));
 
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            Bot.log(Config.instance.game.serverStopMessage);
-            Bot.shutdown();
             MySQL.disconnect();
             Config.save();
         });
